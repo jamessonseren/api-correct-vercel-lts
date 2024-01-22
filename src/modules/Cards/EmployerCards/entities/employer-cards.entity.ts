@@ -3,7 +3,7 @@ import { CustomError } from '../../../../errors/custom.error'
 
 export type EmployerCardsProps = {
     card_id: string
-    company_type_id: string
+    business_data_id: string
 
 }
 
@@ -11,7 +11,7 @@ export class EmployerCardsEntity {
     id: string
     contract_number: string
     card_id: string
-    company_type_id: string
+    business_data_id: string
 
 
     private constructor(props: EmployerCardsProps) {
@@ -19,7 +19,7 @@ export class EmployerCardsEntity {
         this.id = randomUUID()
         this.contract_number = randomUUID()
         this.card_id = props.card_id
-        this.company_type_id = props.company_type_id
+        this.business_data_id = props.business_data_id
 
 
 

@@ -10,13 +10,13 @@ export class DeleteCompanyDataByCorrectController {
     async handle(req: Request, res: Response) {
 
         try {
-            const cnpj = req.body.cnpj
+            const business_id = req.body.company_document as string
 
             const deleteCompanyData = new DeleteCompanyDataByCorrectUsecase(
                 this.companyDataRepository
             )
 
-            await deleteCompanyData.execute(cnpj)
+            await deleteCompanyData.execute(business_id)
 
             return res.json({ message: "Company data deleted successfully" })
 

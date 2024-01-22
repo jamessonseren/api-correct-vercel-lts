@@ -11,15 +11,15 @@ export class JWTToken implements IToken {
 
     private TOKEN_SECRET_CRYPTO = createHmac('sha256', this.TOKEN_SECRET).digest('base64')
 
-    create({ userName, id, email }: CorrectAdminEntity): string {
+    create({ userName, uuid, email }: CorrectAdminEntity): string {
         const token = sign({
             admin: {
                 userName,
-                id,
+                uuid,
                 email
             }
         }, this.TOKEN_SECRET_CRYPTO, {
-            subject: id,
+            subject: uuid,
             expiresIn: '1D'
         })
 

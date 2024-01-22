@@ -3,11 +3,13 @@ import { CreateAppUserByUserUsecase } from "./create-appuser-by-user.usecase";
 import { IAuthAppUserProps } from "../../entities/create-user-by-user/appuser-by-user.entity";
 import { IAppUserAuthRepository } from "../../repositories/app-use-auth-repository";
 import { IAppUserRepository } from "../../../UserByCorrect/repositories/app-user-data-repostory";
+import { ICompanyDataRepository } from "../../../../Company/CompanyData/repositories/company-data.repository";
 
 export class CreateAppUserByUserController{
     constructor(
         private appUserAuthRepository: IAppUserAuthRepository,
-        private appUserDataRepository: IAppUserRepository
+        private appUserDataRepository: IAppUserRepository,
+        private businessInfoRepository: ICompanyDataRepository
 
     ){}
 
@@ -17,11 +19,11 @@ export class CreateAppUserByUserController{
 
         const appUserAuthUsecase = new CreateAppUserByUserUsecase(
             this.appUserAuthRepository,
-            this.appUserDataRepository
+            this.appUserDataRepository,
+            this.businessInfoRepository
         )
         
         const user = await appUserAuthUsecase.execute(data)
-        console.log({data})
 
         return res.json(user)
         }catch(err: any){

@@ -14,6 +14,8 @@ export class DeleteUserByAdminController{
 
         const deleteUser = await deleteUsecase.execute(user_id)
 
+        return res.json(deleteUser)
+
         return res.json({message: "Usuário excluído com sucesso"})
     }
 }

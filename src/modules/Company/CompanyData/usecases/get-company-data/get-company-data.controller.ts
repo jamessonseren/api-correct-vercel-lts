@@ -11,13 +11,13 @@ export class GetCompanyDataController{
     async handle(req: Request, res: Response){
 
         try{
-            const user_id = req.query.user_id as string
-            
+            const business_id = req.query.business_id_id as string
+
             const companyDataUsecase = new GetCompanyDataUsecase(
                 this.companyDataRepository
             )
            
-            const companyData = await companyDataUsecase.execute(user_id)
+            const companyData = await companyDataUsecase.execute(business_id)
 
             return res.json(companyData)
 

@@ -7,7 +7,7 @@ export type CorrectAdminRequest = {
     email: string
     userName: string
     password: string
-    permissions: string[]
+    isAdmin: boolean
 }
 
 export class CreateCorrectAdminUseCase{

@@ -8,25 +8,26 @@ type ICorrectAdmin = {
     email: string
     userName: string
     password: string
-    permissions: string[]
+    isAdmin: boolean
 }
 
 export class CorrectAdminEntity {
-    id: string
+    uuid: string
     name: string
     email: string
     userName: string
     password: string
-    permissions: string[]
+    isAdmin: boolean
+
 
     private constructor(props: ICorrectAdmin){
 
-        this.id = randomUUID()
+        this.uuid = randomUUID()
         this.name = props.name
         this.email = props.email
         this.userName = props.userName
         this.password = props.password
-        this.permissions = props.permissions
+        this.isAdmin = props.isAdmin
         
         
     }

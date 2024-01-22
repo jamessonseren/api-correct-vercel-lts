@@ -21,7 +21,7 @@ export type AppUserAccountsResponse = {
     },
     EmployerCards: {
         id: string;
-        company_type_id: string
+       business_data_id: string
     } | null
 }
 export interface IAppUserAccountRepository{

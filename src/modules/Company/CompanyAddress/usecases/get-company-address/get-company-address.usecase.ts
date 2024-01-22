@@ -4,13 +4,13 @@ import { ICompanyAddressRepository } from "../../repositories/company-address.re
 
 export class GetCompanyAddressUsecase{
     constructor(
-        private companyAddressRepository: ICompanyAddressRepository
+        private companyAddressRepository: ICompanyAddressRepository,
     ){}
 
-    async execute(cnpj: string){
+    async execute(address_id: string){
 
-    
-        const getCompanyAddress = await this.companyAddressRepository.findByCnpj(cnpj)
+
+        const getCompanyAddress = await this.companyAddressRepository.findById(address_id)
         if(!getCompanyAddress) throw new CustomError("Unable to find company address", 400)
 
         return getCompanyAddress

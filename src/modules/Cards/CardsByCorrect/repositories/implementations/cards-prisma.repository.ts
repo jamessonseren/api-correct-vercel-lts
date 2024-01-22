@@ -35,7 +35,6 @@ export class CardsPrismaRepository implements ICards{
             create:{
                 card_name: data.card_name,
                 card_type: data.card_type,
-                correct_admin_id: data.correct_admin_id
 
             },
             update:{

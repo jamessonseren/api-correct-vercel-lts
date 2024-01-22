@@ -25,21 +25,21 @@ export class CorrectAdminPrismaRepository implements ICorrectAdminRepository {
                 password: data.password
             },
             select: {
-                id: true,
+                uuid: true,
                 name: true,
                 email: true,
                 userName: true,
-                permissions: true
+                isAdmin: true
             }
         })
 
         return admin
     }
 
-    async findById(id: string): Promise<AdminResponse | null> {
+    async findById(uuid: string): Promise<AdminResponse | null> {
         const admin = await prismaClient.correctAdmin.findUnique({
             where: {
-                id
+                uuid
             }
         })
         return admin
@@ -48,16 +48,14 @@ export class CorrectAdminPrismaRepository implements ICorrectAdminRepository {
     async findAdmin(): Promise<AdminResponse | null> {
         const admin = await prismaClient.correctAdmin.findFirst({
             where: {
-                permissions: {
-                    equals: ["admin"]
-                }
+                isAdmin: true
             },
             select: {
-                id: true,
+                uuid: true,
                 name: true,
                 email: true,
                 userName: true,
-                permissions: true,
+                isAdmin: true,
 
             }
         })
