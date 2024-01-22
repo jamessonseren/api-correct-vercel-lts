@@ -11,13 +11,13 @@ export class AppUserJWToken implements IAppUserToken{
 
     private TOKEN_SECRET_CRYPTO = createHmac('sha256', this.TOKEN_SECRET).digest('base64')
 
-    create({ id, cpf, password }: AppUserByUserEntity): string {
+    create({ uuid }: AppUserByUserEntity): string {
         const token = sign({
             appUser: {
-                id
+                uuid
             }
         }, this.TOKEN_SECRET_CRYPTO, {
-            subject: id,
+            subject: uuid,
             expiresIn: '1D'
         })
 

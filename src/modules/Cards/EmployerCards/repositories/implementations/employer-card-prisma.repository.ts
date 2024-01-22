@@ -4,11 +4,11 @@ import { EmployerCardsResponse, IEmployercardRepository } from "../employer-card
 
 export class EmployerCardsPrismaRepository implements IEmployercardRepository{
 
-    async findByCardIdAndCompanyTypeId(id: string, company_type_id: string): Promise<EmployerCardsResponse | null> {
+    async findByCardIdAndCompanyTypeId(id: string, business_data_id: string): Promise<EmployerCardsResponse | null> {
         const employerCard = await prismaClient.employerCards.findFirst({
             where:{
                 card_id: id,
-                company_type_id
+                business_data_id
             },
             include:{
                 Cards: true
@@ -18,10 +18,10 @@ export class EmployerCardsPrismaRepository implements IEmployercardRepository{
         return employerCard
     }
 
-    async findByCompanyType(company_type_id: string): Promise<EmployerCardsResponse[] | null> {
+    async findByCompanyType(business_data_id: string): Promise<EmployerCardsResponse[] | null> {
         const employerCard = await prismaClient.employerCards.findMany({
             where:{
-                company_type_id
+                business_data_id
             },
             include:{
                 Cards: true
@@ -48,7 +48,7 @@ export class EmployerCardsPrismaRepository implements IEmployercardRepository{
         const employerCard = await prismaClient.employerCards.create({
             data:{
                 card_id: data.card_id,
-                company_type_id: data.company_type_id,
+                business_data_id: data.business_data_id,
             }
         })
 

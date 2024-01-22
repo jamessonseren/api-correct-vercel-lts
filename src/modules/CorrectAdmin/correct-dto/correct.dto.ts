@@ -1,7 +1,7 @@
 export type AdminResponse = {
-    id: string
+    uuid: string
     name: string
     email: string
     userName: string
-    permissions: string[]
+    isAdmin: boolean
 }

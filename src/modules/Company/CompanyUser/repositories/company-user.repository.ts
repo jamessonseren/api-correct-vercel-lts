@@ -1,18 +1,13 @@
 import { CompanyUserEntity, CompanyUserProps } from "../entities/company-user.entity"
-import { CompanyUserResponse } from "../companyUserDto/company-user.dto"
-import { UserRoles } from "@prisma/client"
+import { BusinessUserResponse } from "../companyUserDto/company-user.dto"
 
 export interface ICompanyUserRepository{
-    findByUserNameAndCNPJAuth(user_name: string, cnpj: string): Promise<CompanyUserEntity | null>
-    // findByCNPJAuth(cnpj: string): Promise<CompanyUserEntity | null>
-    // findByCNPJ(cnpj: string): Promise<CompanyUserResponse | null>
-    // findByCPFAuth(cpf: string): Promise<CompanyUserEntity | null>
-    findById(id: string): Promise<CompanyUserResponse | null>
-    findByCnpjAndAdminRole(cnpj: string): Promise<CompanyUserResponse | null>
-    findByEmail(email: string): Promise<CompanyUserResponse | null>
-    findByUserCode(user_code: string): Promise<CompanyUserResponse[] | null>
-    updateUser(data: CompanyUserProps): Promise<CompanyUserResponse>
-    saveUser(data: CompanyUserEntity): Promise<CompanyUserResponse>
-    saveOrUpdate(data: CompanyUserEntity): Promise<CompanyUserEntity>
+    findByUsers(cnpj: string): Promise<CompanyUserEntity[] | null>
+    findById(id: string): Promise<BusinessUserResponse | null>
+    findByCnpjAndAdminRole(business_document: string): Promise<BusinessUserResponse | null>
+    findByEmail(email: string): Promise<BusinessUserResponse | null>
+    findByUserNameAndDocumentAuth(user_name: string, business_document: string): Promise<CompanyUserEntity | null>
+    updateUser(data: CompanyUserProps): Promise<BusinessUserResponse>
+    saveUser(data: CompanyUserEntity): Promise<BusinessUserResponse>
     deleteByAdminById(user_id: string): Promise<void>
 }

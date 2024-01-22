@@ -1,7 +1,7 @@
-import { CustomError } from "../../errors/custom.error";
-import { IAppUserAuthRepository } from "../AppUser/AppUserManagement/repositories/app-use-auth-repository";
-import { AppUserDataEntity, AppUserProps } from "../AppUser/UserByCorrect/entities/appuser-data.entity";
-import { IAppUserRepository } from "../AppUser/UserByCorrect/repositories/app-user-data-repostory";
+import { CustomError } from "../../../../../errors/custom.error";
+import { IAppUserAuthRepository } from "../../../AppUserManagement/repositories/app-use-auth-repository";
+import { AppUserDataEntity, AppUserProps } from "../../entities/appuser-data.entity";
+import { IAppUserRepository } from "../../repositories/app-user-data-repostory";
 
 export class CreateAppUserDataByUserUsecase {
     constructor(
@@ -14,8 +14,7 @@ export class CreateAppUserDataByUserUsecase {
         const findUser = await this.appUserAuthRepository.findById(appUserId)
         if (!findUser) throw new CustomError("Unable to find User", 400)
         
-        data.cpf = findUser.cpf
-        data.employee = false
+        data.document = findUser.document
 
         // //check if user is already registered
         // const findAppUserData = await this.appUserRepository.findByCPF(data.cpf)
@@ -23,7 +22,7 @@ export class CreateAppUserDataByUserUsecase {
   
 
         const appUser = await AppUserDataEntity.create(data)
-        const appUserData = await this.appUserRepository.saveOrUpdateByAppUser(appUser)
+        const appUserData = await this.appUserRepository.saveOrUpdate(appUser)
 
         return appUserData
     }

@@ -7,18 +7,15 @@ import { CreateCompanyAddressUsecase } from "./create-company-address.usecase";
 export class CreateCompanyAddressController {
     constructor(
         private companyAddressRepository: ICompanyAddressRepository,
-        private companyDataRepository: ICompanyDataRepository
     ) { }
 
     async handle(req: Request, res: Response) {
         try {
             const data: CompanyAddressProps = req.body
 
-            data.cnpj = req.query.cnpj as string
 
             const companyAddressUsecase = new CreateCompanyAddressUsecase(
                 this.companyAddressRepository,
-                this.companyDataRepository
             )
 
             const companyAddress = await companyAddressUsecase.execute(data)

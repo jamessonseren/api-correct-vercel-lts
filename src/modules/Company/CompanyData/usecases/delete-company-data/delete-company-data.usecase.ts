@@ -1,5 +1,3 @@
-import { CompanyTypeOptions } from "@prisma/client";
-import { CustomError } from "../../../../../errors/custom.error";
 import { ICompanyDataRepository } from "../../repositories/company-data.repository";
 
 export class DeleteCompanyDataByCorrectUsecase{
@@ -7,13 +5,9 @@ export class DeleteCompanyDataByCorrectUsecase{
         private companyDataRepository: ICompanyDataRepository
     ){}
 
-    async execute(cnpj: string){
+    async execute(business_id: string){
 
-        //find company tData      
-        const findCompany = await this.companyDataRepository.findByCNPJ(cnpj)
-        if(!findCompany) throw new CustomError('Company data not found', 400)
-
-        const deleteCompanyData = await this.companyDataRepository.deleteByCorrect(cnpj)
+        const deleteCompanyData = await this.companyDataRepository.deleteById(business_id)
 
         return deleteCompanyData
 

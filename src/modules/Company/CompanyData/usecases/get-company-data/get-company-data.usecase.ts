@@ -7,9 +7,9 @@ export class GetCompanyDataUsecase{
         private companyDataRepository: ICompanyDataRepository,
     ){}
 
-    async execute(user_id: string){
+    async execute(business_id: string){
 
-        const getCompanyData = await this.companyDataRepository.findByCompanyAdmin(user_id)
+        const getCompanyData = await this.companyDataRepository.findById(business_id)
         if(!getCompanyData) throw new CustomError("Company Data not registered", 400)
 
         return getCompanyData

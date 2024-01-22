@@ -11,6 +11,6 @@ export class EnsureValidCorrectAdminUsecase {
 
         if(!correctAdmin) throw new CustomError("Admin is not allowed to access", 401)
 
-       return correctAdmin.id
+       return correctAdmin.uuid
     }
 }

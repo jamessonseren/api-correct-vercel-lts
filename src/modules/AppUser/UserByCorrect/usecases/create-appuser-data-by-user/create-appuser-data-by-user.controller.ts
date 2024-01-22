@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAppUserAuthRepository } from "../../../AppUserManagement/repositories/app-use-auth-repository";
 import { IAppUserRepository } from "../../repositories/app-user-data-repostory";
-import { CreateAppUserDataByUserUsecase } from "../../../../Cards/create-appuser-data-by-user.usecase";
+import { CreateAppUserDataByUserUsecase } from "./create-appuser-data-by-user.usecase";
 import { AppUserProps } from "../../entities/appuser-data.entity";
 import { CustomError } from "../../../../../errors/custom.error";
 
@@ -17,7 +17,6 @@ export class CreateAppUserDataByUserController {
             const data:AppUserProps = req.body
             const appUserId = req.appUserId
 
-            data.correct_admin_id = req.query.correctAdminId as string
             
 
             const appUserDataUsecase = new CreateAppUserDataByUserUsecase(
