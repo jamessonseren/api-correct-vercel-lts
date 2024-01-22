@@ -10,7 +10,6 @@ export class CreateCompanyDataController {
     constructor(
         private companyDataRepository: ICompanyDataRepository,
         private companyUserRepository: ICompanyUserRepository,
-        private correctAdminRepository: ICorrectAdminRepository
     ) {
 
     }
@@ -19,13 +18,9 @@ export class CreateCompanyDataController {
         try {
             const data: CompanyDataRequest = req.body
 
-            data.company_user_id = req.companyUserId
-            // data.correct_admin_id = req.query.correct_admin_id as string
-
             const companyDataUsecase = new CreateCompanyDataUsecase(
                 this.companyDataRepository,
                 this.companyUserRepository,
-                this.correctAdminRepository
             )
 
             const companyData = await companyDataUsecase.execute(data)

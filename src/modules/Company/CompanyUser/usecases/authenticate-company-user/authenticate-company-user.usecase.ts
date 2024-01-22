@@ -5,7 +5,7 @@ import { ICompanyUserRepository } from "../../repositories/company-user.reposito
 
 export type AuthenticateCompanyUserRequest = {
    
-    cnpj: string,
+    business_document: string,
     user_name: string,
     password: string,
 }
@@ -16,11 +16,11 @@ export class AuthenticateCompanyUserUsecase{
         private token: ICompanyAdminToken
     ){}
     
-    async execute({ cnpj, user_name, password}: AuthenticateCompanyUserRequest ){
+    async execute({ business_document, user_name, password}: AuthenticateCompanyUserRequest ){
 
-        if(!cnpj || !password || !user_name) throw new CustomError("Incorrect username/password", 401)
+        if(!business_document || !password || !user_name) throw new CustomError("Incorrect username/password", 401)
 
-        const findAdmin = await this.companyUserRepository.findByUserNameAndCNPJAuth(user_name, cnpj)
+        const findAdmin = await this.companyUserRepository.findByUserNameAndDocumentAuth(user_name, business_document)
         if(!findAdmin) throw new CustomError("Incorrect username/password", 401)
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, findAdmin.password )
@@ -28,7 +28,15 @@ export class AuthenticateCompanyUserUsecase{
 
         const tokenGenerated = await this.token.create(findAdmin)
 
-        return tokenGenerated
+        return {
+            uuid: findAdmin.uuid,
+            user_name: findAdmin.user_name,
+            is_client: findAdmin.is_client,
+            business_document: findAdmin.business_document,
+            permissions: findAdmin.permissions,
+            is_admin: findAdmin.is_admin,
+            token: tokenGenerated,
+        }
     
     }
 }

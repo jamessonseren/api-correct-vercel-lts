@@ -5,12 +5,10 @@ import { CreateCompanyDataController } from "./create-company-data.controller";
 
 const companyDataRepository = new CompanyDataPrismaRepository()
 const companyUserRepository = new CompanyUserPrismaRepository()
-const correctAdminRepository = new CorrectAdminPrismaRepository()
 
 const companyDataController = new CreateCompanyDataController(
     companyDataRepository,
     companyUserRepository,
-    correctAdminRepository
 )
 
 export { companyDataController }

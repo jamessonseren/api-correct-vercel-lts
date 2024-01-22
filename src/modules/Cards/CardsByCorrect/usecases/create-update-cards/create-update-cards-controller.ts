@@ -12,13 +12,12 @@ export class CreateCardsController {
     async handle(req: Request, res: Response) {
 
         try {
-            const correct_admin_id = req.correctAdminId
 
             const data: CardsProps = req.body
 
             const cardUsecase = new CreateCardsUsecase(this.cardsRepository)
 
-            const card = await cardUsecase.execute({ ...data, correct_admin_id })
+            const card = await cardUsecase.execute({ ...data})
 
             return res.json(card)
         } catch (err: any) {

@@ -1,15 +1,17 @@
 import { CustomError } from "../../../../../errors/custom.error";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 
-export class GetUsersUsecase {
+export class GetSingleUserUsecase {
     constructor(
         private companyUserRepository: ICompanyUserRepository
     ) {}
 
-    async execute(user_code: string){
+    async execute(business_document: string){
 
-        const getUsers = await this.companyUserRepository.findByUserCode(user_code)
-        if(!getUsers) throw new CustomError("Users not found", 401)
+        if(!business_document) throw new CustomError("Business document required", 403)
+
+        const getUsers = await this.companyUserRepository.findByUsers(business_document)
+        if(!getUsers) throw new CustomError("Users not found", 400)
 
         return getUsers
     }

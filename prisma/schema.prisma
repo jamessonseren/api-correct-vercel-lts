@@ -16,26 +16,18 @@ datasource db {
 }
 
 model CorrectAdmin {
-  id          String        @id @default(uuid())
-  name        String
-  userName    String        @unique
-  email       String        @unique
-  password    String
-  permissions UserRoles[]   @default([admin])
-  CompanyData CompanyData[]
-  AppUserData AppUserData[]
-  Cards       Cards[]
+  uuid     String  @id @default(uuid())
+  name     String
+  userName String  @unique
+  email    String  @unique
+  password String
+  isAdmin  Boolean @default(true)
 
   @@map("correct_admin")
 }
 
-enum UserRoles {
-  admin
-  user
-}
-
 enum Permissions {
-  none
+  all
   sales
   finances
   marketing
@@ -45,274 +37,178 @@ enum Permissions {
   allEmployers
 }
 
-enum Permission {
-  all
+model BusinessUser {
+  uuid               String        @id @default(uuid())
+  business_info_uuid String?
+  is_admin           Boolean       @default(false)
+  business_document  String        
+  admin_document     String?       @unique
+  name               String?
+  email              String?       @unique
+  user_name          String
+  password           String
+  function           String?
+  permissions        Permissions[] @default([all])
+  is_client          Boolean       @default(false)
+  created_at         DateTime?     @default(now())
+  updated_at         DateTime?     @updatedAt
+
+  BusinessInfo BusinessInfo? @relation(fields: [business_info_uuid], references: [uuid])
+
+  @@map("business_users")
 }
 
-model CompanyUser {
-  id           String        @id @default(uuid())
-  email        String?       @unique
-  cnpj         String
-  cpf          String?       @unique
-  user_name    String        @unique
-  user_code    String        @default(uuid())
-  password     String
-  fullName     String?
-  roles        UserRoles[]   @default([admin])
-  permissions  Permissions[] @default([none])
-  function     String?
-  client_admin Boolean       @default(false)
-  created_at   DateTime?     @default(now())
-  updated_at   DateTime?     @updatedAt
+model BusinessInfo {
+  uuid                String              @id @default(uuid())
+  address_uuid        String?
+  contract_info_uuid  String?
+  fantasy_name        String
+  corporate_reason    String?
+  document            String              @unique
+  classification      String
+  colaborators_number Int
+  status              Boolean             @default(false)
+  phone_1             String
+  phone_2             String?
+  business_type       BusinessTypeOptions
 
-  CompanyData   CompanyData[]
-  CompanyType   CompanyType[]
-  Product       Product[]
-  Advertisement Advertisement[]
+  Address      Address?       @relation(fields: [address_uuid], references: [uuid])
+  ContractInfo ContractInfo?  @relation(fields: [contract_info_uuid], references: [uuid])
+  BusinessUser BusinessUser[]
+  UserInfo     UserInfo[]
+  Benefit      Benefit[]
+  Transactions Transactions[]
 
-  @@map("company_users")
+  @@map("companies_data")
 }
 
-model CompanyData {
-  id               String  @id @default(uuid())
-  corporate_name   String
-  cnpj             String  @unique
-  classification   String
-  total_employees  Int
-  phone_1          String
-  phone_2          String?
-  company_user_id  String  @unique
-  correct_admin_id String
-
-  CorrectAdmin CorrectAdmin @relation(fields: [correct_admin_id], references: [id])
-  CompanyUser  CompanyUser  @relation(fields: [company_user_id], references: [id])
-
-  @@map("company_datas")
-}
-
-model CompanyType {
-  id              String             @id @default(uuid())
-  type            CompanyTypeOptions
-  cnpj            String             @unique
-  company_user_id String
-
-  CompanyUser          CompanyUser            @relation(fields: [company_user_id], references: [id])
-  AppUserData          AppUserData[]
-  PartnerCards         PartnerCards[]
-  EmployerCards        EmployerCards[]
-  CompanyBusinessCards CompanyBusinessCards[]
-
-  @@map("company_types")
-}
-
-enum CompanyTypeOptions {
+enum BusinessTypeOptions {
   empregador
   comercio
   autonomo_comercio
   empregador_comercio
 }
 
-model AppUserData {
-  id                    String   @id @default(uuid())
-  internal_company_code String?
-  employee              Boolean  @default(true)
-  company_owner         Boolean  @default(false)
-  full_name             String
-  gender                String
-  rg                    String?
-  cpf                   String   @unique
-  driver_license        String?  @unique
-  date_of_birth         DateTime
-  function              String?
-  salary                Float?
-  company_type_id       String?
-  status                Boolean  @default(true)
-  authenticated         Boolean  @default(false)
-  marital_status        String
-  dependents_quantity   Int      @default(0)
-  correct_admin_id      String
-
-  created_at DateTime? @default(now())
-  updated_at DateTime? @updatedAt
-
-  CorrectAdmin CorrectAdmin @relation(fields: [correct_admin_id], references: [id])
-  CompanyType  CompanyType? @relation(fields: [company_type_id], references: [id])
-
-  @@map("app_user_datas")
-}
-
-model AppUserAuth {
-  id            String  @id @default(uuid())
-  cpf           String  @unique
-  email         String  @unique
-  password      String
-  authenticated Boolean @default(false)
-
-  created_at DateTime? @default(now())
-  updated_at DateTime? @updatedAt
-
-  AppUserValidationDocument AppUserValidationDocument[]
-  AppUserAccounts           AppUserAccounts[]
-
-  @@map("app_user_auth")
-}
-
-model AppUserValidationDocument {
-  id                        String  @id @default(uuid())
-  face_picture              String
-  document_front_picture    String
-  document_back_picture     String
-  face_and_document_picture String
-  status                    Boolean @default(false)
-  app_user_auth_id          String
-
-  created_at DateTime? @default(now())
-  updated_at DateTime? @updatedAt
-
-  AppUserAuth AppUserAuth @relation(fields: [app_user_auth_id], references: [id])
-
-  @@map("app_user_validations")
-}
-
-model Cards {
-  id               String   @id @default(uuid())
-  card_name        String   @unique
-  card_type        CardType
-  correct_admin_id String
-
-  CorrectAdmin CorrectAdmin @relation(fields: [correct_admin_id], references: [id])
-
-  created_at           DateTime?              @default(now())
-  updated_at           DateTime?              @updatedAt
-  PartnerCards         PartnerCards[]
-  EmployerCards        EmployerCards[]
-  CompanyBusinessCards CompanyBusinessCards[]
-  AppUserAccounts      AppUserAccounts[]
-
-  @@map("cards")
-}
-
-enum CardType {
-  pos_pago
-  pre_pago
-}
-
-model PartnerCards {
-  id                 String    @id @default(uuid())
-  contract_number    String    @unique @default(uuid())
-  card_id            String
-  company_type_id    String
-  adm_correct_fee    Float
-  mkt_correct_fee    Float
-  total_installments Int       @default(1)
-  cashback           Float
-  validate           Boolean   @default(false)
-  created_at         DateTime? @default(now())
-  updated_at         DateTime? @updatedAt
-
-  Cards       Cards       @relation(fields: [card_id], references: [id])
-  CompanyType CompanyType @relation(fields: [company_type_id], references: [id])
-
-  @@map("partner_cards")
-}
-
-model EmployerCards {
-  id              String    @id @default(uuid())
-  contract_number String    @unique @default(uuid())
-  card_id         String    @unique
-  company_type_id String
-  created_at      DateTime? @default(now())
-  updated_at      DateTime? @updatedAt
-
-  Cards           Cards             @relation(fields: [card_id], references: [id])
-  CompanyType     CompanyType       @relation(fields: [company_type_id], references: [id])
-  AppUserAccounts AppUserAccounts[]
-
-  @@map("employer_cards")
-}
-
-model AppUserAccounts {
-  id                String    @id @default(uuid())
-  card_id           String
-  account_number    String    @unique @default(uuid())
-  available_amount  Int
-  employer_cards_id String?
-  app_user_id       String
-  status            Boolean   @default(true)
-  created_at        DateTime? @default(now())
-  updated_at        DateTime? @updatedAt
-
-  EmployerCards EmployerCards? @relation(fields: [employer_cards_id], references: [id])
-  AppUserAuth   AppUserAuth    @relation(fields: [app_user_id], references: [id])
-  Cards         Cards          @relation(fields: [card_id], references: [id])
-
-  @@map("app_user_accounts")
-}
-
-model CompanyBusinessCards {
-  id                 String    @id @default(uuid())
-  contract_number    String    @unique @default(uuid())
-  card_id            String
-  company_type_id    String
-  adm_correct_fee    Float     @default(0)
-  mkt_correct_fee    Float     @default(0)
-  total_installments Int       @default(1)
-  cashback           Float     @default(0)
-  validate           Boolean   @default(false)
-  created_at         DateTime? @default(now())
-  updated_at         DateTime? @updatedAt
-
-  Cards       Cards       @relation(fields: [card_id], references: [id])
-  CompanyType CompanyType @relation(fields: [company_type_id], references: [id])
-
-  @@map("company_business_cards")
-}
-
-model CompanyAddress {
-  id           String  @id @default(uuid())
-  street       String
-  number       String
-  complement   String?
+model Address {
+  uuid         String         @id @default(uuid())
+  line1        String
+  line2        String
+  line3        String?
+  postal_code  String
   neighborhood String
-  zip_code     String
   city         String
   state        String
   country      String
-  cnpj         String  @unique
+  BusinessInfo BusinessInfo[]
+  UserInfo     UserInfo[]
 
-  @@map("company_addressess")
+  @@map("addresses")
 }
 
-model Product {
-  id              String    @id @default(uuid())
-  name            String
-  description     String?
-  banner          String    @default("")
-  category_name   String
-  company_user_id String
-  created_at      DateTime? @default(now())
-  updated_at      DateTime? @updatedAt
+model UserInfo {
+  uuid                  String     @id @default(uuid())
+  business_info_uuid    String?
+  address_uuid          String?
+  document              String     @unique
+  document2             String?    @unique
+  document3             String?    @unique
+  first_name            String?
+  last_name             String?
+  display_name          String?
+  internal_company_code String?
+  gender                String?
+  date_of_birth         DateTime
+  phone                 String?
+  salary                String?
+  company_owner         Boolean    @default(false)
+  status                Boolean    @default(true)
+  driver_license        String?    @unique
+  function              String?
+  authenticated         Boolean    @default(false)
+  marital_status        String?
+  dependents_quantity   Int        @default(0)
+  UserAuth              UserAuth[]
 
-  Advertisement Advertisement[]
+  BusinessInfo BusinessInfo?  @relation(fields: [business_info_uuid], references: [uuid])
+  Address      Address?       @relation(fields: [address_uuid], references: [uuid])
+  UserWallet   UserWallet[]
+  Transactions Transactions[]
 
-  CompanyUser CompanyUser @relation(fields: [company_user_id], references: [id])
-
-  @@map("products")
+  @@map("user_info")
 }
 
-model Advertisement {
-  id              String    @id @default(uuid())
-  name            String
-  description     String?
-  price           Int
-  banner          String    @default("")
-  product_id      String
-  created_at      DateTime? @default(now())
-  updated_at      DateTime? @updatedAt
-  company_user_id String
+model UserAuth {
+  uuid           String  @id @default(uuid())
+  user_info_uuid String?
+  document       String  @unique
+  email          String  @unique
+  password       String
 
-  Product     Product     @relation(fields: [product_id], references: [id])
-  CompanyUser CompanyUser @relation(fields: [company_user_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
 
-  @@map("advertisements")
+  UserInfo UserInfo? @relation(fields: [user_info_uuid], references: [uuid])
+
+  @@map("users_auth")
+}
+
+model Benefit {
+  uuid               String       @id @default(uuid())
+  contract_info_uuid String
+  business_info_uuid String
+  benefit_name       String
+  benefit_type       String
+  created_at         DateTime     @default(now())
+  updated_at         DateTime?    @updatedAt
+  UserWallet         UserWallet[]
+
+  ContractInfo ContractInfo @relation(fields: [contract_info_uuid], references: [uuid])
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+
+  @@map("benefits")
+}
+
+model UserWallet {
+  uuid           String    @id @default(uuid())
+  user_info_uuid String
+  benefit_uuid   String
+  balance        Int
+  created_at     DateTime  @default(now())
+  updated_at     DateTime? @updatedAt
+
+  UserInfo     UserInfo       @relation(fields: [user_info_uuid], references: [uuid])
+  Benefit      Benefit        @relation(fields: [benefit_uuid], references: [uuid])
+  Transactions Transactions[]
+
+  @@map("users_wallet")
+}
+
+model ContractInfo {
+  uuid         String         @id @default(uuid())
+  name         String
+  version      String
+  assigned_at  DateTime       @default(now())
+  BusinessInfo BusinessInfo[]
+  Benefit      Benefit[]
+
+  @@map("contract_info")
+}
+
+model Transactions {
+  uuid               String    @id @default(uuid())
+  payer_wallet_uuid  String
+  favored_uuid       String
+  business_info_uuid String
+  amount             Int
+  fee_amount         Int
+  cashback           Int
+  status             Boolean
+  created_at         DateTime? @default(now())
+  updated_at         DateTime? @updatedAt
+
+  UserWallet   UserWallet   @relation(fields: [payer_wallet_uuid], references: [uuid])
+  UserInfo     UserInfo     @relation(fields: [favored_uuid], references: [uuid])
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+
+  @@map("transactions")
 }

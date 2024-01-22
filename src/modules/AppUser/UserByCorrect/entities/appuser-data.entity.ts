@@ -2,64 +2,76 @@ import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
 
 export type AppUserProps = {
-    internal_company_code: string | null
-    employee: boolean
+    business_info_uuid: string | null,
+    address_uuid: string | null,
+    document: string,
+    document2: string | null,
+    document3: string | null,
+    first_name: string | null,
+    last_name: string | null,
+    display_name: string | null,
+    internal_company_code: string | null,
+    gender: string | null,
+    date_of_birth: Date,
+    phone: string | null,
+    salary: string | null,
     company_owner: boolean
-    full_name: string
-    gender: string
-    rg: string | null
-    cpf: string
-    driver_license: string | null
-    date_of_birth: Date
+    status: boolean,
     function: string | null
-    salary: number | null
-    company_type_id: string | null
+    authenticated: boolean
+    marital_status: string | null,
     dependents_quantity: number
-    marital_status: string
-    correct_admin_id: string
 }
 
 export class AppUserDataEntity{
-    id: string
+    uuid: string
+    business_info_uuid: string | null
+    address_uuid: string | null
+    document: string
+    document2: string | null
+    document3: string | null
+    first_name: string | null
+    last_name: string | null
+    display_name: string | null
     internal_company_code: string | null
-    employee: boolean
-    company_owner: boolean
-    full_name: string
-    gender: string
-    rg: string | null
-    cpf: string
-    driver_license: string | null
+    gender: string | null
     date_of_birth: Date
+    phone: string | null
+    salary: string | null
+    company_owner: boolean
+    status: boolean
     function: string | null
-    salary: number | null
-    company_type_id: string | null
-    marital_status: string
+    authenticated: boolean
+    marital_status: string | null
     dependents_quantity: number
-    correct_admin_id: string
 
     private constructor(props: AppUserProps){
-        if(!props.full_name) throw new CustomError("Name is required", 401)
+        if(!props.first_name) throw new CustomError("Name is required", 401)
+        if(!props.last_name) throw new CustomError("Last name is required", 401)
         if(!props.gender) throw new CustomError("Gender is required", 401)
-        if(!props.cpf) throw new CustomError("CPF is required", 401)
+        if(!props.document2) throw new CustomError("document is required", 401)
         if(!props.date_of_birth) throw new CustomError("Date of birth is required", 401)
-        if(!props.correct_admin_id) throw new CustomError("Correct Admin ID is required", 401)
 
-        this.id = randomUUID()
+        this.uuid = randomUUID()
+        this.business_info_uuid = props.business_info_uuid
+        this.document = props.document
+        this.address_uuid = props.address_uuid
+        this.document2 = props.document2
+        this.document3 = props.document3
+        this.first_name = props.first_name
+        this.last_name = props.last_name
+        this.display_name = props.display_name
+        this.phone = props.phone
+        this.status = props.status
+        this.authenticated = props.authenticated
         this.internal_company_code = props.internal_company_code
-        this.employee = props.employee
         this.company_owner = props.company_owner
-        this.full_name = props.full_name
         this.gender = props.gender
-        this.rg = props.rg
-        this.cpf = props.cpf
-        this.driver_license = props.driver_license
         this.date_of_birth = props.date_of_birth
         this.function = props.function
         this.salary = props.salary
-        this.company_type_id = props.company_type_id
         this.marital_status = props.marital_status
         this.dependents_quantity = props.dependents_quantity
-        this.correct_admin_id = props.correct_admin_id
     }
 
     static async create(data: AppUserProps){
