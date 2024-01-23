@@ -20,8 +20,7 @@ export class CreateCompanyDataUsecase {
         //create Data
         const createData = await this.companyDataRepository.saveOrUpdate(companyData)
         
-        // //after creating, set businessData to admin FK
-        // await this.companyUserRepository.updateUser(companyAdminId)
+        
         return createData
 
     }

@@ -1,7 +1,7 @@
 import { CustomError } from "../../../../../errors/custom.error";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 
-export class GetSingleUserUsecase {
+export class GetUsersUsecase {
     constructor(
         private companyUserRepository: ICompanyUserRepository
     ) {}
