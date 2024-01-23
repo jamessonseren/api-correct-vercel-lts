@@ -1,21 +1,32 @@
 import { Request, Response } from "express";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 import { DeleteUserByAdminUsecase } from "./delete-user-by-admin.usecase";
+import { logger } from "../../../../../utils/logger";
 
-export class DeleteUserByAdminController{
+export class DeleteUserByAdminController {
     constructor(
         private companyUserRepository: ICompanyUserRepository
-    ){}
-    async handle(req: Request, res: Response){
+    ) { }
+    async handle(req: Request, res: Response) {
 
-        const user_id = req.body.user_id as string
+        try {
+            const user_id = req.query.user_id as string
 
-        const deleteUsecase = new DeleteUserByAdminUsecase(this.companyUserRepository)
+            const business_document = req.query.business_document as string
+            const deleteUsecase = new DeleteUserByAdminUsecase(this.companyUserRepository)
 
-        const deleteUser = await deleteUsecase.execute(user_id)
+            await deleteUsecase.execute(user_id, business_document)
 
-        return res.json(deleteUser)
 
-        return res.json({message: "Usuário excluído com sucesso"})
+            // return res.json(deleteUser)
+
+            return res.json({ message: "Usuário excluído com sucesso" })
+
+        } catch (err: any) {
+            logger.error(err.stack)
+            return res.status(err.statusCode).json({
+                error: err.message
+            })
+        }
     }
 }

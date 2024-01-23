@@ -12,4 +12,5 @@ export type BusinessUserResponse = {
     function: string | null
     permissions: Permissions[],
     is_client: boolean,   
+    is_active: boolean
 }
