@@ -15,6 +15,7 @@ export type CompanyUserProps = {
     permissions: Permissions[],
     is_client: boolean,     
     password: string
+    is_active: boolean
 }
 
 export class CompanyUserEntity{
@@ -30,6 +31,8 @@ export class CompanyUserEntity{
     permissions: Permissions[]
     is_client: boolean     
     password: string
+    is_active: boolean
+
     private constructor(props: CompanyUserProps){
         this.uuid = randomUUID()
         this.business_info_uuid = props.business_info_uuid
@@ -43,6 +46,7 @@ export class CompanyUserEntity{
         this.password = props.password
         this.function = props.function
         this.is_client = props.is_client
+        this.is_active = props.is_active
     }
 
     static async create(data: CompanyUserProps){

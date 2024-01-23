@@ -36,7 +36,7 @@ companyUserRouter.get('/company-users', companyIsAuth, async (request, response)
 
 
 //update company user by company admin
-companyUserRouter.put("/company-users", companyIsAuth, async (request, response) => {
+companyUserRouter.put("/company-user", companyIsAuth, async (request, response) => {
     await updateUserController.handle(request, response)
 })
 
