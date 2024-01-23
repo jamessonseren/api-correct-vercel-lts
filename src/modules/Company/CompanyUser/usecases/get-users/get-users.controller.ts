@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 import { logger } from "../../../../../utils/logger";
-import { GetSingleUserUsecase } from "./get-users.usecase";
+import { GetUsersUsecase } from "./get-users.usecase";
 
-export class GetSingleUserController{
+export class GetUsersController{
     constructor(
         private companyUserRepository: ICompanyUserRepository
     ) {}
@@ -13,9 +13,9 @@ export class GetSingleUserController{
 
             const business_document = req.query.business_document as string
 
-            const getSingleUserUsecase = new GetSingleUserUsecase(this.companyUserRepository)
+            const getUsersUsecase = new GetUsersUsecase(this.companyUserRepository)
 
-            const users = await getSingleUserUsecase.execute(business_document)
+            const users = await getUsersUsecase.execute(business_document)
             
             return res.json(users)
 

@@ -41,7 +41,7 @@ model BusinessUser {
   uuid               String        @id @default(uuid())
   business_info_uuid String?
   is_admin           Boolean       @default(false)
-  business_document  String        
+  business_document  String
   admin_document     String?       @unique
   name               String?
   email              String?       @unique
@@ -58,26 +58,36 @@ model BusinessUser {
   @@map("business_users")
 }
 
-model BusinessInfo {
-  uuid                String              @id @default(uuid())
-  address_uuid        String?
-  contract_info_uuid  String?
-  fantasy_name        String
-  corporate_reason    String?
-  document            String              @unique
-  classification      String
-  colaborators_number Int
-  status              Boolean             @default(false)
-  phone_1             String
-  phone_2             String?
-  business_type       BusinessTypeOptions
+model BusinessCategory {
+  uuid          String         @id @default(uuid())
+  category_name String
+  BusinessInfo  BusinessInfo[]
 
-  Address      Address?       @relation(fields: [address_uuid], references: [uuid])
-  ContractInfo ContractInfo?  @relation(fields: [contract_info_uuid], references: [uuid])
-  BusinessUser BusinessUser[]
-  UserInfo     UserInfo[]
-  Benefit      Benefit[]
-  Transactions Transactions[]
+  @@map("business_category")
+}
+
+model BusinessInfo {
+  uuid                 String              @id @default(uuid())
+  address_uuid         String?
+  contract_info_uuid   String?
+  fantasy_name         String
+  corporate_reason     String?
+  document             String              @unique
+  classification       String
+  colaborators_number  Int
+  status               Boolean             @default(false)
+  phone_1              String
+  phone_2              String?
+  business_category_id String[]
+  business_type        BusinessTypeOptions
+
+  Address          Address?         @relation(fields: [address_uuid], references: [uuid])
+  ContractInfo     ContractInfo?    @relation(fields: [contract_info_uuid], references: [uuid])
+  BusinessCategory BusinessCategory @relation(fields: [business_category_id], references: [uuid])
+  BusinessUser     BusinessUser[]
+  UserInfo         UserInfo[]
+  Benefit          Benefit[]
+  Transactions     Transactions[]
 
   @@map("companies_data")
 }
