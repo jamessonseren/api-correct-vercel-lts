@@ -50,6 +50,7 @@ model BusinessUser {
   function           String?
   permissions        Permissions[] @default([all])
   is_client          Boolean       @default(false)
+  is_active          Boolean       @default(true)
   created_at         DateTime?     @default(now())
   updated_at         DateTime?     @updatedAt
 
@@ -75,10 +76,12 @@ model BusinessInfo {
   document             String              @unique
   classification       String
   colaborators_number  Int
+  block_list           String[]            @default([])
   status               Boolean             @default(false)
   phone_1              String
   phone_2              String?
-  business_category_id String[]
+  business_category_id String
+  email                String
   business_type        BusinessTypeOptions
 
   Address          Address?         @relation(fields: [address_uuid], references: [uuid])
@@ -89,7 +92,7 @@ model BusinessInfo {
   Benefit          Benefit[]
   Transactions     Transactions[]
 
-  @@map("companies_data")
+  @@map("business_data")
 }
 
 enum BusinessTypeOptions {

@@ -17,14 +17,13 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
     }
     
 
-    async findById(uuid: string): Promise<BusinessUserResponse | null> {
+    async findById(id: string): Promise<BusinessUserResponse | null> {
         const companyUser = await prismaClient.businessUser.findUnique({
             where: {
-                uuid
+                uuid: id
             }
         })
-
-        return companyUser || null
+        return companyUser
     }
 
     async findByCnpjAndAdminRole(business_document: string): Promise<BusinessUserResponse | null> {
@@ -66,7 +65,8 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
             },
             data: {
                 permissions: data.permissions,
-                password: data.password
+                password: data.password,
+                is_active: data.is_active
 
             }
         })
@@ -88,7 +88,8 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                 permissions: data.permissions,
                 function: data.function,
                 password: data.password,
-                user_name: data.user_name
+                user_name: data.user_name,
+                is_active: data.is_active
             }            
         })
 
