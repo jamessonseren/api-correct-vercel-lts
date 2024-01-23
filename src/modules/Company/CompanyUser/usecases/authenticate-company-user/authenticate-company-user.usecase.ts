@@ -23,6 +23,8 @@ export class AuthenticateCompanyUserUsecase{
         const findAdmin = await this.companyUserRepository.findByUserNameAndDocumentAuth(user_name, business_document)
         if(!findAdmin) throw new CustomError("Incorrect username/password", 401)
 
+        if(!findAdmin.is_active) throw new CustomError("User is not allowed to sign in", 401)
+
         const comparePasswordHash = await this.passwordCrypto.compare(password, findAdmin.password )
         if(!comparePasswordHash) throw new CustomError("Incorrect CNPJ, username or password", 401)
 
@@ -36,6 +38,7 @@ export class AuthenticateCompanyUserUsecase{
             permissions: findAdmin.permissions,
             is_admin: findAdmin.is_admin,
             token: tokenGenerated,
+            is_active: findAdmin.is_active
         }
     
     }

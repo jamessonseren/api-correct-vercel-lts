@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
-import { CompanyUserProps } from "../../entities/company-user.entity";
+import { CompanyUserEntity } from "../../entities/company-user.entity";
 import { logger } from "../../../../../utils/logger";
 import { UpdateUserByAdminUsecase } from "./update-user-by-admin.usecase";
 
@@ -12,8 +12,10 @@ export class UpdateUserbyAdminController {
     async handle(req: Request, res: Response) {
 
         try {
-            const data: CompanyUserProps = req.body
+            const data: CompanyUserEntity = req.body
+            data.uuid = req.query.user_id as string
 
+            data.business_document = req.query.business_document as string
             const updateUserUsecase = new UpdateUserByAdminUsecase(this.companyUserRepository)
 
             const updateUser = await updateUserUsecase.execute(data)

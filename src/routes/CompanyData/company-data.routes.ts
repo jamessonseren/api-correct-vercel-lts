@@ -7,7 +7,8 @@ import { deleteCompanyDataController } from "../../modules/Company/CompanyData/u
 
 export const companyDataRouter = Router()
 
-companyDataRouter.post('/company-data', companyIsAuth, async (request, response) => {
+//create company data
+companyDataRouter.post('/company-data', async (request, response) => {
     await companyDataController.handle(request, response)
 })
 
