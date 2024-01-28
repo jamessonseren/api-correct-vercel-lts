@@ -8,7 +8,6 @@ const companyUserRepository = new CompanyUserPrismaRepository()
 
 const companyDataController = new CreateCompanyDataController(
     companyDataRepository,
-    companyUserRepository,
 )
 
 export { companyDataController }

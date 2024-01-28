@@ -1,12 +1,10 @@
 import { CompanyDataPrismaRepository } from "../../../CompanyData/repositories/implementations/prisma/company-data-prisma.repository";
 import { CompanyUserPrismaRepository } from "../../repositories/implementations/company-user.prisma.repository";
-import { CreateCompanyUserByCorrectController } from "./create-company-user.controller";
+import { CreateCompanyUserByAdminController } from "./create-company-user-by-admin.controller";
 
 const companyUserRepository = new CompanyUserPrismaRepository()
-const companyDataRepository = new CompanyDataPrismaRepository()
-const companyUserController = new CreateCompanyUserByCorrectController(
+const companyUserByAdminController = new CreateCompanyUserByAdminController(
     companyUserRepository,
-    companyDataRepository
 )
 
-export { companyUserController }
+export { companyUserByAdminController }

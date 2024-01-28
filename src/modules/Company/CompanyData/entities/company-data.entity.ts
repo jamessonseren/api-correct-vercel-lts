@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error';
-import { BusinessTypeOptions } from '@prisma/client';
+import { BusinessTypeOptions, Status } from '@prisma/client';
 
 type CompanyDataProps = {
     address_uuid: string | null
@@ -12,7 +12,7 @@ type CompanyDataProps = {
     classification: string
     colaborators_number: number
     block_list: string[]
-    status: boolean
+    status: Status
     phone_1: string
     phone_2: string | null
     business_type: BusinessTypeOptions
@@ -31,7 +31,7 @@ export class CompanyDataEntity {
     classification: string
     colaborators_number: number
     block_list: string[]
-    status: boolean
+    status: Status
     phone_1: string
     phone_2: string | null
     business_type: BusinessTypeOptions
@@ -42,7 +42,7 @@ export class CompanyDataEntity {
         if (!props.fantasy_name) throw new CustomError("Fantasy name is required", 400)
         if (!props.classification) throw new CustomError("Company classification is required", 400)
         if (!props.colaborators_number) throw new CustomError("Total employees is required", 400)
-        if(props.email) throw new CustomError("Email is required", 400)
+        if (!props.email) throw new CustomError("Email is required", 400)
         if (!props.phone_1) throw new CustomError("Telephone 1 is required", 400)
 
         this.uuid = randomUUID()

@@ -4,6 +4,15 @@ import { ICompanyDataRepository } from "../../../../CompanyData/repositories/com
 
 
 export class CompanyDataPrismaRepository implements ICompanyDataRepository {
+    async findByEmail(email: string): Promise<CompanyDataEntity | null> {
+        const companyData = await prismaClient.businessInfo.findUnique({
+            where:{
+                email
+            }
+        })
+
+        return companyData
+    }
 
 
 

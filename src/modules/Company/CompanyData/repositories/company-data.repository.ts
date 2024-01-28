@@ -4,5 +4,6 @@ export interface ICompanyDataRepository{
     saveOrUpdate(data: CompanyDataEntity): Promise<CompanyDataEntity>
     findByDocument(cnpj: string): Promise<CompanyDataEntity | null>
     findById(id: string): Promise<CompanyDataEntity | null>
+    findByEmail(email: string): Promise<CompanyDataEntity | null>
     deleteById(cnpj: string):Promise<void>
 }

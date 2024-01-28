@@ -37,24 +37,30 @@ enum Permissions {
   allEmployers
 }
 
+enum Status {
+  pending
+  active
+  inactive
+  pending_password
+}
+
 model BusinessUser {
   uuid               String        @id @default(uuid())
-  business_info_uuid String?
+  business_info_uuid String
   is_admin           Boolean       @default(false)
   business_document  String
-  admin_document     String?       @unique
+  document           String?       @unique
   name               String?
   email              String?       @unique
-  user_name          String
+  user_name          String?
   password           String
   function           String?
   permissions        Permissions[] @default([all])
-  is_client          Boolean       @default(false)
-  is_active          Boolean       @default(true)
+  status             Status        @default(pending)
   created_at         DateTime?     @default(now())
   updated_at         DateTime?     @updatedAt
 
-  BusinessInfo BusinessInfo? @relation(fields: [business_info_uuid], references: [uuid])
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
 
   @@map("business_users")
 }
@@ -77,11 +83,11 @@ model BusinessInfo {
   classification       String
   colaborators_number  Int
   block_list           String[]            @default([])
-  status               Boolean             @default(false)
+  status               Status              @default(pending)
   phone_1              String
   phone_2              String?
   business_category_id String
-  email                String
+  email                String              @unique
   business_type        BusinessTypeOptions
 
   Address          Address?         @relation(fields: [address_uuid], references: [uuid])
@@ -134,10 +140,10 @@ model UserInfo {
   phone                 String?
   salary                String?
   company_owner         Boolean    @default(false)
-  status                Boolean    @default(true)
+  status                Status     @default(pending)
   driver_license        String?    @unique
   function              String?
-  authenticated         Boolean    @default(false)
+  is_authenticated      Boolean    @default(false)
   marital_status        String?
   dependents_quantity   Int        @default(0)
   UserAuth              UserAuth[]
@@ -205,6 +211,12 @@ model ContractInfo {
   Benefit      Benefit[]
 
   @@map("contract_info")
+}
+
+model BranchInfo {
+  uuid         String @id @default(uuid())
+  name         String
+  benefit_uuid String
 }
 
 model Transactions {
