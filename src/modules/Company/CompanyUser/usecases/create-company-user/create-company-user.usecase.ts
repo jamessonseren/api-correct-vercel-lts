@@ -1,84 +1,44 @@
 import { CustomError } from "../../../../../errors/custom.error"
+import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository"
 import { CompanyUserEntity, CompanyUserProps } from "../../entities/company-user.entity"
 import { ICompanyUserRepository } from "../../repositories/company-user.repository"
-import { Permissions } from "@prisma/client"
 
 
-export class CreateCompanyUserUseCase {
+export class CreateCompanyByCorrectUserUseCase {
   constructor(
-    private companyUserRepository: ICompanyUserRepository
+    private companyUserRepository: ICompanyUserRepository,
+    private companyDataRepository: ICompanyDataRepository
   ) { }
 
-  async execute(data: CompanyUserProps, business_document: string) {
+  async execute(data: CompanyUserProps) {
 
-    console.log({business_document})
-    //find company User by email
-    if (data.email) {
-      if(!data.business_document) throw new CustomError("CNPJ is required", 403)
+    if (!data.email) throw new CustomError("Email is required", 400)
 
-      //if email exists, it means that it's an admin being created
-      data.is_admin = true
-      const admin = await CompanyUserEntity.create(data)
+    //if email exists, it means that it's an admin being created  Correct
+    data.is_admin = true
 
-      if(!admin.name) throw new CustomError("Full name is required", 400)
-      if(!admin.function) throw new CustomError("Admin position is required", 400)
+    //check if email is already registered in business info database
+    const findByEmail = await this.companyDataRepository.findByEmail(data.email)
+    if (!findByEmail) throw new CustomError("Email not found in company registers", 400)
 
-      //check if email already exists
-      const companyUserByEmail = await this.companyUserRepository.findByEmail(data.email)
-      if (companyUserByEmail) throw new CustomError("Email already registered", 400)
-
-      //check if username already exists in present company
-      const findUserByUserName = await this.companyUserRepository.findByUserNameAndDocumentAuth(data.user_name, data.business_document)
-      if (findUserByUserName) throw new CustomError("Username already registered", 400)
-
-
-      //create company admin
-      const createCompanyAdmin = await this.companyUserRepository.saveUser(admin)
-
-      return createCompanyAdmin
-
-    }
-
-    //if email is empty, it means that it's a secondary user being created
-    const user = await CompanyUserEntity.create(data)
-
-    //get company Admin with company_document(cnpj) and admin role
-    const findCompanyAdmin = await this.companyUserRepository.findByCnpjAndAdminRole(business_document)
-    if (!findCompanyAdmin) throw new CustomError("Unable to find company Admin", 400)
-
-    console.log({findCompanyAdmin})
-    //Before doing anything, admin must have document registered
-    if(!findCompanyAdmin.admin_document) throw new CustomError("Admin must register CPF", 400)
-
-    //check if username already exists among Admin users
-    const findUser = await this.companyUserRepository.findByUserNameAndDocumentAuth(data.user_name, data.business_document)
-    if(findUser) throw new CustomError("User already exists", 409)
+    //if business info exists, relate to current user
+    data.business_info_uuid = findByEmail.uuid
+    data.business_document = findByEmail.document
+    data.status === 'pending_password'
     
-    //check if admin is a client
-    if(!findCompanyAdmin.is_client) throw new CustomError("User must have a contract first", 403)
+    const admin = await CompanyUserEntity.create(data)
 
-    //check if is admin
-    if(!findCompanyAdmin.is_admin) throw new CustomError("Only admin is allowed to create new users", 403)
+    //if(!admin.name) throw new CustomError("Full name is required", 400)
+    // if(!admin.function) throw new CustomError("Admin position is required", 400)
 
-    //if company is found, define value to seconday users 
-    user.business_document = findCompanyAdmin.business_document
-    user.is_client = findCompanyAdmin.is_client
-    user.is_admin = false
+    //check if email already exists in users registers
+    const companyUserByEmail = await this.companyUserRepository.findByEmail(data.email)
+    if (companyUserByEmail) throw new CustomError("Email already registered", 400)
 
-  
-    //By default, permissions is All - But should be only for admins.
-    if(user.permissions.includes('all')) throw new CustomError("Please, select a permission type", 403) 
+    //create company admin
+    const createCompanyAdmin = await this.companyUserRepository.saveUser(admin)
 
-    //create user
-    const createCompanyUser = await this.companyUserRepository.saveUser(user)
-
-    return createCompanyUser
-
-
-
-
-
-
+    return createCompanyAdmin
   }
 }
 

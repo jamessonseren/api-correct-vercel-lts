@@ -1,4 +1,4 @@
-import { BusinessTypeOptions } from "@prisma/client";
+import { BusinessTypeOptions, Status } from "@prisma/client";
 
 export type CompanyDataRequest = {
     uuid: string;
@@ -11,7 +11,7 @@ export type CompanyDataRequest = {
     classification: string
     colaborators_number: number
     block_list: string[]
-    status: boolean
+    status: Status
     phone_1: string
     phone_2: string | null
     business_type: BusinessTypeOptions

@@ -7,12 +7,20 @@ import { updateUserController } from "../../modules/Company/CompanyUser/usecases
 import { deleteUserController } from "../../modules/Company/CompanyUser/usecases/delete-user-by-admin";
 import { getUsersController } from "../../modules/Company/CompanyUser/usecases/get-users";
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
+import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
+import { companyUserByAdminController } from "../../modules/Company/CompanyUser/usecases/create-company-user-by-admin";
 
 
 export const companyUserRouter = Router()
 
-companyUserRouter.post('/company-user', async (request, response) => {
+//Create Company admin by correct
+companyUserRouter.post('/company-admin', correctIsAuth, async (request, response) => {
     await companyUserController.handle(request, response)
+})
+
+//Create company user by Company Admin
+companyUserRouter.post('/company-user', companyIsAuth, async (request, response) => {
+    await companyUserByAdminController.handle(request, response)
 })
 
 companyUserRouter.post('/company-user-login', async (request, response) => {

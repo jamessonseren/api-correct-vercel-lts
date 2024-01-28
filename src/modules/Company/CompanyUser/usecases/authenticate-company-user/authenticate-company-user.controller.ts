@@ -13,7 +13,7 @@ export class AuthenticateCompanyAdminController{
 
     async handle(req: Request, res: Response){
         try{
-            const { business_document, user_name, password} = req.body
+            const { business_document, user_name, password, email} = req.body
 
             const authCompanyUserUsecase = new AuthenticateCompanyUserUsecase(
                 this.companyUserRepository,
@@ -21,7 +21,7 @@ export class AuthenticateCompanyAdminController{
                 this.token
             )
 
-            const companyUser = await authCompanyUserUsecase.execute({business_document, user_name, password})
+            const companyUser = await authCompanyUserUsecase.execute({business_document, user_name, password, email})
 
             return res.json(companyUser)
 

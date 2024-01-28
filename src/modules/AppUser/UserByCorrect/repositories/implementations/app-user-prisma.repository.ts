@@ -77,7 +77,7 @@ export class AppUserPrismaRepository implements IAppUserRepository{
                 company_owner: data.company_owner,
                 status: data.status,
                 function: data.function,
-                authenticated: data.authenticated,
+                is_authenticated: data.is_authenticated,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity
             },
@@ -97,7 +97,7 @@ export class AppUserPrismaRepository implements IAppUserRepository{
                 company_owner: data.company_owner,
                 status: data.status,
                 function: data.function,
-                authenticated: data.authenticated,
+                is_authenticated: data.is_authenticated,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity
             }

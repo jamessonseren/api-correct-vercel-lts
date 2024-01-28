@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
+import { Status } from '@prisma/client'
 
 export type AppUserProps = {
     business_info_uuid: string | null,
@@ -16,9 +17,9 @@ export type AppUserProps = {
     phone: string | null,
     salary: string | null,
     company_owner: boolean
-    status: boolean,
+    status: Status,
     function: string | null
-    authenticated: boolean
+    is_authenticated: boolean
     marital_status: string | null,
     dependents_quantity: number
 }
@@ -39,9 +40,9 @@ export class AppUserDataEntity{
     phone: string | null
     salary: string | null
     company_owner: boolean
-    status: boolean
+    status: Status
     function: string | null
-    authenticated: boolean
+    is_authenticated: boolean
     marital_status: string | null
     dependents_quantity: number
 
@@ -63,7 +64,7 @@ export class AppUserDataEntity{
         this.display_name = props.display_name
         this.phone = props.phone
         this.status = props.status
-        this.authenticated = props.authenticated
+        this.is_authenticated = props.is_authenticated
         this.internal_company_code = props.internal_company_code
         this.company_owner = props.company_owner
         this.gender = props.gender
