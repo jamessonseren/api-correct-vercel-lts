@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
-import { CreateCompanyByCorrectUserUseCase } from "./create-company-user.usecase";
+import { CreateCompanyUserByAdminUsecase } from "./create-company-user-by-admin.usecase";
 import { CompanyUserProps } from "../../entities/company-user.entity";
 import { logger } from "../../../../../utils/logger";
 import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
 
-export class CreateCompanyUserByCorrectController {
+export class CreateCompanyUserByAdminController {
     constructor(
         private companyUserRepository: ICompanyUserRepository,
-        private companyDataRepository: ICompanyDataRepository
 
     ){}
 
@@ -16,12 +15,12 @@ export class CreateCompanyUserByCorrectController {
         try{
             const data: CompanyUserProps = req.body
 
-            const companyUserUsecase = new CreateCompanyByCorrectUserUseCase(
-                this.companyUserRepository,
-                this.companyDataRepository
+            const companyAdminId = req.companyUserId as string
+            const companyUserUsecase = new CreateCompanyUserByAdminUsecase(
+                this.companyUserRepository
             )
 
-            const companyUser = await companyUserUsecase.execute(data)
+            const companyUser = await companyUserUsecase.execute(data, companyAdminId)
 
             return res.json(companyUser)
             

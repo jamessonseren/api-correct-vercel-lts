@@ -1,16 +1,15 @@
-import { Permissions  } from "@prisma/client"
+import { Permissions, Status  } from "@prisma/client"
 
 export type BusinessUserResponse = {
     uuid: string,
-    business_info_uuid: string | null,
+    business_info_uuid: string,
     is_admin: boolean,
     business_document: string,
-    admin_document: string | null,
+    document: string | null,
     name: string | null,
     email: string | null,
-    user_name: string,
+    user_name: string | null,
     function: string | null
     permissions: Permissions[],
-    is_client: boolean,   
-    is_active: boolean
+    status: Status
 }

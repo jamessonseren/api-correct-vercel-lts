@@ -9,7 +9,6 @@ import { CompanyDataRequest } from "../../companyDataDto/company-data.dto";
 export class CreateCompanyDataController {
     constructor(
         private companyDataRepository: ICompanyDataRepository,
-        private companyUserRepository: ICompanyUserRepository,
     ) {
 
     }
@@ -20,7 +19,6 @@ export class CreateCompanyDataController {
 
             const companyDataUsecase = new CreateCompanyDataUsecase(
                 this.companyDataRepository,
-                this.companyUserRepository,
             )
 
             const companyData = await companyDataUsecase.execute(data)
