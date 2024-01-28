@@ -39,7 +39,7 @@ export class CompanyAddressEntity {
 
     }
 
-    static create(data: CompanyAddressProps) {
+    static async create(data: CompanyAddressProps) {
         if (!data.line1) throw new CustomError("Street is required", 400)
         if (!data.line2) throw new CustomError("Number is required", 400)
         if (!data.neighborhood) throw new CustomError("Neighbohood is required", 400)

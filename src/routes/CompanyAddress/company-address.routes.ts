@@ -6,7 +6,7 @@ import { getCompanyAddressController } from "../../modules/Company/CompanyAddres
 export const companyAddressRouter = Router()
 
 //register company address
-companyAddressRouter.post("/company-address", companyIsAuth, async (request, response) => {
+companyAddressRouter.post("/company-address", async (request, response) => {
     await createCompanyAddressController.handle(request, response)
 })
 

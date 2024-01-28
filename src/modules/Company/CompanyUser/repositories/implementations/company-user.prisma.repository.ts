@@ -5,17 +5,17 @@ import { BusinessUserResponse } from "../../companyUserDto/company-user.dto";
 
 
 export class CompanyUserPrismaRepository implements ICompanyUserRepository {
-    async findByUserNameAndDocumentAuth(user_name: string, business_document: string): Promise<CompanyUserEntity | null> {
+    async findByUserNameAndDocumentAuth(user_name: string, document: string): Promise<CompanyUserEntity | null> {
         const companyUser = await prismaClient.businessUser.findFirst({
             where:{
                 user_name,
-                business_document
+                business_document: document
             }
         })
 
         return companyUser
     }
-    
+       
 
     async findById(id: string): Promise<BusinessUserResponse | null> {
         const companyUser = await prismaClient.businessUser.findUnique({
@@ -26,31 +26,21 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return companyUser
     }
 
-    async findByCnpjAndAdminRole(business_document: string): Promise<BusinessUserResponse | null> {
-        const admin = await prismaClient.businessUser.findFirst({
-            where: {
-                business_document,
-                is_admin: true
-            }
-        })
-
-        return admin
-    }
-
-    async findByEmail(email: string): Promise<BusinessUserResponse | null> {
+   
+    async findByEmail(email: string): Promise<CompanyUserEntity | null> {
         const companyUser = await prismaClient.businessUser.findUnique({
             where: {
                 email
             }
         })
 
-        return companyUser || null
+        return companyUser
     }
 
-    async findByUsers(business_document: string): Promise<CompanyUserEntity[] | null> {
+    async findByUsers(document: string): Promise<CompanyUserEntity[] | null> {
         const companyUser = await prismaClient.businessUser.findMany({
             where: {
-                business_document,
+                document,
                 is_admin: false
             }
         })
@@ -66,7 +56,7 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
             data: {
                 permissions: data.permissions,
                 password: data.password,
-                is_active: data.is_active
+                status: data.status
 
             }
         })
@@ -81,15 +71,14 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                 business_info_uuid: data.business_info_uuid,
                 name: data.name,
                 business_document: data.business_document,
-                admin_document: data.admin_document,
+                document: data.document,
                 email: data.email,
-                is_client: data.is_client,
                 is_admin: data.is_admin,
                 permissions: data.permissions,
                 function: data.function,
                 password: data.password,
                 user_name: data.user_name,
-                is_active: data.is_active
+                status: data.status
             }            
         })
 
