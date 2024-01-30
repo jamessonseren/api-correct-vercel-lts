@@ -1,7 +1,8 @@
 import { CompanyDataEntity } from "../entities/company-data.entity";
 
 export interface ICompanyDataRepository{
-    saveOrUpdate(data: CompanyDataEntity): Promise<CompanyDataEntity>
+    save(data: CompanyDataEntity): Promise<CompanyDataEntity>
+    update(data: CompanyDataEntity): Promise<CompanyDataEntity>
     findByDocument(cnpj: string): Promise<CompanyDataEntity | null>
     findById(id: string): Promise<CompanyDataEntity | null>
     findByEmail(email: string): Promise<CompanyDataEntity | null>
