@@ -97,6 +97,7 @@ model BusinessInfo {
   UserInfo         UserInfo[]
   Benefit          Benefit[]
   Transactions     Transactions[]
+  BusinessConfig   BusinessConfig[]
 
   @@map("business_data")
 }
@@ -236,4 +237,18 @@ model Transactions {
   BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
 
   @@map("transactions")
+}
+
+model BusinessConfig {
+  uuid                     String  @id @default(uuid())
+  business_info_uuid       String
+  admin_tax                Int
+  marketing_tax            Int
+  cycle_start_date         String?
+  cycle_end_date           String?
+  cycle_paper_payment_date String?
+
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+
+  @@map("business_config")
 }
