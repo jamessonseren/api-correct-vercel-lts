@@ -4,6 +4,29 @@ import { ICompanyDataRepository } from "../../../../CompanyData/repositories/com
 
 
 export class CompanyDataPrismaRepository implements ICompanyDataRepository {
+    async update(data: CompanyDataEntity): Promise<CompanyDataEntity> {
+        const companyData = await prismaClient.businessInfo.update({
+            where:{
+                uuid: data.uuid
+            },
+            data:{
+                address_uuid: data.address_uuid,
+                contract_info_uuid: data.contract_info_uuid,
+                fantasy_name: data.fantasy_name,
+                corporate_reason: data.corporate_reason,
+                document: data.document,
+                classification: data.classification,
+                colaborators_number: data.colaborators_number,
+                block_list: data.block_list,
+                phone_1: data.phone_1,
+                phone_2: data.phone_2,
+                business_type: data.business_type,
+                email: data.email
+            }
+        })
+
+        return companyData
+    }
     async findByEmail(email: string): Promise<CompanyDataEntity | null> {
         const companyData = await prismaClient.businessInfo.findUnique({
             where:{
@@ -16,30 +39,14 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
 
 
 
-    async saveOrUpdate(data: CompanyDataEntity): Promise<CompanyDataEntity> {
-        const companyData = await prismaClient.businessInfo.upsert({
-            where: {
-                uuid: data.uuid
-            },
-            create: {
+    async save(data: CompanyDataEntity): Promise<CompanyDataEntity> {
+        const companyData = await prismaClient.businessInfo.create({
+           
+            data: {
                 uuid: data.uuid,
                 address_uuid: data.address_uuid,
                 contract_info_uuid: data.contract_info_uuid,
                 business_category_id: data.business_category_id,
-                fantasy_name: data.fantasy_name,
-                corporate_reason: data.corporate_reason,
-                document: data.document,
-                classification: data.classification,
-                colaborators_number: data.colaborators_number,
-                block_list: data.block_list,
-                phone_1: data.phone_1,
-                phone_2: data.phone_2,
-                business_type: data.business_type,
-                email: data.email
-            },
-            update: {
-                address_uuid: data.address_uuid,
-                contract_info_uuid: data.contract_info_uuid,
                 fantasy_name: data.fantasy_name,
                 corporate_reason: data.corporate_reason,
                 document: data.document,
