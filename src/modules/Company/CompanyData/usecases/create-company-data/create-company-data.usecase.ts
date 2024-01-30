@@ -15,7 +15,7 @@ export class CreateCompanyDataUsecase {
         const companyData = await CompanyDataEntity.create(data)
         
         //create Data
-        const createData = await this.companyDataRepository.saveOrUpdate(companyData)
+        const createData = await this.companyDataRepository.save(companyData)
         
         
         return createData

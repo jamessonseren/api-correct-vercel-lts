@@ -9,6 +9,8 @@ export class GetCompanyDataUsecase{
 
     async execute(business_id: string){
 
+        if(!business_id) throw new CustomError("Business ID is required", 400)
+
         const getCompanyData = await this.companyDataRepository.findById(business_id)
         if(!getCompanyData) throw new CustomError("Company Data not registered", 400)
 
