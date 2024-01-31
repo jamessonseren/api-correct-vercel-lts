@@ -3,12 +3,15 @@ import { IPasswordCrypto } from "../../../../../crypto/password.crypto";
 import { ICompanyAdminToken } from "../../../../../infra/shared/crypto/token/CompanyAdmin/token";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 import { AuthenticateCompanyUserUsecase } from "./authenticate-company-user.usecase";
+import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
 
 export class AuthenticateCompanyAdminController{
     constructor(
         private companyUserRepository: ICompanyUserRepository,
+        private companyDataRepository: ICompanyDataRepository,
         private passwordCrypto: IPasswordCrypto,
         private token: ICompanyAdminToken
+
     ){}
 
     async handle(req: Request, res: Response){
@@ -17,6 +20,7 @@ export class AuthenticateCompanyAdminController{
 
             const authCompanyUserUsecase = new AuthenticateCompanyUserUsecase(
                 this.companyUserRepository,
+                this.companyDataRepository,
                 this.passwordCrypto,
                 this.token
             )

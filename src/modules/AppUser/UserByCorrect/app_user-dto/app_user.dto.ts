@@ -1,7 +1,7 @@
 export type AppUserRequest = {
     document: string,
     document2: string | null,
-    display_name: string | null,
+    full_name: string | null,
     internal_company_code: string | null,
     gender: string | null,
     date_of_birth: Date,

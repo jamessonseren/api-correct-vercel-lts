@@ -8,19 +8,7 @@ import { AppUserProps, AppUserDataEntity } from '../../entities/appuser-data.ent
 import { AppUserRequest } from '../../app_user-dto/app_user.dto';
 import { ICompanyDataRepository } from '../../../../Company/CompanyData/repositories/company-data.repository';
 
-// type AppUserRequest = {
-//     internal_company_code: string | null
-//     employee: boolean
-//     company_owner: boolean
-//     full_name: string
-//     gender: string
-//     rg: string | null
-//     document: string
-//     date_of_birth: Date
-//     user_function: string | null
-//     marital_status: string
-//     dependents_quantity: number
-// }
+
 
 export class CreateAppUserByCorrectUsecase {
     constructor(
@@ -55,7 +43,7 @@ export class CreateAppUserByCorrectUsecase {
                         // Process CSV data
                         const internal_company_code = await data['\ufeffcodigo_interno'];
                         const company_owner = JSON.parse(await data['company_owner']);
-                        const display_name = await data['nome_completo'];
+                        const full_name = await data['nome_completo'];
                         const gender = await data['sexo'];
                         const document2 = await data['rg'];
                         const document = await data['cpf'];
@@ -68,7 +56,7 @@ export class CreateAppUserByCorrectUsecase {
                         const userDataFromCSV: AppUserRequest = {
                             internal_company_code,
                             company_owner,
-                            display_name,
+                            full_name,
                             gender,
                             document,
                             document2,
@@ -99,13 +87,11 @@ export class CreateAppUserByCorrectUsecase {
                             business_info_uuid: business_info_uuid,
                             address_uuid: null,
                             is_authenticated: false,
-                            first_name: null,
-                            last_name: null,
+                            full_name: user.full_name,
                             phone:null,
-                            status: 'active',
+                            status: 'pending',
                             internal_company_code: user.internal_company_code,
                             company_owner: user.company_owner,
-                            display_name: user.display_name,
                             gender: user.gender,
                             document: user.document,
                             document2: user.document2,
@@ -114,6 +100,8 @@ export class CreateAppUserByCorrectUsecase {
                             salary: null,
                             dependents_quantity: user.dependents_quantity,
                             marital_status: user.marital_status,
+                            display_name: null,
+                            email: ''
 
                         }
 

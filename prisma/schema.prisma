@@ -48,7 +48,6 @@ model BusinessUser {
   uuid               String        @id @default(uuid())
   business_info_uuid String
   is_admin           Boolean       @default(false)
-  business_document  String
   document           String?       @unique
   name               String?
   email              String?       @unique
@@ -60,44 +59,47 @@ model BusinessUser {
   created_at         DateTime?     @default(now())
   updated_at         DateTime?     @updatedAt
 
-  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+  BusinessInfo         BusinessInfo           @relation(fields: [business_info_uuid], references: [uuid])
+  BusinessNotification BusinessNotification[]
 
   @@map("business_users")
 }
 
-model BusinessCategory {
+model BranchInfo {
   uuid          String         @id @default(uuid())
-  category_name String
+  name          String
+  benefit_uuid  String
+  marketing_tax Int
+  admin_tax     Int
   BusinessInfo  BusinessInfo[]
 
-  @@map("business_category")
+  Benefit Benefit @relation(fields: [benefit_uuid], references: [uuid])
+
+  @@map("branch")
 }
 
 model BusinessInfo {
-  uuid                 String              @id @default(uuid())
-  address_uuid         String?
-  contract_info_uuid   String?
-  fantasy_name         String
-  corporate_reason     String?
-  document             String              @unique
-  classification       String
-  colaborators_number  Int
-  block_list           String[]            @default([])
-  status               Status              @default(pending)
-  phone_1              String
-  phone_2              String?
-  business_category_id String
-  email                String              @unique
-  business_type        BusinessTypeOptions
+  uuid                String              @id @default(uuid())
+  address_uuid        String
+  fantasy_name        String
+  corporate_reason    String?
+  document            String              @unique
+  branch_uuid         String
+  classification      String
+  colaborators_number Int
+  status              Status              @default(pending_password)
+  phone_1             String
+  phone_2             String?
+  email               String              @unique
+  business_type       BusinessTypeOptions
 
-  Address          Address?         @relation(fields: [address_uuid], references: [uuid])
-  ContractInfo     ContractInfo?    @relation(fields: [contract_info_uuid], references: [uuid])
-  BusinessCategory BusinessCategory @relation(fields: [business_category_id], references: [uuid])
-  BusinessUser     BusinessUser[]
-  UserInfo         UserInfo[]
-  Benefit          Benefit[]
-  Transactions     Transactions[]
-  BusinessConfig   BusinessConfig[]
+  Address        Address?         @relation(fields: [address_uuid], references: [uuid])
+  BranchInfo     BranchInfo       @relation(fields: [branch_uuid], references: [uuid])
+  BusinessUser   BusinessUser[]
+  UserInfo       UserInfo[]
+  Transactions   Transactions[]
+  BusinessConfig BusinessConfig[]
+  ContractInfo   ContractInfo[]
 
   @@map("business_data")
 }
@@ -132,27 +134,28 @@ model UserInfo {
   document              String     @unique
   document2             String?    @unique
   document3             String?    @unique
-  first_name            String?
-  last_name             String?
+  full_name             String?
   display_name          String?
   internal_company_code String?
   gender                String?
+  email                 String
   date_of_birth         DateTime
   phone                 String?
   salary                String?
   company_owner         Boolean    @default(false)
   status                Status     @default(pending)
-  driver_license        String?    @unique
   function              String?
+  recommendation_code   String?
   is_authenticated      Boolean    @default(false)
   marital_status        String?
   dependents_quantity   Int        @default(0)
   UserAuth              UserAuth[]
 
-  BusinessInfo BusinessInfo?  @relation(fields: [business_info_uuid], references: [uuid])
-  Address      Address?       @relation(fields: [address_uuid], references: [uuid])
-  UserWallet   UserWallet[]
-  Transactions Transactions[]
+  BusinessInfo     BusinessInfo?      @relation(fields: [business_info_uuid], references: [uuid])
+  Address          Address?           @relation(fields: [address_uuid], references: [uuid])
+  UserWallet       UserWallet[]
+  Transactions     Transactions[]
+  UserNotification UserNotification[]
 
   @@map("user_info")
 }
@@ -161,7 +164,6 @@ model UserAuth {
   uuid           String  @id @default(uuid())
   user_info_uuid String?
   document       String  @unique
-  email          String  @unique
   password       String
 
   created_at DateTime  @default(now())
@@ -172,18 +174,19 @@ model UserAuth {
   @@map("users_auth")
 }
 
-model Benefit {
-  uuid               String       @id @default(uuid())
-  contract_info_uuid String
-  business_info_uuid String
-  benefit_name       String
-  benefit_type       String
-  created_at         DateTime     @default(now())
-  updated_at         DateTime?    @updatedAt
-  UserWallet         UserWallet[]
+enum BenefitType {
+  pos_pago
+  pre_pago
+}
 
-  ContractInfo ContractInfo @relation(fields: [contract_info_uuid], references: [uuid])
-  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+model Benefit {
+  uuid         String       @id @default(uuid())
+  benefit_name String
+  benefit_type BenefitType
+  created_at   DateTime     @default(now())
+  updated_at   DateTime?    @updatedAt
+  UserWallet   UserWallet[]
+  BranchInfo   BranchInfo[]
 
   @@map("benefits")
 }
@@ -204,33 +207,34 @@ model UserWallet {
 }
 
 model ContractInfo {
-  uuid         String         @id @default(uuid())
-  name         String
-  version      String
-  assigned_at  DateTime       @default(now())
-  BusinessInfo BusinessInfo[]
-  Benefit      Benefit[]
+  uuid               String @id @default(uuid())
+  name               String
+  version            String
+  assigned_at        String
+  business_info_uuid String
+
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
 
   @@map("contract_info")
 }
 
-model BranchInfo {
-  uuid         String @id @default(uuid())
-  name         String
-  benefit_uuid String
+enum TransactionStatus {
+  pending
+  sucess
+  fail
 }
 
 model Transactions {
-  uuid               String    @id @default(uuid())
+  uuid               String            @id @default(uuid())
   payer_wallet_uuid  String
   favored_uuid       String
   business_info_uuid String
   amount             Int
   fee_amount         Int
   cashback           Int
-  status             Boolean
-  created_at         DateTime? @default(now())
-  updated_at         DateTime? @updatedAt
+  status             TransactionStatus
+  created_at         DateTime?         @default(now())
+  updated_at         DateTime?         @updatedAt
 
   UserWallet   UserWallet   @relation(fields: [payer_wallet_uuid], references: [uuid])
   UserInfo     UserInfo     @relation(fields: [favored_uuid], references: [uuid])
@@ -239,11 +243,25 @@ model Transactions {
   @@map("transactions")
 }
 
+model BusinessRecommendation {
+  uuid          String @id @default(uuid())
+  business_name String
+  owner_name    String
+  city          String
+  state         String
+  neighborhood  String
+  phone         String
+  social_media  String
+
+  @@map("business_recommendations")
+}
+
 model BusinessConfig {
-  uuid                     String  @id @default(uuid())
+  uuid                     String   @id @default(uuid())
   business_info_uuid       String
   admin_tax                Int
   marketing_tax            Int
+  block_list               String[] @default([])
   cycle_start_date         String?
   cycle_end_date           String?
   cycle_paper_payment_date String?
@@ -251,4 +269,45 @@ model BusinessConfig {
   BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
 
   @@map("business_config")
+}
+
+model UserNotification {
+  uuid           String  @id @default(uuid())
+  user_info_uuid String
+  title          String
+  description    String
+  read           Boolean
+  created_at     String
+
+  UserInfo UserInfo @relation(fields: [user_info_uuid], references: [uuid])
+
+  @@map("user_notification")
+}
+
+model BusinessNotification {
+  uuid               String  @id @default(uuid())
+  business_user_uuid String
+  title              String
+  description        String
+  read               Boolean
+  created_at         String
+
+  BusinessUser BusinessUser @relation(fields: [business_user_uuid], references: [uuid])
+
+  @@map("business_notifications")
+}
+
+model Products {
+  uuid               String @id @default(uuid())
+  business_info_uuid String
+  name               String
+  original_value     Int
+  value              Int
+  description        String
+  image              String
+  stock              Int
+  weight             String
+  volume             String
+
+  @@map("products")
 }
