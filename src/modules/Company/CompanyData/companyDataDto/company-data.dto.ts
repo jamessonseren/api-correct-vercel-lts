@@ -2,15 +2,13 @@ import { BusinessTypeOptions, Status } from "@prisma/client";
 
 export type CompanyDataRequest = {
     uuid: string;
-    address_uuid: string | null
-    contract_info_uuid: string | null
-    business_category_id: string
+    address_uuid: string
     fantasy_name: string
     corporate_reason: string | null
     document: string
+    branch_uuid: string
     classification: string
     colaborators_number: number
-    block_list: string[]
     status: Status
     phone_1: string
     phone_2: string | null

@@ -8,11 +8,11 @@ export type AppUserProps = {
     document: string,
     document2: string | null,
     document3: string | null,
-    first_name: string | null,
-    last_name: string | null,
+    full_name: string | null,
     display_name: string | null,
     internal_company_code: string | null,
     gender: string | null,
+    email: string,
     date_of_birth: Date,
     phone: string | null,
     salary: string | null,
@@ -31,11 +31,11 @@ export class AppUserDataEntity{
     document: string
     document2: string | null
     document3: string | null
-    first_name: string | null
-    last_name: string | null
+    full_name: string | null
     display_name: string | null
     internal_company_code: string | null
     gender: string | null
+    email: string
     date_of_birth: Date
     phone: string | null
     salary: string | null
@@ -47,8 +47,6 @@ export class AppUserDataEntity{
     dependents_quantity: number
 
     private constructor(props: AppUserProps){
-        if(!props.first_name) throw new CustomError("Name is required", 401)
-        if(!props.last_name) throw new CustomError("Last name is required", 401)
         if(!props.gender) throw new CustomError("Gender is required", 401)
         if(!props.document2) throw new CustomError("document is required", 401)
         if(!props.date_of_birth) throw new CustomError("Date of birth is required", 401)
@@ -59,8 +57,8 @@ export class AppUserDataEntity{
         this.address_uuid = props.address_uuid
         this.document2 = props.document2
         this.document3 = props.document3
-        this.first_name = props.first_name
-        this.last_name = props.last_name
+        this.full_name = props.full_name
+        this.email = props.email
         this.display_name = props.display_name
         this.phone = props.phone
         this.status = props.status

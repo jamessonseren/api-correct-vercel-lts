@@ -24,7 +24,6 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
             select: {
                 uuid: true,
                 document: true,
-                email: true
 
             }
         })
@@ -34,23 +33,6 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
         return appUser
     }
 
-    async findByemail(email: string): Promise<AppUserAuthResponse | null> {
-        const appUser = await prismaClient.userAuth.findUnique({
-            where: {
-                email
-            },
-            select: {
-                uuid: true,
-                document: true,
-                email: true
-
-            }
-        })
-
-        if (appUser === null) return null
-
-        return appUser
-    }
 
     async findById(uuid: string): Promise<AppUserResponse | null> {
         const appUser = await prismaClient.userAuth.findUnique({
@@ -60,7 +42,6 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
             select: {
                 uuid: true,
                 document: true,
-                email: true
 
             }
         })
@@ -73,14 +54,12 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
         const appUser = await prismaClient.userAuth.create({
             data: {
                 document: data.document,
-                email: data.email,
                 password: data.password,
 
             },
             select: {
                 uuid: true,
                 document: true,
-                email: true
 
             }
         })
@@ -91,13 +70,11 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
         const appUser = await prismaClient.userAuth.create({
             data: {
                 document: data.document,
-                email: data.email,
                 password: data.password,
             },
             select: {
                 uuid: true,
                 document: true,
-                email: true
 
             }
         })

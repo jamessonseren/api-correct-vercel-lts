@@ -5,16 +5,27 @@ import { BusinessUserResponse } from "../../companyUserDto/company-user.dto";
 
 
 export class CompanyUserPrismaRepository implements ICompanyUserRepository {
-    async findByUserNameAndDocumentAuth(user_name: string, document: string): Promise<CompanyUserEntity | null> {
+    async findByBusinessIdAndUsername(id: string, user_name: string): Promise<CompanyUserEntity | null> {
         const companyUser = await prismaClient.businessUser.findFirst({
             where:{
-                user_name,
-                business_document: document
+                business_info_uuid: id,
+                user_name
             }
         })
 
         return companyUser
     }
+    async findByBusinessIdAndEmail(id: string, email: string): Promise<CompanyUserEntity | null> {
+        const companyUser = await prismaClient.businessUser.findUnique({
+            where:{
+                business_info_uuid: id,
+                email
+            }
+        })
+
+        return companyUser
+    }
+   
        
 
     async findById(id: string): Promise<BusinessUserResponse | null> {
@@ -69,15 +80,14 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
             data: {
                 uuid: data.uuid,
                 business_info_uuid: data.business_info_uuid,
-                name: data.name,
-                business_document: data.business_document,
-                document: data.document,
-                email: data.email,
                 is_admin: data.is_admin,
-                permissions: data.permissions,
-                function: data.function,
-                password: data.password,
+                document: data.document,
+                name: data.name,
+                email: data.email,
                 user_name: data.user_name,
+                password: data.password,
+                function: data.function,
+                permissions: data.permissions,
                 status: data.status
             }            
         })
