@@ -15,7 +15,6 @@ export class UpdateUserbyAdminController {
             const data: CompanyUserEntity = req.body
             data.uuid = req.query.user_id as string
 
-            data.business_document = req.query.business_document as string
             const updateUserUsecase = new UpdateUserByAdminUsecase(this.companyUserRepository)
 
             const updateUser = await updateUserUsecase.execute(data)
