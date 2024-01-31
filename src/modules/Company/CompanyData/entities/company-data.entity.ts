@@ -3,15 +3,13 @@ import { CustomError } from '../../../../errors/custom.error';
 import { BusinessTypeOptions, Status } from '@prisma/client';
 
 type CompanyDataProps = {
-    address_uuid: string | null
-    contract_info_uuid: string | null
-    business_category_id: string
+    address_uuid: string
     fantasy_name: string
     corporate_reason: string | null
     document: string
+    branch_uuid: string
     classification: string
     colaborators_number: number
-    block_list: string[]
     status: Status
     phone_1: string
     phone_2: string | null
@@ -22,15 +20,13 @@ type CompanyDataProps = {
 export class CompanyDataEntity {
 
     uuid: string;
-    address_uuid: string | null
-    contract_info_uuid: string | null
-    business_category_id: string
+    address_uuid: string
     fantasy_name: string
     corporate_reason: string | null
     document: string
+    branch_uuid: string
     classification: string
     colaborators_number: number
-    block_list: string[]
     status: Status
     phone_1: string
     phone_2: string | null
@@ -47,14 +43,12 @@ export class CompanyDataEntity {
 
         this.uuid = randomUUID()
         this.address_uuid = props.address_uuid
-        this.contract_info_uuid = props.contract_info_uuid
-        this.business_category_id = props.business_category_id
         this.fantasy_name = props.fantasy_name
         this.corporate_reason = props.corporate_reason
         this.document = props.document
+        this.branch_uuid = props.branch_uuid
         this.classification = props.classification
         this.colaborators_number = props.colaborators_number
-        this.block_list = props.block_list
         this.status = props.status
         this.phone_1 = props.phone_1
         this.phone_2 = props.phone_2

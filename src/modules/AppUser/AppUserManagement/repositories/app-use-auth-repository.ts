@@ -3,14 +3,12 @@ import { AppUserByUserEntity } from "../entities/create-user-by-user/appuser-by-
 export type AppUserAuthResponse = {
     uuid: string,
     document: string,
-    email: string,
    
 }
 
 export type AppUserResponse = {
     uuid: string
     document: string
-    email: string
     password: string
     
 }
@@ -18,7 +16,6 @@ export type AppUserResponse = {
 export interface IAppUserAuthRepository{
     findByCPFAuth(document: string): Promise<AppUserByUserEntity | null>
     findByCPF(document: string): Promise<AppUserAuthResponse | null>
-    findByemail(email: string): Promise<AppUserAuthResponse | null>
     findById(id: string): Promise<AppUserResponse| null>
     saveNewUser(data: AppUserByUserEntity): Promise<AppUserAuthResponse>
     saveRegisteredUser(data: AppUserByUserEntity): Promise<AppUserAuthResponse>

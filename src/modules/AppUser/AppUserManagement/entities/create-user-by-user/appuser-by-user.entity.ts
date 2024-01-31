@@ -5,14 +5,12 @@ import { PasswordBCrypt } from '../../../../../infra/shared/crypto/password.bcry
 export type IAuthAppUserProps = {
     user_info_uuid: string
     document: string
-    email: string
     password: string
 }
 export class AppUserByUserEntity{
     uuid: string
     user_info_uuid: string | null
     document: string
-    email: string
     password: string
 
     private constructor(props: IAuthAppUserProps){
@@ -20,14 +18,12 @@ export class AppUserByUserEntity{
         this.uuid = randomUUID()
         this.user_info_uuid = props.user_info_uuid
         this.document = props.document
-        this.email = props.email
         this.password = props.password
     }
     
     static async create(data: IAuthAppUserProps){
         
         if(!data.document) throw new CustomError("Document is required", 400)
-        if(!data.email) throw new CustomError("Email is required", 400)
         if(!data.password) throw new CustomError("Password is required", 400)
         
         const bcrypt = new PasswordBCrypt()

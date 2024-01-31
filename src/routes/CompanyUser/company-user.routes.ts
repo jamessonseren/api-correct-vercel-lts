@@ -1,27 +1,27 @@
 import { Router, request, response } from "express";
-import { companyUserController } from "../../modules/Company/CompanyUser/usecases/create-company-user";
+import { companyUserController } from "../../modules/Company/CompanyUser/usecases/create-company-admin";
 import { authCompanyUserController } from "../../modules/Company/CompanyUser/usecases/authenticate-company-user";
 import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
 import { companyUserDetailsController } from "../../modules/Company/CompanyUser/usecases/company-user-details";
 import { updateUserController } from "../../modules/Company/CompanyUser/usecases/update-user-by-admin";
-import { deleteUserController } from "../../modules/Company/CompanyUser/usecases/delete-user-by-admin";
+import { deleteUserController } from "../../modules/Company/CompanyUser/usecases/delete-user";
 import { getUsersController } from "../../modules/Company/CompanyUser/usecases/get-users";
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
-import { companyUserByAdminController } from "../../modules/Company/CompanyUser/usecases/create-company-user-by-admin";
+// import { companyUserByAdminController } from "../../modules/Company/CompanyUser/usecases/create-company-user";
 
 
 export const companyUserRouter = Router()
 
-//Create Company admin by correct
+// //Create Company admin by correct
 companyUserRouter.post('/company-admin', correctIsAuth, async (request, response) => {
     await companyUserController.handle(request, response)
 })
 
-//Create company user by Company Admin
-companyUserRouter.post('/company-user', companyIsAuth, async (request, response) => {
-    await companyUserByAdminController.handle(request, response)
-})
+// //Create company user by Company Admin
+// companyUserRouter.post('/company-user', companyIsAuth, async (request, response) => {
+//     await companyUserByAdminController.handle(request, response)
+// })
 
 companyUserRouter.post('/company-user-login', async (request, response) => {
     await authCompanyUserController.handle(request, response)

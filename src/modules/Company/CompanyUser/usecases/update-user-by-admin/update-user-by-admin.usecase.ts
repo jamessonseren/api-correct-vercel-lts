@@ -12,7 +12,6 @@ export class UpdateUserByAdminUsecase{
         const findUser = await this.companyUserRepository.findById(data.uuid)
         if(!findUser) throw new CustomError("User not found", 400)
 
-        if(findUser.business_document !== data.business_document) throw new CustomError("Admin is not allowed to update this user", 403)
         data.uuid = findUser.uuid
 
         //update user
