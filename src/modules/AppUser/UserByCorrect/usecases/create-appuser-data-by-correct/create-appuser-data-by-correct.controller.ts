@@ -14,7 +14,7 @@ export class CreateAppUserByCorrectController {
         try {
 
             const business_info_uuid = req.body.business_info_id
-            if(!req.file) throw new CustomError("Error upload file", 401)
+            if(!req.file) throw new CustomError("Error upload file", 400)
             
             const { originalname, filename: csvFilePath} = req.file
 
