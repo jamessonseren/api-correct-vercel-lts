@@ -3,6 +3,7 @@ import { CustomError } from '../../../../errors/custom.error'
 import { BusinessTypeOptions, Status } from '@prisma/client'
 
 export type BusinessRegisterProps = {
+    //address table
     line1: string
     line2: string
     line3: string | null
@@ -11,6 +12,7 @@ export type BusinessRegisterProps = {
     city: string
     state: string
     country: string
+    //businessinfo
     address_fk_uuid: string
     fantasy_name: string
     corporate_reason: string | null

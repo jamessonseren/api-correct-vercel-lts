@@ -4,14 +4,14 @@ import { verify } from 'jsonwebtoken';
 import { createHmac } from 'crypto'
 
 import { IAppUserToken, TokenAppUser } from './token';
-import { AppUserByUserEntity } from '../../../../../modules/AppUser/AppUserManagement/entities/create-user-by-user/appuser-by-user.entity';
+import { AppUserAuthResponseAuthentication } from '../../../../../modules/AppUser/app-user-dto/app-user.dto';
 
 export class AppUserJWToken implements IAppUserToken{
     private TOKEN_SECRET = process.env.SECRET_KEY_TOKEN_APP_USER|| ''
 
     private TOKEN_SECRET_CRYPTO = createHmac('sha256', this.TOKEN_SECRET).digest('base64')
 
-    create({ uuid }: AppUserByUserEntity): string {
+    create({ uuid }: AppUserAuthResponseAuthentication): string {
         const token = sign({
             appUser: {
                 uuid
