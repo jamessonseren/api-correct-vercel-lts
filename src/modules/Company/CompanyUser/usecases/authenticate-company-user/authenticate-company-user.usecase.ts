@@ -43,13 +43,7 @@ export class AuthenticateCompanyUserUsecase {
             const tokenGenerated = this.token.create(findUser)
 
             return {
-                uuid: findUser.uuid,
-                user_name: findUser.user_name,
-                status: findUser.status,
-                business_info_id: findUser.business_info_uuid,
-                permissions: findUser.permissions,
-                is_admin: findUser.is_admin,
-                token: tokenGenerated,
+                token: tokenGenerated
             }
 
         }
