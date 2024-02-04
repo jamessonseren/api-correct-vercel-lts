@@ -57,7 +57,7 @@ model BusinessUser {
   password           String
   function           String?
   permissions        Permissions[] @default([all])
-  status             Status        @default(pending)
+  status             Status        @default(pending_password)
   created_at         DateTime?     @default(now())
   updated_at         DateTime?     @updatedAt
 
@@ -89,7 +89,7 @@ model BusinessInfo {
   branch_uuid         String
   classification      String
   colaborators_number Int
-  status              Status              @default(pending_password)
+  status              Status              @default(pending)
   phone_1             String
   phone_2             String?
   email               String              @unique
