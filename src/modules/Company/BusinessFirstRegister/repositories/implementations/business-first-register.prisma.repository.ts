@@ -9,7 +9,7 @@ export class BusinessRegisterPrismaRepository implements IBusinessFirstRegisterR
 
             prismaClient.address.create({
                 data:{
-                    uuid: data.address_fk_uuid,
+                    uuid: data.address_pk_uuid,
                     line1: data.line1,
                     line2: data.line2,
                     line3: data.line3,
