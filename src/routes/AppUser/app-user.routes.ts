@@ -7,9 +7,10 @@ import { appUserIsAuth } from "../../infra/shared/middlewares/AppUser/app-user-a
 import { appUsersignUpController } from "../../modules/AppUser/AppUserSignUp/usecases";
 import { userDetailsController } from "../../modules/AppUser/AppUserManagement/usecases/app-user-details";
 import { updateDocumentsController } from "../../modules/AppUser/AppUserManagement/usecases/update-documents-validation";
+import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCorrect/usecases/create-appuser-data-by-correct";
 
 const appUserRouter = Router()
-
+const upload = multer(uploadConfig.upload("./tmp"))
 
 //AppUserSignup - First Register
 appUserRouter.post('/new-app-user', async (request, response) => {
@@ -30,9 +31,9 @@ appUserRouter.get("/app-user", appUserIsAuth, async (request, response) => {
 appUserRouter.patch("/app-user", appUserIsAuth, async (request, response) => {
     await updateDocumentsController.handle(request, response)
 })
-//create / update appuser data by appuser
-// appUserRouter.post("/app-user-data", appUserIsAuth, async (request, response) => {
-//     await createAppUserDataController.handle(request, response)
-// })
 
+//Register app users by Correct
+appUserRouter.post("/app-users-by-correct", correctIsAuth, upload.single('file'), async (request, response) => {
+    await createAppUserByCorrectController.handle(request, response)
+})
 export { appUserRouter }

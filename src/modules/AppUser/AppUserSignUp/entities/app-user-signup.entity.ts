@@ -1,8 +1,6 @@
 import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
-import { DocumentValidation, ValidationStatus } from '../app-user-dto/app-user-dto'
-import { JsonValue } from '@prisma/client/runtime/library'
-import { Prisma, Status, UserDocumentValidationStatus } from '@prisma/client'
+import {  Status, UserDocumentValidationStatus } from '@prisma/client'
 import { PasswordBCrypt } from '../../../../infra/shared/crypto/password.bcrypt'
 
 export type AppUserProps = {
@@ -17,7 +15,7 @@ export type AppUserProps = {
     country: string
     //userInfo table
     business_info_uuid: string | null
-    address_fk_uuid: string
+    address_fk_uuid: string | null
     document: string
     document2: string | null
     document3: string | null
@@ -34,7 +32,7 @@ export type AppUserProps = {
     function: string | null
     recommendation_code: string
     is_authenticated: boolean
-    marital_status: string
+    marital_status: string | null
     dependents_quantity: number
     user_document_validation_uuid: string
     //user auth table
@@ -42,13 +40,13 @@ export type AppUserProps = {
     // document_auth: string
     password: string
     //user validation table
-    document_front_base64: string
+    document_front_base64: string | null
     document_front_status: UserDocumentValidationStatus
-    document_back_base64: string
+    document_back_base64: string | null
     document_back_status: UserDocumentValidationStatus
-    selfie_base64: string
+    selfie_base64: string | null
     selfie_status: UserDocumentValidationStatus
-    document_selfie_base64: string
+    document_selfie_base64: string | null
     document_selfie_status: UserDocumentValidationStatus
 
 
@@ -86,19 +84,19 @@ export class AppUserSignUpEntity {
     function: string | null
     recommendation_code: string
     is_authenticated: boolean
-    marital_status: string
+    marital_status: string | null
     dependents_quantity: number
-    user_document_validation_uuid: string
+    user_document_validation_uuid: string 
 
     //user validation table
     user_validation_pk_uuid: string
-    document_front_base64: string
+    document_front_base64: string | null
     document_front_status: UserDocumentValidationStatus
-    document_back_base64: string
+    document_back_base64: string | null
     document_back_status: UserDocumentValidationStatus
-    selfie_base64: string
+    selfie_base64: string | null
     selfie_status: UserDocumentValidationStatus
-    document_selfie_base64: string
+    document_selfie_base64: string | null
     document_selfie_status: UserDocumentValidationStatus
 
 
@@ -159,7 +157,6 @@ export class AppUserSignUpEntity {
         //user Auth
         this.user_auth_uuid = randomUUID()
         this.user_info_fk_uuid = this.user_info_pk_uuid
-        // this.document_auth = props.document_auth
         this.password = props.password
     }
 
