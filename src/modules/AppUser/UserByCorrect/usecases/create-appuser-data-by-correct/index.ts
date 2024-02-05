@@ -1,11 +1,11 @@
 
-// import { AppUserPrismaRepository } from "../../repositories/implementations/app-user-prisma.repository";
-// import { CreateAppUserByCorrectController } from "./create-appuser-data-by-correct.controller";
+import { AppUserInfoPrismaRepository } from "../../../AppUserManagement/repositories/implementations-user-info/app-user-info-prisma.repository";
+import { CreateAppUserByCorrectController } from "./create-appuser-data-by-correct.controller";
 
-// const appUserRepository = new AppUserPrismaRepository()
+const appUserInfoRepository = new AppUserInfoPrismaRepository()
 
-// const createAppUserByCorrectController = new CreateAppUserByCorrectController(
-//     appUserRepository
-// )
+const createAppUserByCorrectController = new CreateAppUserByCorrectController(
+    appUserInfoRepository
+)
 
-// export { createAppUserByCorrectController }
+export { createAppUserByCorrectController }

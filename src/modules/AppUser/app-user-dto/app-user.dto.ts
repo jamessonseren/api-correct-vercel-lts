@@ -1,5 +1,6 @@
 import { Status, UserDocumentValidationStatus } from "@prisma/client"
 
+
 export type AppUserAuthResponseAuthentication = {
     uuid: string
     document: string
@@ -8,7 +9,7 @@ export type AppUserAuthResponseAuthentication = {
 export type UserInfoResponse = {
     uuid: string
     business_info_uuid: string | null
-    address_uuid: string
+    address_uuid: string | null
     document: string
     document2: string | null
     document3: string | null
@@ -16,7 +17,7 @@ export type UserInfoResponse = {
     display_name: string | null
     internal_company_code: string | null
     gender: string | null
-    email: string
+    email: string | null
     date_of_birth: string
     phone: string | null
     salary: string | null
@@ -29,7 +30,7 @@ export type UserInfoResponse = {
     BusinessInfo: {
         fantasy_name: string
     } | null
-    user_document_validation_uuid: string
+    user_document_validation_uuid: string | null
     Address: {
         uuid: string
         line1: string
@@ -51,7 +52,7 @@ export type UserInfoResponse = {
         selfie_status: UserDocumentValidationStatus
         //document_selfie_base64: string
         document_selfie_status: UserDocumentValidationStatus
-    }
+    } | null
 
 }
 
@@ -68,7 +69,7 @@ export type AppUserAuthResponse = {
         display_name: string | null,
         internal_company_code: string | null,
         gender: string | null,
-        email: string,
+        email: string | null,
         date_of_birth: string
         phone: string | null
         salary: string | null
@@ -79,7 +80,7 @@ export type AppUserAuthResponse = {
         is_authenticated: boolean
         marital_status: string | null
         dependents_quantity: number
-        user_document_validation_uuid: string
+        user_document_validation_uuid: string | null
         Address: {
             uuid: string
             line1: string
@@ -90,7 +91,7 @@ export type AppUserAuthResponse = {
             city: string
             state: string
             country: string
-        },
+        } | null,
         UserValidation: {
             uuid: string
             //document_front_base64: string
@@ -101,7 +102,7 @@ export type AppUserAuthResponse = {
             selfie_status: UserDocumentValidationStatus
             //document_selfie_base64: string
             document_selfie_status: UserDocumentValidationStatus
-        }
+        } | null
     
     }
 
@@ -123,12 +124,27 @@ export type UserValidation = {
 
 export type UserValidationUpdate = {
     uuid: string
-    document_front_base64: string
+    document_front_base64: string | null
     document_front_status: UserDocumentValidationStatus
-    document_back_base64: string
+    document_back_base64: string | null
     document_back_status: UserDocumentValidationStatus
-    selfie_base64: string
+    selfie_base64: string | null
     selfie_status: UserDocumentValidationStatus
-    document_selfie_base64: string
+    document_selfie_base64: string | null
     document_selfie_status: UserDocumentValidationStatus
+}
+
+
+export type AppUserInfoRequest = {
+    document: string,
+    document2: string | null,
+    full_name: string,
+    internal_company_code: string | null,
+    gender: string | null,
+    date_of_birth: string,
+    salary: string | null,
+    company_owner: boolean
+    user_function: string | null
+    marital_status: string | null,
+    dependents_quantity: number
 }
