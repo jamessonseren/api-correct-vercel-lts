@@ -132,7 +132,7 @@ model Address {
 model UserInfo {
   uuid                          String     @id @default(uuid())
   business_info_uuid            String?
-  address_uuid                  String
+  address_uuid                  String?
   document                      String     @unique
   document2                     String?    @unique
   document3                     String?    @unique
@@ -140,7 +140,7 @@ model UserInfo {
   display_name                  String?
   internal_company_code         String?
   gender                        String?
-  email                         String     @unique
+  email                         String?     @unique
   date_of_birth                 String
   phone                         String?
   salary                        String?
@@ -151,12 +151,12 @@ model UserInfo {
   is_authenticated              Boolean    @default(false)
   marital_status                String?
   dependents_quantity           Int        @default(0)
-  user_document_validation_uuid String
+  user_document_validation_uuid String?
   UserAuth                      UserAuth[]
 
   BusinessInfo     BusinessInfo?          @relation(fields: [business_info_uuid], references: [uuid])
-  Address          Address               @relation(fields: [address_uuid], references: [uuid])
-  UserValidation   UserDocumentValidation @relation(fields: [user_document_validation_uuid], references: [uuid])
+  Address          Address?               @relation(fields: [address_uuid], references: [uuid])
+  UserValidation   UserDocumentValidation? @relation(fields: [user_document_validation_uuid], references: [uuid])
   UserWallet       UserWallet[]
   Transactions     Transactions[]
   UserNotification UserNotification[]
@@ -166,13 +166,13 @@ model UserInfo {
 
 model UserDocumentValidation {
   uuid                   String                       @id @default(uuid())
-  document_front_base64  String
+  document_front_base64  String?
   document_front_status  UserDocumentValidationStatus @default(under_analysis)
-  document_back_base64   String
+  document_back_base64   String?
   document_back_status   UserDocumentValidationStatus @default(under_analysis)
   selfie_base64          String?
   selfie_status          UserDocumentValidationStatus @default(under_analysis)
-  document_selfie_base64 String
+  document_selfie_base64 String?
   document_selfie_status UserDocumentValidationStatus @default(under_analysis)
   UserInfo               UserInfo[]
 

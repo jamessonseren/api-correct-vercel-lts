@@ -1,0 +1,16 @@
+﻿codigo_interno,company_owner,nome_completo,sexo,rg,cpf,data_nascimento,estado_civil,total_dependentes,cargo,remuneracao
+4,false,João da Silva,M,1234567-8,123.456.789-01,3/15/1985,Solteiro,2,Analista de Vendas,5000
+91,false,Maria Santos,F,9876543-2,987.654.321-09,7/25/1990,Casado,1,Gerente de Marketing,8000
+91,false,Pedro Oliveira,M,5678901-2,567.890.123-45,12/10/1988,Divorciado,0,Analista de TI,6000
+98198,false,Ana Pereira,F,3456789-0,345.678.901-23,9/3/1995,Solteiro,3,Designer Gráfico,4500
+19,false,Carlos Rodrigues,M,2345678-1,234.567.890-12,5/18/1983,Casado,2,Engenheiro Civil,7000
+196,false,Sofia Almeida,F,543210-9,654.321.098-76,11/22/1987,Viúvo,0,Recepcionista,3500
+1,false,André Fernandes,M,4321098-7,432.109.876-54,2/5/1992,Solteiro,1,Analista de RH,5500
+9198,false,Laura Costa,F,7890123-4,789.012.345-67,8/12/1998,Casado,2,Contador,6500
+1,false,José Pereira,M,8765432-1,876.543.210-98,4/30/1980,Divorciado,4,Gerente de Produção,7500
+16,false,Rita Ferreira,F,2109876-5,210.987.654-32,6/20/1993,Solteiro,0,Analista de Marketing,5000
+16,false,Manuel Santos,M,2109876-5,543.210.987-65,1/8/1986,Casado,2,Advogado,8000
+165,false,Beatriz Silva,F,6789012-3,678.901.234-56,10/14/1997,Solteira,0,Estudante,2000
+1698,false,Miguel Sousa,M,1098765-4,109.876.543-21,7/27/1989,Casado,3,Médico,9000
+18,false,Helena Ramos,F,4321098-7,432.109.876-54,4/11/1994,Solteira,1,Analista Financeiro,6000
+691,false,Guilherme Mendes,M,9876543-2,987.654.321-09,9/19/1982,Divorciado,2,Consultor de Vendas,7000

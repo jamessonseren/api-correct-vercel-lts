@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
-import { Status } from '@prisma/client'
+import { Status, UserDocumentValidationStatus } from '@prisma/client'
 
 export type AppUserProps = {
     business_info_uuid: string | null,
@@ -8,16 +8,16 @@ export type AppUserProps = {
     document: string,
     document2: string | null,
     document3: string | null,
-    full_name: string | null,
+    full_name: string,
     display_name: string | null,
     internal_company_code: string | null,
     gender: string | null,
-    email: string,
-    date_of_birth: Date,
+    email: string | null,
+    date_of_birth: string,
     phone: string | null,
     salary: string | null,
     company_owner: boolean
-    status: Status,
+    status: UserDocumentValidationStatus,
     function: string | null
     is_authenticated: boolean
     marital_status: string | null,
@@ -31,25 +31,27 @@ export class AppUserDataEntity{
     document: string
     document2: string | null
     document3: string | null
-    full_name: string | null
+    full_name: string
     display_name: string | null
     internal_company_code: string | null
     gender: string | null
-    email: string
-    date_of_birth: Date
+    email: string | null
+    date_of_birth: string
     phone: string | null
     salary: string | null
     company_owner: boolean
-    status: Status
+    status: UserDocumentValidationStatus
     function: string | null
     is_authenticated: boolean
     marital_status: string | null
     dependents_quantity: number
 
+
     private constructor(props: AppUserProps){
-        if(!props.gender) throw new CustomError("Gender is required", 401)
-        if(!props.document2) throw new CustomError("document is required", 401)
-        if(!props.date_of_birth) throw new CustomError("Date of birth is required", 401)
+        if(!props.business_info_uuid) throw new CustomError("Business info id is required", 400)
+        if(!props.gender) throw new CustomError("Gender is required", 400)
+        if(!props.document) throw new CustomError("document is required", 400)
+        if(!props.date_of_birth) throw new CustomError("Date of birth is required", 400)
 
         this.uuid = randomUUID()
         this.business_info_uuid = props.business_info_uuid
