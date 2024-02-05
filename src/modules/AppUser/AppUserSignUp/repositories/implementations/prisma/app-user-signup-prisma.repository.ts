@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { prismaClient } from "../../../../../../infra/databases/prisma.config";
-import { DocumentValidation, UserAuthResponse, UserInfoResponse } from "../../../app-user-dto/app-user-dto";
 import { AppUserSignUpEntity } from "../../../entities/app-user-signup.entity";
 import { IAppUserSignupRepository } from "../../app-user-signup.repository";
+import { AppUserAuthResponseAuthentication, UserInfoResponse } from "../../../../app-user-dto/app-user.dto";
 
 
 export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
@@ -28,10 +28,10 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
 
             prismaClient.userDocumentValidation.upsert({
                 where:{
-                    uuid: data.user_document_validation_uuid
+                    uuid: data.user_validation_pk_uuid
                 },
                 create:{
-                    uuid: data.user_document_validation_uuid,
+                    uuid: data.user_validation_pk_uuid,
                     document_front_base64: data.document_front_base64,
                     document_front_status: data.document_front_status,
                     document_back_base64: data.document_back_base64,
@@ -101,8 +101,7 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     marital_status: data.marital_status,
                     dependents_quantity: data.dependents_quantity,
                     user_document_validation_uuid: data.user_document_validation_uuid,
-                    status: data.status
-                                     
+                    status: data.status                                
 
                 }
             }),
@@ -120,7 +119,7 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
         ])
     }
 
-    async findByDocumentUserAuth(document: string): Promise<UserAuthResponse | null> {
+    async findByDocumentUserAuth(document: string): Promise<AppUserAuthResponseAuthentication | null> {
         const user = await prismaClient.userAuth.findUnique({
             where:{
                 document
@@ -130,43 +129,7 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
         return user
     }
 
-    async findByDocumentUserInfo(document: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
-            where:{
-                document
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address:true,
-                UserValidation: true
-            }
-        })
-
-        return user
-    }
-
-    async findByEmailUserInfo(email: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
-            where:{
-                email
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address:true,
-                UserValidation: true
-            }
-        })
-
-        return user
-    }
+    
     
 
 }
