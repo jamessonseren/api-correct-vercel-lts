@@ -1,18 +1,16 @@
 import path from 'path'
 import fs from 'fs'
 import csv from 'csv-parser'
-import { parse } from 'date-fns'
-import { IAppUserRepository } from "../../repositories/app-user-data-repostory";
 import { CustomError } from '../../../../../errors/custom.error';
 import { AppUserProps, AppUserDataEntity } from '../../entities/appuser-data.entity';
-import { AppUserRequest } from '../../app_user-dto/app_user.dto';
-import { ICompanyDataRepository } from '../../../../Company/CompanyData/repositories/company-data.repository';
+import { AppUserInfoRequest } from '../../../app-user-dto/app-user.dto';
+import { IAppUserInfoRepository } from '../../../AppUserManagement/repositories/app-user-info.repository';
 
 
 
 export class CreateAppUserByCorrectUsecase {
     constructor(
-        private appUserRepository: IAppUserRepository,
+        private appUserInfoRepository: IAppUserInfoRepository,
     ) { }
 
     async execute(csvFilePath: string, business_info_uuid: string) {
@@ -26,8 +24,8 @@ export class CreateAppUserByCorrectUsecase {
     }
 
     private async readCSV(filePath: string, business_info_uuid: string){
-        let results: AppUserRequest[] = [];
-        let usersRegistered: AppUserRequest[] = [];
+        let results: AppUserInfoRequest[] = [];
+        let usersRegistered: AppUserInfoRequest[] = [];
         let alreadyRegistered: string[] = [];
 
 
@@ -37,29 +35,32 @@ export class CreateAppUserByCorrectUsecase {
                 .pipe(csv({ separator: ',' }))
                 .on('data', async (data) => {
                     try{
+                       
+                        
                     // All csv header title must be in this condition
                     if (data['\ufeffcodigo_interno'] && data['company_owner'] && data['nome_completo'] && data['sexo'] && data['rg'] && data['cpf'] && data['data_nascimento'] && data['estado_civil'] && data['total_dependentes'] && data['cargo'] && data['remuneracao']) {
 
                         // Process CSV data
-                        const internal_company_code = await data['\ufeffcodigo_interno'];
+                        const internal_company_code = await data['codigo_interno'];
                         const company_owner = JSON.parse(await data['company_owner']);
                         const full_name = await data['nome_completo'];
                         const gender = await data['sexo'];
                         const document2 = await data['rg'];
                         const document = await data['cpf'];
-                        const date_of_birth = parse(await data['data_nascimento'], 'dd/MM/yyyy', new Date());
+                        const date_of_birth = await data['data_nascimento'];
                         const marital_status = await data['estado_civil'];
                         const dependents_quantity = +await data['total_dependentes'];
                         const user_function = await data['cargo']
                         const salary = await data['remuneracao']
 
-                        const userDataFromCSV: AppUserRequest = {
-                            internal_company_code,
-                            company_owner,
-                            full_name,
-                            gender,
+                        const userDataFromCSV: AppUserInfoRequest = {
+                            
                             document,
                             document2,
+                            full_name,
+                            internal_company_code,
+                            gender,
+                            company_owner,
                             date_of_birth,
                             marital_status,
                             dependents_quantity,
@@ -71,7 +72,7 @@ export class CreateAppUserByCorrectUsecase {
                         //if everything works fine, add all data to results Array
                         results.push(userDataFromCSV);
                     } else {
-                        throw new CustomError("File must be according to model!", 400)
+                        throw new CustomError("Caiu aqui", 400)
                     }
                 }catch(err){
                     reject(err)
@@ -83,38 +84,45 @@ export class CreateAppUserByCorrectUsecase {
                     //after adding everything, pass each user from Results array
                     for (const user of results) {
                         const data: AppUserProps = {
-                            document3: null,
                             business_info_uuid: business_info_uuid,
+                            document: user.document,
+                            document2: user.document2,
+                            document3: null,
                             address_uuid: null,
                             is_authenticated: false,
                             full_name: user.full_name,
                             phone:null,
-                            status: 'pending',
+                            status: 'pending_to_send',
                             internal_company_code: user.internal_company_code,
                             company_owner: user.company_owner,
                             gender: user.gender,
-                            document: user.document,
-                            document2: user.document2,
                             date_of_birth: user.date_of_birth,
                             function: user.user_function,
-                            salary: null,
+                            salary: user.salary,
                             dependents_quantity: user.dependents_quantity,
                             marital_status: user.marital_status,
-                            display_name: null,
-                            email: ''
+                            display_name: '',
+                            email: null
 
                         }
 
                         const appUser = await AppUserDataEntity.create(data)
+                        
+                        const findUser = await this.appUserInfoRepository.findByDocumentUserInfo(user.document)
 
-                        const findUser = await this.appUserRepository.findByCPF(user.document)
-
+                        const findByDocument2 = await this.appUserInfoRepository.findByDocument2UserInfo(user.document2)
+                        
                         if (findUser) {
-                            alreadyRegistered.push(user.document);
+                            if(findByDocument2?.document === findUser.document){
+                                alreadyRegistered.push(user.document);
+                            } else {
+                                alreadyRegistered.push(user.document);
+
+                            }
 
 
                         } else {
-                            await this.appUserRepository.saveOrUpdate(appUser)
+                            await this.appUserInfoRepository.saveOrUpdate(appUser)
                             usersRegistered.push(user)
 
                         }

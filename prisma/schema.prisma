@@ -8,6 +8,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
+  // previewFeatures = ["filterJson"]
 }
 
 datasource db {
@@ -42,6 +43,7 @@ enum Status {
   active
   inactive
   pending_password
+  pending_validation
 }
 
 model BusinessUser {
@@ -55,7 +57,7 @@ model BusinessUser {
   password           String
   function           String?
   permissions        Permissions[] @default([all])
-  status             Status        @default(pending)
+  status             Status        @default(pending_password)
   created_at         DateTime?     @default(now())
   updated_at         DateTime?     @updatedAt
 
@@ -85,7 +87,7 @@ model BusinessInfo {
   branch_uuid         String
   classification      String
   colaborators_number Int
-  status              Status              @default(pending_password)
+  status              Status              @default(pending)
   phone_1             String
   phone_2             String?
   email               String              @unique
@@ -126,31 +128,33 @@ model Address {
 }
 
 model UserInfo {
-  uuid                  String     @id @default(uuid())
-  business_info_uuid    String?
-  address_uuid          String?
-  document              String     @unique
-  document2             String?    @unique
-  document3             String?    @unique
-  full_name             String?
-  display_name          String?
-  internal_company_code String?
-  gender                String?
-  email                 String
-  date_of_birth         DateTime
-  phone                 String?
-  salary                String?
-  company_owner         Boolean    @default(false)
-  status                Status     @default(pending)
-  function              String?
-  recommendation_code   String?
-  is_authenticated      Boolean    @default(false)
-  marital_status        String?
-  dependents_quantity   Int        @default(0)
-  UserAuth              UserAuth[]
+  uuid                          String     @id @default(uuid())
+  business_info_uuid            String?
+  address_uuid                  String?
+  document                      String     @unique
+  document2                     String?    @unique
+  document3                     String?    @unique
+  full_name                     String
+  display_name                  String?
+  internal_company_code         String?
+  gender                        String?
+  email                         String?     @unique
+  date_of_birth                 String
+  phone                         String?
+  salary                        String?
+  company_owner                 Boolean    @default(false)
+  status                        Status     @default(pending)
+  function                      String?
+  recommendation_code           String?
+  is_authenticated              Boolean    @default(false)
+  marital_status                String?
+  dependents_quantity           Int        @default(0)
+  user_document_validation_uuid String?
+  UserAuth                      UserAuth[]
 
-  BusinessInfo     BusinessInfo?      @relation(fields: [business_info_uuid], references: [uuid])
-  Address          Address?           @relation(fields: [address_uuid], references: [uuid])
+  BusinessInfo     BusinessInfo?          @relation(fields: [business_info_uuid], references: [uuid])
+  Address          Address?               @relation(fields: [address_uuid], references: [uuid])
+  UserValidation   UserDocumentValidation? @relation(fields: [user_document_validation_uuid], references: [uuid])
   UserWallet       UserWallet[]
   Transactions     Transactions[]
   UserNotification UserNotification[]
@@ -158,16 +162,38 @@ model UserInfo {
   @@map("user_info")
 }
 
+model UserDocumentValidation {
+  uuid                   String                       @id @default(uuid())
+  document_front_base64  String?
+  document_front_status  UserDocumentValidationStatus @default(under_analysis)
+  document_back_base64   String?
+  document_back_status   UserDocumentValidationStatus @default(under_analysis)
+  selfie_base64          String?
+  selfie_status          UserDocumentValidationStatus @default(under_analysis)
+  document_selfie_base64 String?
+  document_selfie_status UserDocumentValidationStatus @default(under_analysis)
+  UserInfo               UserInfo[]
+
+  @@map("user_document_validation")
+}
+
+enum UserDocumentValidationStatus {
+  approved
+  denied
+  pending_to_send
+  under_analysis
+}
+
 model UserAuth {
-  uuid           String  @id @default(uuid())
-  user_info_uuid String?
-  document       String  @unique
+  uuid           String @id @default(uuid())
+  user_info_uuid String
+  document       String @unique
   password       String
 
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  UserInfo UserInfo? @relation(fields: [user_info_uuid], references: [uuid])
+  UserInfo UserInfo @relation(fields: [user_info_uuid], references: [uuid])
 
   @@map("users_auth")
 }
