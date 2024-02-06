@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { AppUserAuthPrismaRepository } from "../../../../modules/AppUser/AppUserManagement/repositories/implementations/app-user-auth-prisma.repository"
+import { AppUserAuthPrismaRepository } from "../../../../modules/AppUser/AppUserManagement/repositories/implementations-user-auth/app-user-auth-prisma.repository"
 import { EnsureValidAppUserController } from "./ensure-valid-app-user.controller.middlware"
 import { AppUserJWToken } from "../../crypto/token/AppUser/jwt.token"
 

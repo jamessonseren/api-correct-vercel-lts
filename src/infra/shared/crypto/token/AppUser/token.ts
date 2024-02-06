@@ -1,9 +1,9 @@
-import { AppUserByUserEntity } from "../../../../../modules/AppUser/AppUserManagement/entities/create-user-by-user/appuser-by-user.entity"
+import { AppUserAuthResponseAuthentication } from "../../../../../modules/AppUser/app-user-dto/app-user.dto"
 
 export type TokenAppUser = {
     sub: string
 }
 export interface IAppUserToken{
-    create(appUser: AppUserByUserEntity): string
+    create(appUser: AppUserAuthResponseAuthentication): string
     validate(token: string): TokenAppUser | null
 }
