@@ -75,8 +75,6 @@ model BranchInfo {
   admin_tax     Int
   BusinessInfo  BusinessInfo[]
 
-  Benefit Benefit @relation(fields: [benefit_uuid], references: [uuid])
-
   @@map("branch")
 }
 
@@ -206,13 +204,11 @@ enum BenefitType {
 }
 
 model Benefit {
-  uuid         String       @id @default(uuid())
+  uuid         String      @id @default(uuid())
   benefit_name String
   benefit_type BenefitType
-  created_at   DateTime     @default(now())
-  updated_at   DateTime?    @updatedAt
-  UserWallet   UserWallet[]
-  BranchInfo   BranchInfo[]
+  created_at   String
+  updated_at   String?
 
   @@map("benefits")
 }
@@ -226,7 +222,6 @@ model UserWallet {
   updated_at     DateTime? @updatedAt
 
   UserInfo     UserInfo       @relation(fields: [user_info_uuid], references: [uuid])
-  Benefit      Benefit        @relation(fields: [benefit_uuid], references: [uuid])
   Transactions Transactions[]
 
   @@map("users_wallet")
