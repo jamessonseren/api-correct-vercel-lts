@@ -1,4 +1,5 @@
-import { Permissions, Status  } from "@prisma/client"
+import { BusinessTypeOptions, Permissions, Status } from "@prisma/client"
+import { CompanyDataEntity } from "../../CompanyData/entities/company-data.entity"
 
 export type BusinessUserResponse = {
     uuid: string
@@ -8,8 +9,8 @@ export type BusinessUserResponse = {
     name: string | null
     email: string | null
     user_name: string | null
-    password: string
     function: string | null
     permissions: Permissions[]
     status: Status
+    
 }
