@@ -67,17 +67,6 @@ model BusinessUser {
   @@map("business_users")
 }
 
-model BranchInfo {
-  uuid          String         @id @default(uuid())
-  name          String
-  benefit_uuid  String
-  marketing_tax Int
-  admin_tax     Int
-  BusinessInfo  BusinessInfo[]
-
-  @@map("branch")
-}
-
 model BusinessInfo {
   uuid                String              @id @default(uuid())
   address_uuid        String
@@ -94,7 +83,6 @@ model BusinessInfo {
   business_type       BusinessTypeOptions
 
   Address        Address?         @relation(fields: [address_uuid], references: [uuid])
-  BranchInfo     BranchInfo       @relation(fields: [branch_uuid], references: [uuid])
   BusinessUser   BusinessUser[]
   UserInfo       UserInfo[]
   Transactions   Transactions[]
@@ -138,7 +126,7 @@ model UserInfo {
   display_name                  String?
   internal_company_code         String?
   gender                        String?
-  email                         String?     @unique
+  email                         String?    @unique
   date_of_birth                 String
   phone                         String?
   salary                        String?
@@ -152,8 +140,8 @@ model UserInfo {
   user_document_validation_uuid String?
   UserAuth                      UserAuth[]
 
-  BusinessInfo     BusinessInfo?          @relation(fields: [business_info_uuid], references: [uuid])
-  Address          Address?               @relation(fields: [address_uuid], references: [uuid])
+  BusinessInfo     BusinessInfo?           @relation(fields: [business_info_uuid], references: [uuid])
+  Address          Address?                @relation(fields: [address_uuid], references: [uuid])
   UserValidation   UserDocumentValidation? @relation(fields: [user_document_validation_uuid], references: [uuid])
   UserWallet       UserWallet[]
   Transactions     Transactions[]
@@ -211,6 +199,18 @@ model Benefit {
   updated_at   String?
 
   @@map("benefits")
+}
+
+model BranchInfo {
+  uuid          String   @id @default(uuid())
+  name          String
+  benefits_uuid String[]
+  marketing_tax Int
+  admin_tax     Int
+  created_at    String
+  updated_at    String?
+
+  @@map("branch_info")
 }
 
 model UserWallet {
