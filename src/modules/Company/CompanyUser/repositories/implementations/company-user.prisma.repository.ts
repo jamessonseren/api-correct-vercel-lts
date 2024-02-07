@@ -32,9 +32,22 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         const companyUser = await prismaClient.businessUser.findUnique({
             where: {
                 uuid: id
-            }
+            },
+            select:{
+                uuid: true,
+                business_info_uuid: true,
+                is_admin: true,
+                document: true,
+                name: true,
+                email: true,
+                user_name: true,
+                function: true,
+                permissions: true,
+                status: true
+            },
+        
         })
-        return companyUser
+        return companyUser 
     }
 
    
@@ -59,7 +72,7 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return companyUser
     }   
 
-    async updateUser(data: CompanyUserEntity): Promise<BusinessUserResponse> {
+    async updateUser(data: CompanyUserEntity): Promise<CompanyUserEntity> {
         const updateUser = await prismaClient.businessUser.update({
             where: {
                 uuid: data.uuid
@@ -75,7 +88,7 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return updateUser
     }
 
-    async saveUser(data: CompanyUserEntity): Promise<BusinessUserResponse> {
+    async saveUser(data: CompanyUserEntity): Promise<CompanyUserEntity> {
         const companyUser = await prismaClient.businessUser.create({
             data: {
                 uuid: data.uuid,
@@ -89,7 +102,8 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                 function: data.function,
                 permissions: data.permissions,
                 status: data.status
-            }            
+            }
+                      
         })
 
         return companyUser
