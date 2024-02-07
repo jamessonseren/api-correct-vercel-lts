@@ -39,12 +39,14 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
             where: {
                 uuid
             },
-            include:{
+            select: {
+                uuid: true,
+                document: true,
                 UserInfo: {
                     include: {
                         Address: true,
                         UserValidation: {
-                            select:{
+                            select: {
                                 uuid: true,
                                 document_front_status: true,
                                 document_back_status: true,
@@ -55,40 +57,10 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
                     }
                 }
             }
-        })
-
-        return appUser
+        });
+    
+        return appUser;
     }
-    // async saveNewUser(data: AppUserByUserEntity): Promise<AppUserAuthResponse> {
-    //     const appUser = await prismaClient.userAuth.create({
-    //         data: {
-    //             document: data.document,
-    //             password: data.password,
-
-    //         },
-    //         select: {
-    //             uuid: true,
-    //             document: true,
-
-    //         }
-    //     })
-    //     return appUser
-    // }
-
-    // async saveRegisteredUser(data: AppUserByUserEntity): Promise<AppUserAuthResponse> {
-    //     const appUser = await prismaClient.userAuth.create({
-    //         data: {
-    //             document: data.document,
-    //             password: data.password,
-    //         },
-    //         select: {
-    //             uuid: true,
-    //             document: true,
-
-    //         }
-    //     })
-
-    //     return appUser
-    // }
+    
 
 }
