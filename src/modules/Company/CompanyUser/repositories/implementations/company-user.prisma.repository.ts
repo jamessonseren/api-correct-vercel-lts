@@ -88,8 +88,8 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return updateUser
     }
 
-    async saveUser(data: CompanyUserEntity): Promise<CompanyUserEntity> {
-        const companyUser = await prismaClient.businessUser.create({
+    async saveUser(data: CompanyUserEntity): Promise<void> {
+       await prismaClient.businessUser.create({
             data: {
                 uuid: data.uuid,
                 business_info_uuid: data.business_info_uuid,
@@ -106,7 +106,6 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                       
         })
 
-        return companyUser
     }
 
 

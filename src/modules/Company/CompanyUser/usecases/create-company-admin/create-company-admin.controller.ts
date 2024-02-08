@@ -21,9 +21,9 @@ export class CreateCompanyUserByCorrectController {
                 this.companyDataRepository
             )
 
-            const companyUser = await companyUserUsecase.execute(data)
+            await companyUserUsecase.execute(data)
 
-            return res.json(companyUser)
+            return res.status(201).json({message: "Business admin created successfully"})
             
         }catch(err: any){
             logger.error(err.stack)
