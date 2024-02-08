@@ -6,13 +6,13 @@ export class GetUsersUsecase {
         private companyUserRepository: ICompanyUserRepository
     ) {}
 
-    async execute(business_document: string){
+    async execute(business_info_uuid: string){
 
-        if(!business_document) throw new CustomError("Business document required", 403)
+        if(!business_info_uuid) throw new CustomError("Business document required", 400)
 
-        const getUsers = await this.companyUserRepository.findByUsers(business_document)
+        const getUsers = await this.companyUserRepository.findUsers(business_info_uuid)
         if(!getUsers) throw new CustomError("Users not found", 400)
-
+        
         return getUsers
     }
 }
