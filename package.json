@@ -9,7 +9,8 @@
     "dev": "ts-node-dev src/server.ts",
     "prisma": "npx prisma migrate dev",
     "pstudio": "npx prisma studio",
-    "test": "vitest"
+    "test": "vitest",
+    "vercel-build": "prisma generate npx prisma migrate deploy"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
