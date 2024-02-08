@@ -1,5 +1,4 @@
 import { BusinessTypeOptions, Permissions, Status } from "@prisma/client"
-import { CompanyDataEntity } from "../../CompanyData/entities/company-data.entity"
 
 export type BusinessUserResponse = {
     uuid: string
