@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { CompanyAddressEntity } from "../../entities/company-address.entity";
 import { UpdateCompanyDataAndAddressByAdminUsecase } from "./update-company-address-by-admin.usecase";
 import { ICompanyAddressRepository } from "../../repositories/company-address.repository";
-import { UpdateCompanyDataByAdminUsecase } from "../../../CompanyData/usecases/update-company-data-by-admin/update-company-data-by-admin.usecase";
+import { UpdateBusinessInfoUsecase } from "../../../CompanyData/usecases/update-business-info/update-business-info.usecase";
 import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
 import { CompanyDataEntity } from "../../../CompanyData/entities/company-data.entity";
 
@@ -24,7 +24,7 @@ export class UpdateCompanyDataAndAddressByAdminController {
 
             data.uuid = req.query.data_uuid as string
             const companyAddressUsecase = new UpdateCompanyDataAndAddressByAdminUsecase(this.companyAddressRepository)
-            const companyDataUsecase = new UpdateCompanyDataByAdminUsecase(this.companyDataRepository)
+            const companyDataUsecase = new UpdateBusinessInfoUsecase(this.companyDataRepository)
 
             await companyAddressUsecase.execute(address)
             await companyDataUsecase.execute(data)
