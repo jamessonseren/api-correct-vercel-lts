@@ -20,7 +20,8 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
                 phone_1: data.phone_1,
                 phone_2: data.phone_2,
                 business_type: data.business_type,
-                email: data.email
+                email: data.email,
+                status: data.status
             }
         })
 
