@@ -3,7 +3,6 @@ import { ICompanyUserRepository } from "../../repositories/company-user.reposito
 import { CreateCompanyUserByAdminUsecase } from "./create-company-user-by-admin.usecase";
 import { CompanyUserProps } from "../../entities/company-user.entity";
 import { logger } from "../../../../../utils/logger";
-import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
 
 export class CreateCompanyUserByAdminController {
     constructor(
@@ -15,12 +14,12 @@ export class CreateCompanyUserByAdminController {
         try{
             const data: CompanyUserProps = req.body
 
-            const companyAdminId = req.companyUserId as string
+            const business_info_uuid = req.companyUserId as string
             const companyUserUsecase = new CreateCompanyUserByAdminUsecase(
                 this.companyUserRepository
             )
 
-            const companyUser = await companyUserUsecase.execute(data, companyAdminId)
+            const companyUser = await companyUserUsecase.execute(data, business_info_uuid)
 
             return res.json(companyUser)
             

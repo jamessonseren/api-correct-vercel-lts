@@ -11,12 +11,11 @@ export class GetUsersController{
     async handle(req: Request, res: Response){
         try{
 
-            const business_document = req.query.business_document as string
+            const business_info_uuid = req.query.business_info_uuid as string
 
             const getUsersUsecase = new GetUsersUsecase(this.companyUserRepository)
 
-            const users = await getUsersUsecase.execute(business_document)
-            
+            const users = await getUsersUsecase.execute(business_info_uuid)
             return res.json(users)
 
         }catch(err: any){

@@ -5,7 +5,7 @@ import { BusinessUserResponse } from "../../companyUserDto/company-user.dto";
 
 
 export class CompanyUserPrismaRepository implements ICompanyUserRepository {
-    async findByBusinessIdAndUsername(id: string, user_name: string): Promise<CompanyUserEntity | null> {
+    async findByBusinessIdAndUsername(id: string, user_name: string | null): Promise<CompanyUserEntity | null> {
         const companyUser = await prismaClient.businessUser.findFirst({
             where:{
                 business_info_uuid: id,
@@ -61,10 +61,10 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return companyUser
     }
 
-    async findByUsers(document: string): Promise<CompanyUserEntity[] | null> {
+    async findUsers(business_info_uuid: string): Promise<BusinessUserResponse[] | null> {
         const companyUser = await prismaClient.businessUser.findMany({
             where: {
-                document,
+                business_info_uuid,
                 is_admin: false
             }
         })
