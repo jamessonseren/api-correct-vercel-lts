@@ -78,6 +78,13 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                 uuid: data.uuid
             },
             data: {
+                document: data.document,
+                is_admin: data.is_admin,
+                name: data.name,
+                email: data.email,
+                user_name: data.user_name,
+                function: data.function,
+                business_info_uuid: data.business_info_uuid,
                 permissions: data.permissions,
                 password: data.password,
                 status: data.status
