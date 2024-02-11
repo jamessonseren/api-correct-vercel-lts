@@ -11,7 +11,7 @@ export class GetCompanyDataController{
     async handle(req: Request, res: Response){
 
         try{
-            const business_id = req.query.business_id as string
+            const business_id = req.query.business_info_uuid as string
 
             const companyDataUsecase = new GetCompanyDataUsecase(
                 this.companyDataRepository
