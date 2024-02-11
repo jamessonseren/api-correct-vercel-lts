@@ -9,6 +9,7 @@ import { appUserRouter } from './AppUser/app-user.routes';
 import { businessRegisterRouter } from './BusinessFirstRegister/business-register.routes';
 import { benefitsRouter } from './benefits/benefits.routes';
 import { branchRouter } from './branch/branch.routes';
+import { companyAddressRouter } from './CompanyAddress/company-address.routes';
 
 const router = Router();
 
@@ -16,7 +17,7 @@ router.use(correctAdminRouter);
 router.use(companyUserRouter);
 router.use(companyDataRouter);
 router.use(appUserRouter);
-// router.use(companyAddressRouter)
+router.use(companyAddressRouter)
 router.use(businessRegisterRouter);
 router.use(benefitsRouter);
 router.use(branchRouter);
