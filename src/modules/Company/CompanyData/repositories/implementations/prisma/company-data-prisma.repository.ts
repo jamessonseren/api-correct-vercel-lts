@@ -53,6 +53,9 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
         const companyData = await prismaClient.businessInfo.findUnique({
             where: {
                 uuid: id
+            },
+            include:{
+                Address: true
             }
         })
 
