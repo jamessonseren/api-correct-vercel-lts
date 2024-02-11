@@ -39,7 +39,7 @@ export class AuthenticateCompanyUserUsecase {
 
                 //after finding, compare password
                 const comparePasswordHash = await this.passwordCrypto.compare(password, findUser.password)
-                if (!comparePasswordHash) throw new CustomError("Incorrect CNPJ, username or password", 401)
+                if (!comparePasswordHash) throw new CustomError("Incorrect credentials", 401)
     
                 //check if user status is inactive
                 if (findUser.status === "inactive") throw new CustomError("User is not allowed to sign in", 401)
@@ -55,7 +55,7 @@ export class AuthenticateCompanyUserUsecase {
         if (!user_name) throw new CustomError("Incorrect credentials", 401)
 
         const findUser = await this.companyUserRepository.findByBusinessIdAndUsername(findBusinessInfo.uuid, user_name)
-        if (!findUser) throw new CustomError("Incorrecaat credentials", 401)
+        if (!findUser) throw new CustomError("Incorrecat credentials", 401)
 
         if (findUser.status === "inactive") throw new CustomError("User is not allowed to sign in", 401)
 
