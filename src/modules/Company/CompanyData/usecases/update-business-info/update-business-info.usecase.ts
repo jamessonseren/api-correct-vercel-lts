@@ -9,10 +9,10 @@ export class UpdateBusinessInfoUsecase {
     ){}
 
     async execute(data: CompanyDataEntity){
-        if(!data.uuid) throw new CustomError("Company Data Id is required", 400)
+        if(!data.uuid) throw new CustomError("Business info Id is required", 400)
 
         const findData = await this.businessInfoRepository.findById(data.uuid)
-        if(!findData) throw new CustomError("Business info not found", 400)
+        if(!findData) throw new CustomError("Business info not found", 404)
 
         const updateBusinessInfoRepository = await this.businessInfoRepository.update(data)
 
