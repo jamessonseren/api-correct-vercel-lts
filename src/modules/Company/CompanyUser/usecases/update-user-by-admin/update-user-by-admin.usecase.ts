@@ -27,11 +27,18 @@ export class UpdateUserByAdminUsecase {
             data.password = passwordHash
 
         }
+        if(data.password){
+            const bcrypt = new PasswordBcrypt()
+            const passwordHash = await bcrypt.hash(data.password)
+
+            data.password = passwordHash
+        }
 
         if (data.user_name) {
             //check if username already exists
             const findByUsername = await this.companyUserRepository.findByBusinessIdAndUsername(findUser.business_info_uuid, data.user_name)
             if (findByUsername) throw new CustomError("User name already registered", 409)
+
 
         }
         if (!data.document) data.document = findUser.document
