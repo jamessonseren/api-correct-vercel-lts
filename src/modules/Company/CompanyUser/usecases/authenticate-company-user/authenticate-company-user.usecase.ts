@@ -60,7 +60,7 @@ export class AuthenticateCompanyUserUsecase {
         if (findUser.status === "inactive") throw new CustomError("User is not allowed to sign in", 401)
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, findUser.password)
-        if (!comparePasswordHash) throw new CustomError("Incorrect CNPJ, username or password", 401)
+        if (!comparePasswordHash) throw new CustomError("Incorrect credentials", 401)
 
         const tokenGenerated = this.token.create(findUser)
 
