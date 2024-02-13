@@ -9,6 +9,7 @@ import { getUsersController } from "../../modules/Company/CompanyUser/usecases/g
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
 import { companyUserByAdminController } from "../../modules/Company/CompanyUser/usecases/create-company-user";
+import { confirmPasswordController } from "../../modules/Company/CompanyUser/usecases/confirm-password";
 
 
 export const companyUserRouter = Router()
@@ -52,4 +53,9 @@ companyUserRouter.patch("/company-user", companyIsAuth, async (request, response
 //Delete User By company Admin
 companyUserRouter.delete("/company-user", companyIsAuth, async (request, response) => {
     await deleteUserController.handle(request, response)
+})
+
+//Password confirmation
+companyUserRouter.post("/confirm-password", companyIsAuth, async (request, response) => {
+    await confirmPasswordController.handle(request, response)
 })
