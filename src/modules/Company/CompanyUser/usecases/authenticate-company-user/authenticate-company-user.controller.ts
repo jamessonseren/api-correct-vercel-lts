@@ -4,6 +4,7 @@ import { ICompanyAdminToken } from "../../../../../infra/shared/crypto/token/Com
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 import { AuthenticateCompanyUserUsecase } from "./authenticate-company-user.usecase";
 import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
+import { logger } from "../../../../../utils/logger";
 
 export class AuthenticateCompanyAdminController{
     constructor(
@@ -30,6 +31,7 @@ export class AuthenticateCompanyAdminController{
             return res.json(companyUser)
 
         }catch(err: any){
+            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message
             })
