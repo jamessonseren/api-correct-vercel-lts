@@ -5,6 +5,16 @@ import { BusinessUserResponse } from "../../companyUserDto/company-user.dto";
 
 
 export class CompanyUserPrismaRepository implements ICompanyUserRepository {
+   async findByIdAuth(id: string): Promise<CompanyUserEntity | null> {
+        const companyUser = await prismaClient.businessUser.findUnique({
+            where:{
+                uuid: id
+            }
+        })
+
+        return companyUser
+    }
+    
     async findByBusinessIdAndUsername(id: string, user_name: string | null): Promise<CompanyUserEntity | null> {
         const companyUser = await prismaClient.businessUser.findFirst({
             where:{
