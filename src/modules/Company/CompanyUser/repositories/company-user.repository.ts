@@ -8,7 +8,7 @@ export interface ICompanyUserRepository{
     findByBusinessIdAndEmail(id: string, email: string): Promise<CompanyUserEntity | null>
     findByBusinessIdAndUsername(id: string, user_name: string | null): Promise<CompanyUserEntity | null>
     findByEmail(email: string): Promise<CompanyUserEntity | null>
-    updateUser(data: CompanyUserProps): Promise<CompanyUserEntity>
+    updateUser(data: CompanyUserProps): Promise<BusinessUserResponse>
     saveUser(data: CompanyUserEntity): Promise<void>
     deleteByAdminById(user_id: string): Promise<void>
 }
