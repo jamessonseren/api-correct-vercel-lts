@@ -82,7 +82,7 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
         return companyUser
     }   
 
-    async updateUser(data: CompanyUserEntity): Promise<CompanyUserEntity> {
+    async updateUser(data: CompanyUserEntity): Promise<BusinessUserResponse> {
         const updateUser = await prismaClient.businessUser.update({
             where: {
                 uuid: data.uuid
