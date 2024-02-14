@@ -4,6 +4,7 @@ import { BusinessTypeOptions, Status } from '@prisma/client';
 
 type CompanyDataProps = {
     address_uuid: string
+    contract_info_uuid: string | null
     fantasy_name: string
     corporate_reason: string | null
     document: string
@@ -21,6 +22,7 @@ export class CompanyDataEntity {
 
     uuid: string;
     address_uuid: string
+    contract_info_uuid: string | null
     fantasy_name: string
     corporate_reason: string | null
     document: string
@@ -43,6 +45,7 @@ export class CompanyDataEntity {
 
         this.uuid = randomUUID()
         this.address_uuid = props.address_uuid
+        this.contract_info_uuid = props.contract_info_uuid
         this.fantasy_name = props.fantasy_name
         this.corporate_reason = props.corporate_reason
         this.document = props.document

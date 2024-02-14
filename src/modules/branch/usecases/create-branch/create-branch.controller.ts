@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { IBranchRepository } from '../../repositories/branch.repository';
 import { CreateBranchUsecase } from './create-branch.usercase';
 import { BranchEntity } from '../../entities/branch.entity';
+import { logger } from '../../../../utils/logger';
 
 export class CreateBranchController {
     constructor(private branchRepository: IBranchRepository) {}
@@ -17,6 +18,7 @@ export class CreateBranchController {
 
             return res.status(201).json(resp);
         } catch (err: any) {
+            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message,
             });
