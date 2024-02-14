@@ -30,7 +30,7 @@ export type AppUserProps = {
     company_owner: boolean
     status: Status
     function: string | null
-    recommendation_code: string
+    recommendation_code: string | null
     is_authenticated: boolean
     marital_status: string | null
     dependents_quantity: number
@@ -82,7 +82,7 @@ export class AppUserSignUpEntity {
     company_owner: boolean
     status: Status
     function: string | null
-    recommendation_code: string
+    recommendation_code: string | null
     is_authenticated: boolean
     marital_status: string | null
     dependents_quantity: number

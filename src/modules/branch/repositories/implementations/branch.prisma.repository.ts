@@ -5,12 +5,14 @@ import { newDateF } from '../../../../utils/date';
 
 export class BranchPrismaRepository implements IBranchRepository {
     async create(data: BranchEntity): Promise<BranchEntity> {
+        console.log({data})
         const r = await prismaClient.branchInfo.create({
             data: {
                 uuid: data.uuid,
                 name: data.name,
                 benefits_uuid: data.benefits_uuid,
                 marketing_tax: data.marketing_tax,
+                market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,
                 created_at: newDateF(),
                 updated_at: newDateF(),
@@ -38,6 +40,7 @@ export class BranchPrismaRepository implements IBranchRepository {
                 name: data.name,
                 benefits_uuid: data.benefits_uuid,
                 marketing_tax: data.marketing_tax,
+                market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,
                 updated_at: newDateF(),
             },
