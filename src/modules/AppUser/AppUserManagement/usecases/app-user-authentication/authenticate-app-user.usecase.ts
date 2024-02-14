@@ -22,8 +22,8 @@ export class AuthenticateAppuserUsecase{
         const appUser = await this.appUserRepository.findByDocumentAuth(document)
         if(!appUser) throw new CustomError("Username/password is incorrect", 401)
 
-        // const comparePasswordHash = await this.passwordCrypto.compare(password, appUser.password)
-        // if(!comparePasswordHash) throw new CustomError("Username/password is incorrect", 401)
+        const comparePasswordHash = await this.passwordCrypto.compare(password, appUser.password)
+        if(!comparePasswordHash) throw new CustomError("Username/password is incorrect", 401)
 
         const tokenGenerated = this.token.create(appUser)
 

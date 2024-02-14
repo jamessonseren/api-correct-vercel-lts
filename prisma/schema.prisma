@@ -70,6 +70,7 @@ model BusinessUser {
 model BusinessInfo {
   uuid                String              @id @default(uuid())
   address_uuid        String
+  contract_info_uuid  String?
   fantasy_name        String
   corporate_reason    String?
   document            String              @unique
@@ -83,11 +84,11 @@ model BusinessInfo {
   business_type       BusinessTypeOptions
 
   Address        Address?         @relation(fields: [address_uuid], references: [uuid])
+  Contract       ContractInfo?    @relation(fields: [contract_info_uuid], references: [uuid])
   BusinessUser   BusinessUser[]
   UserInfo       UserInfo[]
   Transactions   Transactions[]
   BusinessConfig BusinessConfig[]
-  ContractInfo   ContractInfo[]
 
   @@map("business_data")
 }
@@ -202,13 +203,15 @@ model Benefit {
 }
 
 model BranchInfo {
-  uuid          String   @id @default(uuid())
-  name          String
-  benefits_uuid String[]
-  marketing_tax Int
-  admin_tax     Int
-  created_at    String
-  updated_at    String?
+  uuid             String         @id @default(uuid())
+  name             String
+  benefits_uuid    String[]
+  marketing_tax    Int
+  admin_tax        Int
+  market_place_tax Int
+  created_at       String
+  updated_at       String?
+  ContractInfo     ContractInfo[]
 
   @@map("branch_info")
 }
@@ -228,13 +231,15 @@ model UserWallet {
 }
 
 model ContractInfo {
-  uuid               String @id @default(uuid())
-  name               String
-  version            String
-  assigned_at        String
-  business_info_uuid String
+  uuid             String  @id @default(uuid())
+  name             String?
+  content          String
+  version          String?
+  assigned_at      String
+  branch_info_uuid String
 
-  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+  BranchInfo   BranchInfo     @relation(fields: [branch_info_uuid], references: [uuid])
+  BusinessInfo BusinessInfo[]
 
   @@map("contract_info")
 }
