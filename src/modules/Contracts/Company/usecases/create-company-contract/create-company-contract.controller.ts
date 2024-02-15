@@ -3,21 +3,31 @@ import { logger } from "../../../../../utils/logger";
 import { ICompanyContractRepository } from "../../repositories/implementations/company-contract.repository";
 import { CompanyContractProps } from "../../entities/company-contract.entity";
 import { CreateCompanyContractUsecase } from "./create-company-contract.usecase";
+import { ICompanyUserRepository } from "../../../../Company/CompanyUser/repositories/company-user.repository";
+import { IPasswordCrypto } from "../../../../../crypto/password.crypto";
 
 export class CreateCompanyContractController{
     constructor(
-        private companyContractRepository: ICompanyContractRepository
+        private companyContractRepository: ICompanyContractRepository,
+        private businessUser: ICompanyUserRepository,
+        private passwordCrypto: IPasswordCrypto,
+
+
     ){}
 
     async handle( req: Request, res: Response){
         try{
+            const adminId = req.companyUserId
+
+            const password = req.body.password as string
+
             const data: CompanyContractProps = req.body
 
-            const contractUsecase = new CreateCompanyContractUsecase(this.companyContractRepository)
+            const contractUsecase = new CreateCompanyContractUsecase(this.companyContractRepository, this.businessUser, this.passwordCrypto)
 
-            const contract = await contractUsecase.execute(data)
+            await contractUsecase.execute(data, adminId, password)
 
-            return contract
+            return res.json({message: "Contract Signed successfully"})
             
         }catch(err: any){
             logger.error(err.stack)

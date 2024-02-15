@@ -10,6 +10,7 @@ import { businessRegisterRouter } from './BusinessFirstRegister/business-registe
 import { benefitsRouter } from './benefits/benefits.routes';
 import { branchRouter } from './branch/branch.routes';
 import { companyAddressRouter } from './CompanyAddress/company-address.routes';
+import { contractsRouter } from './Contracts/contracts.routes';
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use(companyAddressRouter)
 router.use(businessRegisterRouter);
 router.use(benefitsRouter);
 router.use(branchRouter);
+router.use(contractsRouter)
 
 export { router };

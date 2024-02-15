@@ -10,11 +10,12 @@ export class UpdateUserByAdminUsecase {
 
     async execute(data: CompanyUserEntity) {
 
+        if(!data.uuid) throw new CustomError("User ID is required", 400)
+
         //check if user exists
         const findUser = await this.companyUserRepository.findById(data.uuid)
         if (!findUser) throw new CustomError("User not found", 404)
 
-        data.uuid = findUser.uuid
 
         if (findUser.status === 'pending_password') {
             if (!data.password) throw new CustomError("Admin must update password", 400)
@@ -25,6 +26,7 @@ export class UpdateUserByAdminUsecase {
             const passwordHash = await bcrypt.hash(data.password)
 
             data.password = passwordHash
+            data.status = 'active'
 
         }
         if(data.password){
