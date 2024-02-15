@@ -11,6 +11,8 @@ export class ConfirmPasswordUsecase{
 
     async execute(user_id: string, password: string){
 
+        if(!password) throw new CustomError("Password is required", 400)
+        
         //find user
         const findUser = await this.companyUserRepository.findByIdAuth(user_id)
         if(!findUser) throw new CustomError("User not found", 404)
@@ -19,7 +21,7 @@ export class ConfirmPasswordUsecase{
         const comparePasswordHash = await this.passwordCrypto.compare(password, findUser.password)
         if(!comparePasswordHash) throw new CustomError("Incorrect credentials", 403)
 
-        return ({message: "Password matches"})
+        return ({message: "Password matches", businessInfoUuid: `${findUser.business_info_uuid}`})
 
     }
 }
