@@ -6,7 +6,6 @@ export type CompanyContractProps = {
     content: string
     version: string | null
     assigned_at: string
-    branch_info_uuid: string
 }
 
 export class CompanyContractEntity{
@@ -16,7 +15,6 @@ export class CompanyContractEntity{
     content: string
     version: string | null
     assigned_at: string
-    branch_info_uuid: string
 
     private constructor(props: CompanyContractProps){
 
@@ -25,7 +23,6 @@ export class CompanyContractEntity{
         this.content = props.content
         this.version = props.version
         this.assigned_at = props.assigned_at
-        this.branch_info_uuid = props.branch_info_uuid
 
         if(!props.content) throw new CustomError("Contract content is required", 400)
         if(!props.assigned_at) throw new CustomError("Signing date is required", 400)
