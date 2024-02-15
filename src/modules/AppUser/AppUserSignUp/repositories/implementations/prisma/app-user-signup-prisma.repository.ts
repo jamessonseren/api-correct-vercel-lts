@@ -3,6 +3,7 @@ import { prismaClient } from "../../../../../../infra/databases/prisma.config";
 import { AppUserSignUpEntity } from "../../../entities/app-user-signup.entity";
 import { IAppUserSignupRepository } from "../../app-user-signup.repository";
 import { AppUserAuthResponseAuthentication, UserInfoResponse } from "../../../../app-user-dto/app-user.dto";
+import { newDateF } from "../../../../../../utils/date";
 
 
 export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
@@ -39,7 +40,9 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     document_selfie_base64: data.document_back_base64,
                     document_selfie_status: data.document_selfie_status,
                     selfie_base64: data.selfie_base64,
-                    selfie_status: data.document_selfie_status
+                    selfie_status: data.document_selfie_status,
+                    created_at: newDateF(),
+                    updated_at: newDateF()
                 }, 
                 update:{
                     document_front_base64: data.document_front_base64,
@@ -49,7 +52,8 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     document_selfie_base64: data.document_back_base64,
                     document_selfie_status: data.document_selfie_status,
                     selfie_base64: data.selfie_base64,
-                    selfie_status: data.document_selfie_status
+                    selfie_status: data.document_selfie_status,
+                    updated_at: newDateF()
                 }
             }),
 
@@ -78,7 +82,9 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     marital_status: data.marital_status,
                     dependents_quantity: data.dependents_quantity,
                     user_document_validation_uuid: data.user_document_validation_uuid,
-                    status: data.status
+                    status: data.status,
+                    created_at: newDateF(),
+                    updated_at: newDateF()
 
                 },
                 update:{
@@ -101,7 +107,8 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     marital_status: data.marital_status,
                     dependents_quantity: data.dependents_quantity,
                     user_document_validation_uuid: data.user_document_validation_uuid,
-                    status: data.status                                
+                    status: data.status,
+                    updated_at: newDateF()                              
 
                 }
             }),
@@ -111,8 +118,9 @@ export class AppUserSignUpPrismaRepository implements IAppUserSignupRepository{
                     uuid: data.user_auth_uuid,
                     user_info_uuid: data.user_info_fk_uuid,
                     document: data.document,
-                    password: data.password
-
+                    password: data.password,
+                    created_at: newDateF(),
+                    updated_at: newDateF()
                 }
             })
 
