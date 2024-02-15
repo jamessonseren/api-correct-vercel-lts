@@ -12,12 +12,13 @@ export type BusinessRegisterProps = {
     city: string
     state: string
     country: string
+
     //businessinfo
     address_fk_uuid: string
+    branch_info_uuid: string
     fantasy_name: string
     corporate_reason: string | null
     document: string
-    branch_uuid: string
     classification: string
     colaborators_number: number
     status: Status
@@ -40,10 +41,10 @@ export class BusinessRegisterEntity {
     country: string
     business_info_uuid
     address_fk_uuid: string
+    branch_info_uuid: string
     fantasy_name: string
     corporate_reason: string | null
     document: string
-    branch_uuid: string
     classification: string
     colaborators_number: number
     status: Status
@@ -69,7 +70,7 @@ export class BusinessRegisterEntity {
         this.fantasy_name = props.fantasy_name
         this.document = props.document
         this.corporate_reason = props.corporate_reason
-        this.branch_uuid = props.branch_uuid
+        this.branch_info_uuid = props.branch_info_uuid
         this.classification = props.classification
         this.colaborators_number = props.colaborators_number
         this.status = props.status

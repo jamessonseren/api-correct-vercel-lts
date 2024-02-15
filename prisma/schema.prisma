@@ -58,8 +58,8 @@ model BusinessUser {
   function           String?
   permissions        Permissions[] @default([all])
   status             Status        @default(pending_password)
-  created_at         DateTime?     @default(now())
-  updated_at         DateTime?     @updatedAt
+  created_at         String?
+  updated_at         String?
 
   BusinessInfo         BusinessInfo           @relation(fields: [business_info_uuid], references: [uuid])
   BusinessNotification BusinessNotification[]
@@ -71,10 +71,10 @@ model BusinessInfo {
   uuid                String              @id @default(uuid())
   address_uuid        String
   contract_info_uuid  String?
+  branch_info_uuid    String
   fantasy_name        String
   corporate_reason    String?
   document            String              @unique
-  branch_uuid         String
   classification      String
   colaborators_number Int
   status              Status              @default(pending)
@@ -85,6 +85,8 @@ model BusinessInfo {
 
   Address        Address?         @relation(fields: [address_uuid], references: [uuid])
   Contract       ContractInfo?    @relation(fields: [contract_info_uuid], references: [uuid])
+  Branch         BranchInfo       @relation(fields: [branch_info_uuid], references: [uuid])
+  
   BusinessUser   BusinessUser[]
   UserInfo       UserInfo[]
   Transactions   Transactions[]
@@ -117,29 +119,32 @@ model Address {
 }
 
 model UserInfo {
-  uuid                          String     @id @default(uuid())
+  uuid                          String  @id @default(uuid())
   business_info_uuid            String?
   address_uuid                  String?
-  document                      String     @unique
-  document2                     String?    @unique
-  document3                     String?    @unique
+  document                      String  @unique
+  document2                     String? @unique
+  document3                     String? @unique
   full_name                     String
   display_name                  String?
   internal_company_code         String?
   gender                        String?
-  email                         String?    @unique
+  email                         String? @unique
   date_of_birth                 String
   phone                         String?
   salary                        String?
-  company_owner                 Boolean    @default(false)
-  status                        Status     @default(pending)
+  company_owner                 Boolean @default(false)
+  status                        Status  @default(pending)
   function                      String?
   recommendation_code           String?
-  is_authenticated              Boolean    @default(false)
+  is_authenticated              Boolean @default(false)
   marital_status                String?
-  dependents_quantity           Int        @default(0)
+  dependents_quantity           Int     @default(0)
   user_document_validation_uuid String?
-  UserAuth                      UserAuth[]
+  created_at                    String?
+  updated_at                    String?
+
+  UserAuth UserAuth[]
 
   BusinessInfo     BusinessInfo?           @relation(fields: [business_info_uuid], references: [uuid])
   Address          Address?                @relation(fields: [address_uuid], references: [uuid])
@@ -161,7 +166,10 @@ model UserDocumentValidation {
   selfie_status          UserDocumentValidationStatus @default(under_analysis)
   document_selfie_base64 String?
   document_selfie_status UserDocumentValidationStatus @default(under_analysis)
-  UserInfo               UserInfo[]
+  created_at             String?
+  updated_at             String?
+
+  UserInfo UserInfo[]
 
   @@map("user_document_validation")
 }
@@ -179,8 +187,8 @@ model UserAuth {
   document       String @unique
   password       String
 
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  created_at String?
+  updated_at String?
 
   UserInfo UserInfo @relation(fields: [user_info_uuid], references: [uuid])
 
@@ -211,18 +219,18 @@ model BranchInfo {
   market_place_tax Int
   created_at       String
   updated_at       String?
-  ContractInfo     ContractInfo[]
+  BusinessInfo     BusinessInfo[]
 
   @@map("branch_info")
 }
 
 model UserWallet {
-  uuid           String    @id @default(uuid())
+  uuid           String @id @default(uuid())
   user_info_uuid String
   benefit_uuid   String
   balance        Int
-  created_at     DateTime  @default(now())
-  updated_at     DateTime? @updatedAt
+  created_at     String
+  updated_at     String
 
   UserInfo     UserInfo       @relation(fields: [user_info_uuid], references: [uuid])
   Transactions Transactions[]
@@ -231,14 +239,12 @@ model UserWallet {
 }
 
 model ContractInfo {
-  uuid             String  @id @default(uuid())
-  name             String?
-  content          String
-  version          String?
-  assigned_at      String
-  branch_info_uuid String
+  uuid        String  @id @default(uuid())
+  name        String?
+  content     String
+  version     String?
+  assigned_at String
 
-  BranchInfo   BranchInfo     @relation(fields: [branch_info_uuid], references: [uuid])
   BusinessInfo BusinessInfo[]
 
   @@map("contract_info")
@@ -259,8 +265,8 @@ model Transactions {
   fee_amount         Int
   cashback           Int
   status             TransactionStatus
-  created_at         DateTime?         @default(now())
-  updated_at         DateTime?         @updatedAt
+  created_at         String
+  updated_at         String
 
   UserWallet   UserWallet   @relation(fields: [payer_wallet_uuid], references: [uuid])
   UserInfo     UserInfo     @relation(fields: [favored_uuid], references: [uuid])
