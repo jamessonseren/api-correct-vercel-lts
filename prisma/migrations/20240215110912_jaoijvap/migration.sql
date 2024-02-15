@@ -2,10 +2,13 @@
 CREATE TYPE "Permissions" AS ENUM ('all', 'sales', 'finances', 'marketing', 'benefits', 'transports', 'allPartners', 'allEmployers');
 
 -- CreateEnum
-CREATE TYPE "Status" AS ENUM ('pending', 'active', 'inactive', 'pending_password');
+CREATE TYPE "Status" AS ENUM ('pending', 'active', 'inactive', 'pending_password', 'pending_validation');
 
 -- CreateEnum
 CREATE TYPE "BusinessTypeOptions" AS ENUM ('empregador', 'comercio', 'autonomo_comercio', 'empregador_comercio');
+
+-- CreateEnum
+CREATE TYPE "UserDocumentValidationStatus" AS ENUM ('approved', 'denied', 'pending_to_send', 'under_analysis');
 
 -- CreateEnum
 CREATE TYPE "BenefitType" AS ENUM ('pos_pago', 'pre_pago');
@@ -37,29 +40,19 @@ CREATE TABLE "business_users" (
     "password" TEXT NOT NULL,
     "function" TEXT,
     "permissions" "Permissions"[] DEFAULT ARRAY['all']::"Permissions"[],
-    "status" "Status" NOT NULL DEFAULT 'pending',
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "status" "Status" NOT NULL DEFAULT 'pending_password',
+    "created_at" TEXT,
+    "updated_at" TEXT,
 
     CONSTRAINT "business_users_pkey" PRIMARY KEY ("uuid")
 );
 
 -- CreateTable
-CREATE TABLE "business_category" (
-    "uuid" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "benefit_uuid" TEXT NOT NULL,
-    "marketing_tax" INTEGER NOT NULL,
-    "admin_tax" INTEGER NOT NULL,
-
-    CONSTRAINT "business_category_pkey" PRIMARY KEY ("uuid")
-);
-
--- CreateTable
 CREATE TABLE "business_data" (
     "uuid" TEXT NOT NULL,
-    "address_uuid" TEXT,
+    "address_uuid" TEXT NOT NULL,
     "contract_info_uuid" TEXT,
+    "branch_info_uuid" TEXT NOT NULL,
     "fantasy_name" TEXT NOT NULL,
     "corporate_reason" TEXT,
     "document" TEXT NOT NULL,
@@ -98,12 +91,12 @@ CREATE TABLE "user_info" (
     "document" TEXT NOT NULL,
     "document2" TEXT,
     "document3" TEXT,
-    "full_name" TEXT,
+    "full_name" TEXT NOT NULL,
     "display_name" TEXT,
     "internal_company_code" TEXT,
     "gender" TEXT,
-    "email" TEXT NOT NULL,
-    "date_of_birth" TIMESTAMP(3) NOT NULL,
+    "email" TEXT,
+    "date_of_birth" TEXT NOT NULL,
     "phone" TEXT,
     "salary" TEXT,
     "company_owner" BOOLEAN NOT NULL DEFAULT false,
@@ -113,18 +106,38 @@ CREATE TABLE "user_info" (
     "is_authenticated" BOOLEAN NOT NULL DEFAULT false,
     "marital_status" TEXT,
     "dependents_quantity" INTEGER NOT NULL DEFAULT 0,
+    "user_document_validation_uuid" TEXT,
+    "created_at" TEXT,
+    "updated_at" TEXT,
 
     CONSTRAINT "user_info_pkey" PRIMARY KEY ("uuid")
 );
 
 -- CreateTable
+CREATE TABLE "user_document_validation" (
+    "uuid" TEXT NOT NULL,
+    "document_front_base64" TEXT,
+    "document_front_status" "UserDocumentValidationStatus" NOT NULL DEFAULT 'under_analysis',
+    "document_back_base64" TEXT,
+    "document_back_status" "UserDocumentValidationStatus" NOT NULL DEFAULT 'under_analysis',
+    "selfie_base64" TEXT,
+    "selfie_status" "UserDocumentValidationStatus" NOT NULL DEFAULT 'under_analysis',
+    "document_selfie_base64" TEXT,
+    "document_selfie_status" "UserDocumentValidationStatus" NOT NULL DEFAULT 'under_analysis',
+    "created_at" TEXT,
+    "updated_at" TEXT,
+
+    CONSTRAINT "user_document_validation_pkey" PRIMARY KEY ("uuid")
+);
+
+-- CreateTable
 CREATE TABLE "users_auth" (
     "uuid" TEXT NOT NULL,
-    "user_info_uuid" TEXT,
+    "user_info_uuid" TEXT NOT NULL,
     "document" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "created_at" TEXT,
+    "updated_at" TEXT,
 
     CONSTRAINT "users_auth_pkey" PRIMARY KEY ("uuid")
 );
@@ -134,10 +147,24 @@ CREATE TABLE "benefits" (
     "uuid" TEXT NOT NULL,
     "benefit_name" TEXT NOT NULL,
     "benefit_type" "BenefitType" NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT,
 
     CONSTRAINT "benefits_pkey" PRIMARY KEY ("uuid")
+);
+
+-- CreateTable
+CREATE TABLE "branch_info" (
+    "uuid" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "benefits_uuid" TEXT[],
+    "marketing_tax" INTEGER NOT NULL,
+    "admin_tax" INTEGER NOT NULL,
+    "market_place_tax" INTEGER NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT,
+
+    CONSTRAINT "branch_info_pkey" PRIMARY KEY ("uuid")
 );
 
 -- CreateTable
@@ -146,8 +173,8 @@ CREATE TABLE "users_wallet" (
     "user_info_uuid" TEXT NOT NULL,
     "benefit_uuid" TEXT NOT NULL,
     "balance" INTEGER NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL,
 
     CONSTRAINT "users_wallet_pkey" PRIMARY KEY ("uuid")
 );
@@ -155,8 +182,9 @@ CREATE TABLE "users_wallet" (
 -- CreateTable
 CREATE TABLE "contract_info" (
     "uuid" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "version" TEXT NOT NULL,
+    "name" TEXT,
+    "content" TEXT NOT NULL,
+    "version" TEXT,
     "assigned_at" TEXT NOT NULL,
 
     CONSTRAINT "contract_info_pkey" PRIMARY KEY ("uuid")
@@ -172,8 +200,8 @@ CREATE TABLE "transactions" (
     "fee_amount" INTEGER NOT NULL,
     "cashback" INTEGER NOT NULL,
     "status" "TransactionStatus" NOT NULL,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL,
 
     CONSTRAINT "transactions_pkey" PRIMARY KEY ("uuid")
 );
@@ -274,22 +302,22 @@ CREATE UNIQUE INDEX "user_info_document2_key" ON "user_info"("document2");
 CREATE UNIQUE INDEX "user_info_document3_key" ON "user_info"("document3");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "user_info_email_key" ON "user_info"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_auth_document_key" ON "users_auth"("document");
 
 -- AddForeignKey
 ALTER TABLE "business_users" ADD CONSTRAINT "business_users_business_info_uuid_fkey" FOREIGN KEY ("business_info_uuid") REFERENCES "business_data"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "business_category" ADD CONSTRAINT "business_category_benefit_uuid_fkey" FOREIGN KEY ("benefit_uuid") REFERENCES "benefits"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "business_data" ADD CONSTRAINT "business_data_address_uuid_fkey" FOREIGN KEY ("address_uuid") REFERENCES "addresses"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "business_data" ADD CONSTRAINT "business_data_address_uuid_fkey" FOREIGN KEY ("address_uuid") REFERENCES "addresses"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "business_data" ADD CONSTRAINT "business_data_contract_info_uuid_fkey" FOREIGN KEY ("contract_info_uuid") REFERENCES "contract_info"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "business_data" ADD CONSTRAINT "business_data_branch_uuid_fkey" FOREIGN KEY ("branch_uuid") REFERENCES "business_category"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "business_data" ADD CONSTRAINT "business_data_branch_info_uuid_fkey" FOREIGN KEY ("branch_info_uuid") REFERENCES "branch_info"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_info" ADD CONSTRAINT "user_info_business_info_uuid_fkey" FOREIGN KEY ("business_info_uuid") REFERENCES "business_data"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -298,13 +326,13 @@ ALTER TABLE "user_info" ADD CONSTRAINT "user_info_business_info_uuid_fkey" FOREI
 ALTER TABLE "user_info" ADD CONSTRAINT "user_info_address_uuid_fkey" FOREIGN KEY ("address_uuid") REFERENCES "addresses"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users_auth" ADD CONSTRAINT "users_auth_user_info_uuid_fkey" FOREIGN KEY ("user_info_uuid") REFERENCES "user_info"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "user_info" ADD CONSTRAINT "user_info_user_document_validation_uuid_fkey" FOREIGN KEY ("user_document_validation_uuid") REFERENCES "user_document_validation"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "users_auth" ADD CONSTRAINT "users_auth_user_info_uuid_fkey" FOREIGN KEY ("user_info_uuid") REFERENCES "user_info"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users_wallet" ADD CONSTRAINT "users_wallet_user_info_uuid_fkey" FOREIGN KEY ("user_info_uuid") REFERENCES "user_info"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "users_wallet" ADD CONSTRAINT "users_wallet_benefit_uuid_fkey" FOREIGN KEY ("benefit_uuid") REFERENCES "benefits"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_payer_wallet_uuid_fkey" FOREIGN KEY ("payer_wallet_uuid") REFERENCES "users_wallet"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;

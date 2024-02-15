@@ -4,8 +4,16 @@ import { IBranchRepository } from '../branch.repository';
 import { newDateF } from '../../../../utils/date';
 
 export class BranchPrismaRepository implements IBranchRepository {
+    async findByName(branch_name: string): Promise<BranchEntity | null> {
+        const branch = await prismaClient.branchInfo.findFirst({
+            where:{
+                name: branch_name
+            }
+        })
+
+        return branch as BranchEntity
+    }
     async create(data: BranchEntity): Promise<BranchEntity> {
-        console.log({data})
         const r = await prismaClient.branchInfo.create({
             data: {
                 uuid: data.uuid,

@@ -5,5 +5,6 @@ export interface IBranchRepository {
     getByID(uuid: string): Promise<BranchEntity | null>;
     update(uuid: string, data: BranchEntity): Promise<void>;
     list(): Promise<BranchEntity[] | []>;
+    findByName(branch_name: string): Promise<BranchEntity | null>
     // delete(uuid: string): Promise<void>;
 }

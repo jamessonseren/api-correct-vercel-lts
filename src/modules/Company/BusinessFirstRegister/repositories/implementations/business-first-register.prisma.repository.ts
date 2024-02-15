@@ -28,7 +28,7 @@ export class BusinessRegisterPrismaRepository implements IBusinessFirstRegisterR
                     fantasy_name: data.fantasy_name,
                     corporate_reason: data.corporate_reason,
                     document: data.document,
-                    branch_uuid: data.branch_uuid,
+                    branch_info_uuid: data.branch_info_uuid,
                     classification: data.classification,
                     colaborators_number: data.colaborators_number,
                     status: data.status,
