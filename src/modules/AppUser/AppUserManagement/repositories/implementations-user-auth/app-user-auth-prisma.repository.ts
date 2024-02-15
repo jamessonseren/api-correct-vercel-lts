@@ -42,6 +42,8 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
             select: {
                 uuid: true,
                 document: true,
+                created_at: true,
+                updated_at: true,
                 UserInfo: {
                     include: {
                         Address: true,
@@ -51,7 +53,9 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
                                 document_front_status: true,
                                 document_back_status: true,
                                 selfie_status: true,
-                                document_selfie_status: true
+                                document_selfie_status: true,
+                                created_at: true,
+                                updated_at: true
                             }
                         }
                     }

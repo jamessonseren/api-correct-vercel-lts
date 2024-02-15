@@ -16,7 +16,18 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository{
                     }
                 },
                 Address:true,
-                UserValidation: true
+                UserValidation:{
+                    select:{
+                        uuid: true,
+                        document_front_status: true,
+                        document_back_status: true,
+                        selfie_status: true,
+                        document_selfie_status: true,
+                        document_back_base64: true,
+                        created_at: true,
+                        updated_at: true
+                    }
+                }
             }
         })
 

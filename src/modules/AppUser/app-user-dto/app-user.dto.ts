@@ -27,6 +27,8 @@ export type UserInfoResponse = {
     recommendation_code: string | null
     marital_status: string | null
     dependents_quantity: number
+    created_at: string | null
+    updated_at: string | null
     BusinessInfo: {
         fantasy_name: string
     } | null
@@ -52,6 +54,10 @@ export type UserInfoResponse = {
         selfie_status: UserDocumentValidationStatus
         //document_selfie_base64: string
         document_selfie_status: UserDocumentValidationStatus
+        created_at: string | null
+        updated_at: string | null
+    
+        
     } | null
 
 }
@@ -60,6 +66,8 @@ export type UserInfoResponse = {
 export type AppUserAuthResponse = {
     uuid: string,
     document: string,
+    created_at: string | null,
+    updated_at: string | null,
     UserInfo: {
         uuid: string,
         document: string,
@@ -102,8 +110,11 @@ export type AppUserAuthResponse = {
             selfie_status: UserDocumentValidationStatus
             //document_selfie_base64: string
             document_selfie_status: UserDocumentValidationStatus
+            created_at: string | null
+            updated_at: string | null
+        
         } | null
-    
+
     }
 
 
