@@ -12,7 +12,7 @@ export class CompanyContractPrismaRepository implements ICompanyContractReposito
 
         return contract
     }
-    async save(data: CompanyContractEntity, business_info_uuid: string): Promise<void> {
+    async save(data: CompanyContractEntity, business_info_uuid: string): Promise<CompanyContractEntity> {
 
         const [contract, businessInfo] = await prismaClient.$transaction([
             prismaClient.contractInfo.create({
@@ -35,6 +35,8 @@ export class CompanyContractPrismaRepository implements ICompanyContractReposito
             })
 
         ])
+
+        return contract
 
 
 
