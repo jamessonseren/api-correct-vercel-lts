@@ -11,7 +11,6 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
             },
             data:{
                 address_uuid: data.address_uuid,
-                contract_info_uuid: data.contract_info_uuid,
                 fantasy_name: data.fantasy_name,
                 corporate_reason: data.corporate_reason,
                 document: data.document,

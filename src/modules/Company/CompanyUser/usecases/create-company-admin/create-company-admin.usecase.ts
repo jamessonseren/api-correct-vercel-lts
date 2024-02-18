@@ -21,7 +21,7 @@ export class CreateCompanyAdminUseCase {
     const findByEmail = await this.companyDataRepository.findByEmail(data.email)
     if (!findByEmail) throw new CustomError("Email not found in company registers", 400)
 
-    if(findByEmail.status === 'pending') throw new CustomError("Business must be validated before creating an Admin user", 401)
+    if(findByEmail.status === 'pending_approval') throw new CustomError("Business must be validated before creating an Admin user", 401)
     if(findByEmail.status === 'inactive') throw new CustomError("Business has inactive status", 401)
 
     //if business info exists, relate to current user
