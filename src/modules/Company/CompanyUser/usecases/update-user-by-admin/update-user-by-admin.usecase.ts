@@ -17,24 +17,26 @@ export class UpdateUserByAdminUsecase {
         if (!findUser) throw new CustomError("User not found", 404)
 
 
-        if (findUser.status === 'pending_password') {
-            if (!data.password) throw new CustomError("Admin must update password", 400)
-
-            if (!findUser.document && !data.document) throw new CustomError("Document is required", 400)
-
-            const bcrypt = new PasswordBcrypt()
-            const passwordHash = await bcrypt.hash(data.password)
-
-            data.password = passwordHash
-            data.status = 'active'
-
-        }
         if(data.password){
             const bcrypt = new PasswordBcrypt()
             const passwordHash = await bcrypt.hash(data.password)
 
             data.password = passwordHash
         }
+        
+        if (findUser.status === 'pending_password') {
+            if (!data.password) throw new CustomError("Admin must update password", 400)
+
+            if (!findUser.document && !data.document) throw new CustomError("Document is required", 400)
+
+            // const bcrypt = new PasswordBcrypt()
+            // const passwordHash = await bcrypt.hash(data.password)
+
+            // data.password = passwordHash
+            data.status = 'active'
+
+        }
+        
 
         if (data.user_name) {
             //check if username already exists
