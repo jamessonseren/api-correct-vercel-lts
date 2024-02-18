@@ -46,6 +46,13 @@ enum Status {
   pending_validation
 }
 
+enum BusinessStatus {
+  pending_approval
+  pending_contract
+  active
+  inactive
+}
+
 model BusinessUser {
   uuid               String        @id @default(uuid())
   business_info_uuid String
@@ -70,27 +77,27 @@ model BusinessUser {
 model BusinessInfo {
   uuid                String              @id @default(uuid())
   address_uuid        String
-  contract_info_uuid  String?
   branch_info_uuid    String
   fantasy_name        String
   corporate_reason    String?
   document            String              @unique
   classification      String
   colaborators_number Int
-  status              Status              @default(pending)
+  status              BusinessStatus              @default(pending_approval)
   phone_1             String
   phone_2             String?
   email               String              @unique
   business_type       BusinessTypeOptions
 
-  Address        Address?         @relation(fields: [address_uuid], references: [uuid])
-  Contract       ContractInfo?    @relation(fields: [contract_info_uuid], references: [uuid])
-  Branch         BranchInfo       @relation(fields: [branch_info_uuid], references: [uuid])
-  
-  BusinessUser   BusinessUser[]
-  UserInfo       UserInfo[]
-  Transactions   Transactions[]
-  BusinessConfig BusinessConfig[]
+  Address Address?   @relation(fields: [address_uuid], references: [uuid])
+  Branch  BranchInfo @relation(fields: [branch_info_uuid], references: [uuid])
+
+  BusinessUser     BusinessUser[]
+  UserInfo         UserInfo[]
+  Transactions     Transactions[]
+  BusinessConfig   BusinessConfig[]
+  Contracts        ContractInfo[]
+  BusinessContract BusinessContract[]
 
   @@map("business_data")
 }
@@ -245,9 +252,21 @@ model ContractInfo {
   version     String?
   assigned_at String
 
-  BusinessInfo BusinessInfo[]
+  BusinessInfo     BusinessInfo[]
+  BusinessContract BusinessContract[]
 
   @@map("contract_info")
+}
+
+model BusinessContract {
+  uuid               String @id @default(uuid())
+  business_info_uuid String
+  contract_info_uuid String
+
+  BusinessInfo BusinessInfo @relation(fields: [business_info_uuid], references: [uuid])
+  ContractInfo ContractInfo @relation(fields: [contract_info_uuid], references: [uuid])
+
+  @@map("business_contract")
 }
 
 enum TransactionStatus {

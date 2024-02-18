@@ -19,10 +19,10 @@ export class CreateCompanyContractUsecase {
 
         //validate password
         const comparePassword = new ConfirmPasswordUsecase(this.businessUser, this.passwordCrypto)
-        const compare = await comparePassword.execute(adminId, password)
+        await comparePassword.execute(adminId, password)
         
         const contract = await CompanyContractEntity.create(data)
-        const createContract = await this.companyContractRepository.save(contract, compare.businessInfoUuid)
+        const createContract = await this.companyContractRepository.save(contract)
 
         return createContract
     }
