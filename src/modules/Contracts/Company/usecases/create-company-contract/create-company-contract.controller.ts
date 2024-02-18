@@ -25,9 +25,9 @@ export class CreateCompanyContractController{
 
             const contractUsecase = new CreateCompanyContractUsecase(this.companyContractRepository, this.businessUser, this.passwordCrypto)
 
-            const contract = await contractUsecase.execute(data, adminId, password)
+            await contractUsecase.execute(data, adminId, password)
 
-            return res.json(contract)
+            return res.json({message: "Contract signed successfully"})
             
         }catch(err: any){
             logger.error(err.stack)
