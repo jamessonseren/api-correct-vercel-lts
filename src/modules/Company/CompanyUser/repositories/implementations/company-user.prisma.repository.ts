@@ -53,7 +53,8 @@ export class CompanyUserPrismaRepository implements ICompanyUserRepository {
                 user_name: true,
                 function: true,
                 permissions: true,
-                status: true
+                status: true,
+                BusinessInfo: true
             },
         
         })

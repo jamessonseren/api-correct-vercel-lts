@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ICompanyUserRepository } from "../../repositories/company-user.repository";
 import { CompanyUserDetailsUsecase } from "./company-user-details.usecase";
+import { logger } from "../../../../../utils/logger";
 
 export class CompanyUserDetailsController{
     constructor(
@@ -21,6 +22,7 @@ export class CompanyUserDetailsController{
             return res.json(companyUser)
 
         }catch(err:any){
+            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message
             })
