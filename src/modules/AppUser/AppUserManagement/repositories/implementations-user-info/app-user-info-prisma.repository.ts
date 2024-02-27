@@ -137,7 +137,7 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository{
         return user
     }
     async findByDocument3UserInfo(document3: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
+        const user = await prismaClient.userInfo.findFirst({
             where:{
                 document3
             },
