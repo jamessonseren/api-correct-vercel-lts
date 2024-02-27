@@ -131,7 +131,7 @@ model UserInfo {
   address_uuid                  String?
   document                      String  @unique
   document2                     String? @unique
-  document3                     String? @unique
+  document3                     String? 
   full_name                     String
   display_name                  String?
   internal_company_code         String?
