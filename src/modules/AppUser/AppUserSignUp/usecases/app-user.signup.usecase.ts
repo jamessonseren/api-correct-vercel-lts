@@ -17,6 +17,17 @@ export class AppUserSignUpUsecase {
         const findUserByDocument = await this.appUserSingUpRepository.findByDocumentUserAuth(data.document)
         if (findUserByDocument) throw new CustomError("User already has an account", 409)
 
+        //check if document2 is already registered
+        if(data.document2){
+            const findByDocument2 = await this.appUserInfoRepository.findByDocument2UserInfo(data.document2)
+            if(findByDocument2) throw new CustomError("Document 2 already registered", 409)
+        }
+
+        if(data.document3){
+            const findByDocument3 = await this.appUserInfoRepository.findByDocument3UserInfo(data.document3)
+            if(findByDocument3) throw new CustomError("Document 3 already registered", 409)
+        }
+        
         if(data.selfie_base64){
             if (!validator.isBase64(data.selfie_base64)) {
                 throw new CustomError("Invalid base64 format for 'face'", 400);
@@ -59,6 +70,8 @@ export class AppUserSignUpUsecase {
         if (findUserbyEmail) {
             if (findUserbyEmail.document !== appUser.document) throw new CustomError("Email is already in use", 409)
         }
+
+        
 
         const createUser = await this.appUserSingUpRepository.signUpUser(appUser)
 
