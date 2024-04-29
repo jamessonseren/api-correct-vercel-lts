@@ -83,7 +83,7 @@ model BusinessInfo {
   document            String              @unique
   classification      String
   colaborators_number Int
-  status              BusinessStatus              @default(pending_approval)
+  status              BusinessStatus      @default(pending_approval)
   phone_1             String
   phone_2             String?
   email               String              @unique
@@ -131,7 +131,7 @@ model UserInfo {
   address_uuid                  String?
   document                      String  @unique
   document2                     String? @unique
-  document3                     String? 
+  document3                     String?
   full_name                     String
   display_name                  String?
   internal_company_code         String?
@@ -189,15 +189,16 @@ enum UserDocumentValidationStatus {
 }
 
 model UserAuth {
-  uuid           String @id @default(uuid())
-  user_info_uuid String
-  document       String @unique
+  uuid           String  @id @default(uuid())
+  user_info_uuid String?
+  document       String  @unique
+  email          String  @unique
   password       String
 
   created_at String?
   updated_at String?
 
-  UserInfo UserInfo @relation(fields: [user_info_uuid], references: [uuid])
+  UserInfo UserInfo? @relation(fields: [user_info_uuid], references: [uuid])
 
   @@map("users_auth")
 }

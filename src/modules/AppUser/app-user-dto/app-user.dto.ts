@@ -5,7 +5,13 @@ export type AppUserAuthResponseAuthentication = {
     uuid: string
     document: string
     password: string
+    created_at: string
+    updated_at: string
 }
+
+export type UpdateAppUserRequest = Omit<AppUserAuthResponseAuthentication, 'password'>
+// export type AppUserAuthResponse = Omit<AppUserAuthResponseAuthentication, 'password'>
+
 export type UserInfoResponse = {
     uuid: string
     business_info_uuid: string | null
@@ -65,15 +71,18 @@ export type UserInfoResponse = {
 
 export type AppUserAuthResponse = {
     uuid: string,
+    user_info_uuid: string | null,
     document: string,
+    email: string,
     created_at: string | null,
     updated_at: string | null,
     UserInfo: {
         uuid: string,
+        business_info_uuid: string | null,
         document: string,
         document2: string | null,
         document3: string | null,
-        full_name: string | null,
+        full_name: string,
         display_name: string | null,
         internal_company_code: string | null,
         gender: string | null,
@@ -158,4 +167,12 @@ export type AppUserInfoRequest = {
     user_function: string | null
     marital_status: string | null,
     dependents_quantity: number
+}
+
+export type AppUserAuthRequest = {
+    user_info_uuid: string | null,
+    document: string,
+    email: string
+    created_at: string | null,
+    updated_at: string | null,
 }
