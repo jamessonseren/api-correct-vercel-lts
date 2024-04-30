@@ -1,4 +1,5 @@
 import { Status, UserDocumentValidationStatus } from "@prisma/client"
+import { JsonValue } from "@prisma/client/runtime/library"
 
 
 export type AppUserAuthResponseAuthentication = {
@@ -52,19 +53,20 @@ export type UserInfoResponse = {
     } | null
     UserValidation: {
         uuid: string
-        //document_front_base64: string
         document_front_status: UserDocumentValidationStatus
-        //document_back_base64: string
         document_back_status: UserDocumentValidationStatus
-        //selfie_base64: string | null
         selfie_status: UserDocumentValidationStatus
-        //document_selfie_base64: string
         document_selfie_status: UserDocumentValidationStatus
         created_at: string | null
         updated_at: string | null
     
         
     } | null
+    UserAuth:[{
+        uuid: string
+        document: string
+        email: string
+    }]
 
 }
 

@@ -166,13 +166,13 @@ model UserInfo {
 model UserDocumentValidation {
   uuid                   String                       @id @default(uuid())
   document_front_base64  String?
-  document_front_status  UserDocumentValidationStatus @default(under_analysis)
+  document_front_status  UserDocumentValidationStatus @default(pending_to_send)
   document_back_base64   String?
-  document_back_status   UserDocumentValidationStatus @default(under_analysis)
+  document_back_status   UserDocumentValidationStatus @default(pending_to_send)
   selfie_base64          String?
-  selfie_status          UserDocumentValidationStatus @default(under_analysis)
+  selfie_status          UserDocumentValidationStatus @default(pending_to_send)
   document_selfie_base64 String?
-  document_selfie_status UserDocumentValidationStatus @default(under_analysis)
+  document_selfie_status UserDocumentValidationStatus @default(pending_to_send)
   created_at             String?
   updated_at             String?
 
