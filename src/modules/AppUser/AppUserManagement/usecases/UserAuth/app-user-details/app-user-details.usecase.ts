@@ -12,16 +12,8 @@ export class AppUserDetailsUsecase {
 
         const findUser = await this.appUserRepository.findById(uuid)
         if (!findUser) throw new CustomError("User not found", 404)
-        
+    
 
-        let message: string = ''
-        // if(findUser.UserInfo.status === 'inactive') message = "User is not allowed to proceed due to inactive status"
-        // if(findUser.UserInfo.status === 'pending_validation') message = "User is pending document validation"
-        // if(findUser.UserInfo.status === 'active') message = "User is allowed to proceed"
-
-        return {
-            statusMessage: message,
-            findUser
-        }
+        return findUser
     }
 }

@@ -6,6 +6,53 @@ import { AppUserInfoEntity } from "../../entities/app-user-info.entity";
 import { IAppUserInfoRepository } from "../app-user-info.repository";
 
 export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
+    async saveOrUpdate(data: AppUserInfoEntity): Promise<void> {
+        await prismaClient.userInfo.upsert({
+            where:{
+                document: data.document
+            },
+            create:{
+                uuid: data.uuid,
+                business_info_uuid: data.business_info_uuid,
+                document: data.document,
+                document2: data.document2,
+                full_name: data.full_name,
+                internal_company_code: data.internal_company_code,
+                gender: data.gender,
+                date_of_birth: data.date_of_birth,
+                salary: data.salary,
+                company_owner: data.company_owner,
+                marital_status: data.marital_status,
+                dependents_quantity: data.dependents_quantity,
+
+            },
+            update:{
+                document: data.document,
+                document2: data.document2,
+                full_name: data.full_name,
+                internal_company_code: data.internal_company_code,
+                gender: data.gender,
+                date_of_birth: data.date_of_birth,
+                salary: data.salary,
+                company_owner: data.company_owner,
+                marital_status: data.marital_status,
+                dependents_quantity: data.dependents_quantity,
+
+            },
+            include: {
+                BusinessInfo: {
+                    select: {
+                        fantasy_name: true
+                    }
+                },
+                Address:true,
+                UserValidation: true
+            }
+        })
+
+       
+    }
+    
 
     async findById(id: string): Promise<UserInfoResponse | null> {
         const user = await prismaClient.userInfo.findUnique({
@@ -30,11 +77,13 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                         created_at: true,
                         updated_at: true
                     }
-                }
+                },
+                
+                
             }
         })
 
-        return user
+        return user as UserInfoResponse | null
     }
 
     async save(data: AppUserInfoEntity): Promise<void> {
@@ -55,8 +104,8 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                     company_owner: data.company_owner,
                     marital_status: data.marital_status,
                     dependents_quantity: data.dependents_quantity,
-                    created_at: newDateF(new Date())
-
+                    created_at: newDateF(new Date()),
+                    
                 }
             }),
 
@@ -71,64 +120,43 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
             })
         ])
     }
-    // async saveOrUpdate(data: AppUserInfoEntity): Promise<void> {
-
-    //     await prismaClient.userInfo.upsert({
-    //         where: {
-    //             document: data.document
-    //         },
-    //         create: {
-    //             uuid: data.uuid,
-    //             business_info_uuid: data.business_info_uuid,
-    //             document: data.document,
-    //             document2: data.document2,
-    //             full_name: data.full_name,
-    //             internal_company_code: data.internal_company_code,
-    //             gender: data.gender,
-    //             date_of_birth: data.date_of_birth,
-    //             salary: data.salary,
-    //             company_owner: data.company_owner,
-    //             marital_status: data.marital_status,
-    //             dependents_quantity: data.dependents_quantity,
-    //             created_at: newDateF(new Date())
-
-    //         },
-    //         update: {
-    //             document: data.document,
-    //             document2: data.document2,
-    //             full_name: data.full_name,
-    //             internal_company_code: data.internal_company_code,
-    //             gender: data.gender,
-    //             date_of_birth: data.date_of_birth,
-    //             salary: data.salary,
-    //             company_owner: data.company_owner,
-    //             marital_status: data.marital_status,
-    //             dependents_quantity: data.dependents_quantity,
-
-
-    //         }
-    //     })
-
-
-    // }
+   
 
     async findByDocumentUserInfo(document: string): Promise<UserInfoResponse | null> {
         const user = await prismaClient.userInfo.findUnique({
             where: {
                 document
             },
-            include: {
-                BusinessInfo: {
-                    select: {
+            include:{
+                BusinessInfo:{
+                    select:{
                         fantasy_name: true
                     }
                 },
                 Address: true,
-                UserValidation: true
+                UserValidation: {
+                    select:{
+                        uuid: true,
+                        document_front_status: true,
+                        document_back_status: true,
+                        selfie_status: true,
+                        document_selfie_status: true,
+                        created_at: true,
+                        updated_at: true
+                    }
+                },
+                UserAuth: {
+                    select:{
+                        uuid: true,
+                        document: true,
+                        email: true,
+                    }
+                }
             }
+            
         })
 
-        return user
+        return user as UserInfoResponse | null
     }
 
     async findByEmailUserInfo(email: string): Promise<UserInfoResponse | null> {
@@ -143,11 +171,18 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                     }
                 },
                 Address: true,
-                UserValidation: true
+                UserValidation: true,
+                UserAuth: {
+                    select:{
+                        uuid: true,
+                        document: true,
+                        email: true,
+                    }
+                }
             }
         })
 
-        return user
+        return user as UserInfoResponse | null
     }
 
     async findByDocument2UserInfo(document2: string): Promise<UserInfoResponse | null> {
@@ -162,11 +197,18 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                     }
                 },
                 Address: true,
-                UserValidation: true
+                UserValidation: true,
+                UserAuth: {
+                    select:{
+                        uuid: true,
+                        document: true,
+                        email: true,
+                    }
+                }
             }
         })
 
-        return user
+        return user as UserInfoResponse | null
     }
     async findByDocument3UserInfo(document3: string): Promise<UserInfoResponse | null> {
         const user = await prismaClient.userInfo.findFirst({
@@ -180,12 +222,20 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                     }
                 },
                 Address: true,
-                UserValidation: true
+                UserValidation: true,
+                UserAuth: {
+                    select:{
+                        uuid: true,
+                        document: true,
+                        email: true,
+                    }
+                }
             }
         })
 
-        return user
+        return user as UserInfoResponse | null
     }
+
 
 
 }
