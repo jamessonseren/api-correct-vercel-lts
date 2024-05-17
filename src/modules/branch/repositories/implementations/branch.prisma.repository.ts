@@ -22,8 +22,8 @@ export class BranchPrismaRepository implements IBranchRepository {
                 marketing_tax: data.marketing_tax,
                 market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,
-                created_at: newDateF(),
-                updated_at: newDateF(),
+                created_at: newDateF(new Date()),
+                updated_at: newDateF(new Date()),
             },
         });
 
@@ -50,7 +50,7 @@ export class BranchPrismaRepository implements IBranchRepository {
                 marketing_tax: data.marketing_tax,
                 market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,
-                updated_at: newDateF(),
+                updated_at: newDateF(new Date()),
             },
             where: { uuid: uuid },
         });

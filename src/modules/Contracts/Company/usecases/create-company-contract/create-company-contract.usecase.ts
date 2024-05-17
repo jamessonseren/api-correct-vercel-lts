@@ -15,7 +15,7 @@ export class CreateCompanyContractUsecase {
 
     async execute(data: CompanyContractProps, adminId: string, password: string){
 
-        data.assigned_at = newDateF()
+        data.assigned_at = newDateF(new Date())
 
         //validate password
         const comparePassword = new ConfirmPasswordUsecase(this.businessUser, this.passwordCrypto)

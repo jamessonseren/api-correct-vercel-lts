@@ -10,8 +10,8 @@ export class BenefitPrismaRepository implements IBenefitsRepository {
                 uuid: data.uuid,
                 benefit_name: data.benefit_name,
                 benefit_type: data.benefit_type,
-                created_at: newDateF(),
-                updated_at: newDateF(),
+                created_at: newDateF(new Date()),
+                updated_at: newDateF(new Date()),
             },
         });
 
@@ -35,7 +35,7 @@ export class BenefitPrismaRepository implements IBenefitsRepository {
             data: {
                 benefit_name: data.benefit_name,
                 benefit_type: data.benefit_type,
-                updated_at: newDateF(),
+                updated_at: newDateF(new Date()),
             },
             where: { uuid: uuid },
         });

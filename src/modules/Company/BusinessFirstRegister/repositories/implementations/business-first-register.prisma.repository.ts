@@ -4,7 +4,7 @@ import { IBusinessFirstRegisterRepository } from "../business-first-register.rep
 
 export class BusinessRegisterPrismaRepository implements IBusinessFirstRegisterRepository{
     async save(data: BusinessRegisterEntity): Promise<void> {
-        
+        console.log({data})
         const [address, businessInfo] = await prismaClient.$transaction([
 
             prismaClient.address.create({
