@@ -2,19 +2,24 @@ import path from 'path'
 import fs from 'fs'
 import csv from 'csv-parser'
 import { CustomError } from '../../../../../errors/custom.error';
-import { AppUserProps, AppUserDataEntity } from '../../entities/appuser-data.entity';
 import { AppUserInfoRequest } from '../../../app-user-dto/app-user.dto';
 import { IAppUserInfoRepository } from '../../../AppUserManagement/repositories/app-user-info.repository';
+import { AppUserInfoEntity, AppUserInfoProps } from '../../../AppUserManagement/entities/app-user-info.entity';
+import { ICompanyDataRepository } from '../../../../Company/CompanyData/repositories/company-data.repository';
 
 
 
 export class CreateAppUserByCorrectUsecase {
     constructor(
         private appUserInfoRepository: IAppUserInfoRepository,
+        private businessRepository: ICompanyDataRepository
     ) { }
 
     async execute(csvFilePath: string, business_info_uuid: string) {
 
+        //find business by id
+        const business = await this.businessRepository.findById(business_info_uuid)
+        if(!business) throw new CustomError("Business not found", 404)
 
         const filePath = path.join(__dirname, '..', '..', '..', '..', '..','..', 'tmp', csvFilePath);
         if (!fs.existsSync(filePath)) throw new CustomError("File not found", 400);
@@ -83,7 +88,7 @@ export class CreateAppUserByCorrectUsecase {
 
                     //after adding everything, pass each user from Results array
                     for (const user of results) {
-                        const data: AppUserProps = {
+                        const data: AppUserInfoProps = {
                             business_info_uuid: business_info_uuid,
                             document: user.document,
                             document2: user.document2,
@@ -92,7 +97,7 @@ export class CreateAppUserByCorrectUsecase {
                             is_authenticated: false,
                             full_name: user.full_name,
                             phone:null,
-                            status: 'pending_to_send',
+                            status: 'pending',
                             internal_company_code: user.internal_company_code,
                             company_owner: user.company_owner,
                             gender: user.gender,
@@ -102,11 +107,12 @@ export class CreateAppUserByCorrectUsecase {
                             dependents_quantity: user.dependents_quantity,
                             marital_status: user.marital_status,
                             display_name: '',
-                            email: null
+                            email: null,
+                            user_document_validation_uuid:'',
+                            recommendation_code: ''
 
                         }
-
-                        const appUser = await AppUserDataEntity.create(data)
+                        const appUser = await AppUserInfoEntity.create(data)
                         
                         const findUser = await this.appUserInfoRepository.findByDocumentUserInfo(user.document)
 
