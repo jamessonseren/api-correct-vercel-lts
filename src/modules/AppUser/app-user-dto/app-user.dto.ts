@@ -40,7 +40,7 @@ export type UserInfoResponse = {
         fantasy_name: string
     } | null
     user_document_validation_uuid: string | null
-    Address: {
+    Address?: {
         uuid: string
         line1: string
         line2: string
@@ -51,7 +51,7 @@ export type UserInfoResponse = {
         state: string
         country: string
     } | null
-    UserValidation: {
+    UserValidation?: {
         uuid: string
         document_front_status: UserDocumentValidationStatus
         document_back_status: UserDocumentValidationStatus
@@ -62,11 +62,11 @@ export type UserInfoResponse = {
     
         
     } | null
-    UserAuth:[{
+    UserAuth?:{
         uuid: string
         document: string
         email: string
-    }]
+    } | null
 
 }
 

@@ -12,6 +12,8 @@ import { createUserAddressController } from "../../modules/AppUser/AppUserManage
 import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
 import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCorrect/usecases/create-appuser-data-by-correct";
 import { getUserInfoController } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-by-document";
+import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
+import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
 
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
@@ -62,6 +64,10 @@ appUserRouter.post("/app-users-by-correct", correctIsAuth, upload.single('file')
     await createAppUserByCorrectController.handle(request, response)
 })
 
+//Get app users by business admin
+appUserRouter.get("/business-admin/app-users", companyIsAuth, async (request, response) => {
+    await getUsersByAdmin.handle(request, response)
+})
 
 
 export { appUserRouter }

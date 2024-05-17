@@ -12,7 +12,7 @@ export class GetUserInfoByDocumentUsecase {
         if(!getUser) throw new CustomError("User not found", 404)
 
         let message = {
-            UserAuth: getUser.UserAuth.length > 0 ? 'OK' : null,
+            UserAuth: getUser.UserAuth ? 'OK' : null,
             Address: getUser.Address ? 'Ok' : null,
             UserValidation: {
                 document_front_status: getUser.UserValidation?.document_front_status ? getUser.UserValidation?.document_front_status : 'pending to send',
