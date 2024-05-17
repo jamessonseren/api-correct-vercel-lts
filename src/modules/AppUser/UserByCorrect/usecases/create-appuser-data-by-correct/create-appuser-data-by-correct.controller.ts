@@ -4,10 +4,13 @@ import { CustomError } from "../../../../../errors/custom.error";
 import { CreateAppUserByCorrectUsecase } from "./create-appuser-data-by-correct.usecase";
 import { logger } from "../../../../../utils/logger";
 import { IAppUserInfoRepository } from "../../../AppUserManagement/repositories/app-user-info.repository";
+import { ICompanyDataRepository } from "../../../../Company/CompanyData/repositories/company-data.repository";
 
 export class CreateAppUserByCorrectController {
     constructor(
-        private appUserInfoRepository: IAppUserInfoRepository
+        private appUserInfoRepository: IAppUserInfoRepository,
+        private businessRepository: ICompanyDataRepository
+
 
     ){}
     async handle(req: Request, res: Response) {
@@ -20,7 +23,8 @@ export class CreateAppUserByCorrectController {
             const { originalname, filename: csvFilePath} = req.file
 
             const appUserUsecase = new CreateAppUserByCorrectUsecase(
-                this.appUserInfoRepository
+                this.appUserInfoRepository,
+                this.businessRepository
             )
 
             const user = await appUserUsecase.execute(csvFilePath, business_info_uuid)
