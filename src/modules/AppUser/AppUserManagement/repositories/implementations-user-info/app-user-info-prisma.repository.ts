@@ -6,6 +6,38 @@ import { AppUserInfoEntity } from "../../entities/app-user-info.entity";
 import { IAppUserInfoRepository } from "../app-user-info.repository";
 
 export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
+    async findManyByBusiness(business_info_uuid: string): Promise<UserInfoResponse[] | []> {
+       const user = await prismaClient.userInfo.findMany({
+            where:{
+                business_info_uuid
+            },
+            include: {
+                BusinessInfo: {
+                    select: {
+                        fantasy_name: true
+                    }
+                },
+                Address: true,
+                UserValidation: {
+                    select: {
+                        uuid: true,
+                        document_front_status: true,
+                        document_back_status: true,
+                        selfie_status: true,
+                        document_selfie_status: true,
+                        created_at: true,
+                        updated_at: true
+                    }
+                },
+                
+                
+            }
+        })
+
+        if(user.length > 0) return user as UserInfoResponse[]
+
+        return []
+    }
     async saveOrUpdate(data: AppUserInfoEntity): Promise<void> {
         await prismaClient.userInfo.upsert({
             where:{
@@ -38,15 +70,6 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity,
 
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address:true,
-                UserValidation: true
             }
         })
 
