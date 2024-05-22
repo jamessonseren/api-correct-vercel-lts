@@ -11,9 +11,9 @@ export class CreateBusinessRegisterUsecase {
 
     async execute(data: BusinessRegisterProps){
         const findBusiness = await this.companyDataRepository.findByDocument(data.document)
+        if(findBusiness) throw new CustomError("Business already registered", 409)
         
         const register = await BusinessRegisterEntity.create(data)
-        if(findBusiness) throw new CustomError("Business already registered", 409)
 
         const createFirstRegister = await this.businessRegisterRepository.save(register)
 

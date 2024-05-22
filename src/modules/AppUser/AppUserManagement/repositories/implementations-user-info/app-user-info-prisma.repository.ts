@@ -56,6 +56,7 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                 company_owner: data.company_owner,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity,
+                created_at: data.created_at
 
             },
             update:{
@@ -69,6 +70,7 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                 company_owner: data.company_owner,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity,
+                updated_at: newDateF(new Date())
 
             }
         })

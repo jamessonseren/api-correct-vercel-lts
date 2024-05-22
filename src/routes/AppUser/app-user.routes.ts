@@ -14,6 +14,8 @@ import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCo
 import { getUserInfoController } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-by-document";
 import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
 import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
+import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
+import { getSingleUserByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-single-user-by-business-admin";
 
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
@@ -33,10 +35,17 @@ appUserRouter.get("/app-user", appUserIsAuth, async (request, response) => {
     await userDetailsController.handle(request, response)
 })
 
+//Get user details by business admin
+appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, response) => {
+    await getSingleUserByAdmin.handle(request, response)
+})
+
 //user Details by document
 appUserRouter.get("/app-user/document/:document", async (request, response) => {
     await getByDocumentController.handle(request, response)
 })
+
+
 
 //get User Info by document
 appUserRouter.get("/app-user-info/document/:document", async (request, response) => {
