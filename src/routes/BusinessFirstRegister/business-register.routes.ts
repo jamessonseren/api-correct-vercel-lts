@@ -5,6 +5,6 @@ import { businessRegisterController } from "../../modules/Company/BusinessFirstR
 export const businessRegisterRouter = Router()
 
 //create company data
-businessRegisterRouter.post('/business-register', async (request, response) => {
+businessRegisterRouter.post('/business/register', async (request, response) => {
     await businessRegisterController.handle(request, response)
 })
