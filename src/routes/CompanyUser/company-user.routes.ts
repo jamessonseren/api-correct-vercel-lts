@@ -15,27 +15,27 @@ import { confirmPasswordController } from "../../modules/Company/CompanyUser/use
 export const companyUserRouter = Router()
 
 // //Create Company admin by correct
-companyUserRouter.post('/company-admin', correctIsAuth, async (request, response) => {
+companyUserRouter.post('/business/admin/correct', correctIsAuth, async (request, response) => {
     await companyUserController.handle(request, response)
 })
 
 
-companyUserRouter.post('/company-user-login', async (request, response) => {
+companyUserRouter.post('/business/admin/login', async (request, response) => {
     await authCompanyUserController.handle(request, response)
 })
 
 //get user details
-companyUserRouter.get('/company-user-details', companyIsAuth, async (request, response) => {
+companyUserRouter.get('/business/admin/details', companyIsAuth, async (request, response) => {
     await companyUserDetailsController.handle(request, response)
 })
 
 //create company user by company admin
-companyUserRouter.post('/company-user', companyIsAuth, async (request, response) => {
+companyUserRouter.post('/business/admin/register/user', companyIsAuth, async (request, response) => {
     await companyUserByAdminController.handle(request, response)
 })
 
 //get single User
-companyUserRouter.get("/company-user", async (request, response) => {
+companyUserRouter.get("/business/admin/details/user", async (request, response) => {
     await getSingleUserController.handle(request, response)
 })
 
