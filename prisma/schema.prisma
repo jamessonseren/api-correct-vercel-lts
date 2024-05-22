@@ -212,6 +212,7 @@ model Benefit {
   uuid         String      @id @default(uuid())
   benefit_name String
   benefit_type BenefitType
+  short_description  String?
   created_at   String
   updated_at   String?
 

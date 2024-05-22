@@ -17,8 +17,6 @@ export class CreateCompanyUserByAdminUsecase {
         //check if admin is active
         if (findAdmin.status !== 'active') throw new CustomError("Admin is not allowed to create users", 403)
         
-        // const findBusinessInfo = await this.businessInfoRepository.findById(findAdmin.business_info_uuid)
-        // if(!this.businessInfoRepository) throw new CustomError("Business Info not found", 404)
 
         //check if username already exists
         const findByUsername = await this.companyUserRepository.findByBusinessIdAndUsername(findAdmin.business_info_uuid, data.user_name)
