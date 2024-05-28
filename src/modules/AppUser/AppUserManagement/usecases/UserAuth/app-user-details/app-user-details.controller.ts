@@ -16,6 +16,8 @@ export class AppUserDetailsController {
             const userDetailsUsecase = new AppUserDetailsUsecase(this.appUserRepository)
 
             const userDetails = await userDetailsUsecase.execute(user_uuid)
+            
+                     
 
             return res.json(userDetails)
         }catch(err: any){
