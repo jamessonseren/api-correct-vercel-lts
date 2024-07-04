@@ -4,7 +4,6 @@ import cors from 'cors'
 import swaggerUI from 'swagger-ui-express'
 
 import swaggerDocument from '../swagger.json'
-// import { uploadImage } from './infra/shared/multer/multer-memory.config'
 
 const app = express()
 app.use(express.json({

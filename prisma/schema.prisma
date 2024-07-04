@@ -77,7 +77,8 @@ model BusinessUser {
 model BusinessInfo {
   uuid                String              @id @default(uuid())
   address_uuid        String
-  branch_info_uuid    String
+  branch_info_uuid    String?
+  branch_name         String?
   fantasy_name        String
   corporate_reason    String?
   document            String              @unique
@@ -89,8 +90,8 @@ model BusinessInfo {
   email               String              @unique
   business_type       BusinessTypeOptions
 
-  Address Address?   @relation(fields: [address_uuid], references: [uuid])
-  Branch  BranchInfo @relation(fields: [branch_info_uuid], references: [uuid])
+  Address Address?    @relation(fields: [address_uuid], references: [uuid])
+  Branch  BranchInfo? @relation(fields: [branch_info_uuid], references: [uuid])
 
   BusinessUser     BusinessUser[]
   UserInfo         UserInfo[]
@@ -111,14 +112,14 @@ enum BusinessTypeOptions {
 
 model Address {
   uuid         String         @id @default(uuid())
-  line1        String
-  line2        String
+  line1        String?
+  line2        String?
   line3        String?
   postal_code  String
-  neighborhood String
-  city         String
-  state        String
-  country      String
+  neighborhood String?
+  city         String?
+  state        String?
+  country      String?
   BusinessInfo BusinessInfo[]
   UserInfo     UserInfo[]
 
@@ -209,12 +210,12 @@ enum BenefitType {
 }
 
 model Benefit {
-  uuid         String      @id @default(uuid())
-  benefit_name String
-  benefit_type BenefitType
-  short_description  String?
-  created_at   String
-  updated_at   String?
+  uuid              String      @id @default(uuid())
+  benefit_name      String
+  benefit_type      BenefitType
+  short_description String?
+  created_at        String
+  updated_at        String?
 
   @@map("benefits")
 }
