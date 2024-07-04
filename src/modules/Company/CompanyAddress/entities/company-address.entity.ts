@@ -2,27 +2,27 @@ import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
 
 export type CompanyAddressProps = {
-    line1: string
-    line2: string
+    line1: string | null
+    line2: string | null
     line3: string | null
     postal_code: string
-    neighborhood: string
-    city: string
-    state: string
-    country: string
+    neighborhood: string | null
+    city: string | null
+    state: string | null
+    country: string | null
 
 }
 
 export class CompanyAddressEntity {
     uuid: string
-    line1: string
-    line2: string
+    line1: string | null
+    line2: string | null
     line3: string | null
-    neighborhood: string
+    neighborhood: string | null
     postal_code: string
-    city: string
-    state: string
-    country: string
+    city: string | null
+    state: string | null
+    country: string | null
 
 
     private constructor(props: CompanyAddressProps) {

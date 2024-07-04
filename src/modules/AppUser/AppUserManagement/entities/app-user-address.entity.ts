@@ -2,8 +2,8 @@ import { randomUUID } from 'crypto'
 import { CustomError } from '../../../../errors/custom.error'
 
 export type AppUserAddressProps = {
-    line1: string
-    line2: string
+    line1: string | null
+    line2: string | null
     line3: string | null
     postal_code: string
     neighborhood: string
@@ -14,14 +14,14 @@ export type AppUserAddressProps = {
 
 export class AppUserAddressEntity  {
     uuid: string
-    line1: string
-    line2: string
+    line1: string | null
+    line2: string | null
     line3: string | null
     postal_code: string
-    neighborhood: string
-    city: string
-    state: string
-    country: string
+    neighborhood: string | null
+    city: string | null
+    state: string | null
+    country: string | null
 
     private constructor(props: AppUserAddressProps) {
         this.uuid = randomUUID()
