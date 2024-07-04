@@ -7,7 +7,7 @@ type CompanyDataProps = {
     fantasy_name: string
     corporate_reason: string | null
     document: string
-    branch_info_uuid: string
+    branch_info_uuid: string | null
     classification: string
     colaborators_number: number
     status: BusinessStatus
@@ -24,7 +24,7 @@ export class CompanyDataEntity {
     fantasy_name: string
     corporate_reason: string | null
     document: string
-    branch_info_uuid: string
+    branch_info_uuid: string | null
     classification: string
     colaborators_number: number
     status: BusinessStatus

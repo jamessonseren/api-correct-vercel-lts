@@ -31,6 +31,7 @@ export class AuthenticateCompanyAdminController{
             return res.json(companyUser)
 
         }catch(err: any){
+            console.log({err})
             logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message
