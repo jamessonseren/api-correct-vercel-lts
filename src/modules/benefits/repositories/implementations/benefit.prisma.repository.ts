@@ -4,18 +4,18 @@ import { IBenefitsRepository } from '../benefit.repository';
 import { newDateF } from '../../../../utils/date';
 
 export class BenefitPrismaRepository implements IBenefitsRepository {
-    async create(data: BenefitsEntity): Promise<BenefitsEntity> {
+    async create(data: BenefitsEntity): Promise<void> {
         const r = await prismaClient.benefit.create({
             data: {
                 uuid: data.uuid,
-                benefit_name: data.benefit_name,
-                benefit_type: data.benefit_type,
+                name: data.name,
+                item_type: data.item_type,
+                item_category: data.item_category
                 created_at: newDateF(new Date()),
                 updated_at: newDateF(new Date()),
             },
         });
 
-        return r as BenefitsEntity;
     }
 
     async getByID(uuid: string): Promise<BenefitsEntity | null> {
