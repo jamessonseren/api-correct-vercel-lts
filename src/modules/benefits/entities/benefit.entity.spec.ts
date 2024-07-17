@@ -7,7 +7,10 @@ describe('Benefit unit tests', () => {
         name: 'Benefit name',
         description: 'benefit description',
         item_type: 'gratuito',
-        item_category: 'pos_pago',
+        item_category: 'pre_pago',
+        parent_uuid: '',
+        created_at: '',
+        updated_at: ''
     };
 
     it('Should throw error if name is empty', () => {

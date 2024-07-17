@@ -18,7 +18,6 @@ export class BranchPrismaRepository implements IBranchRepository {
             data: {
                 uuid: data.uuid,
                 name: data.name,
-                benefits_uuid: data.benefits_uuid,
                 marketing_tax: data.marketing_tax,
                 market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,
@@ -46,7 +45,6 @@ export class BranchPrismaRepository implements IBranchRepository {
         const _r = await prismaClient.branchInfo.update({
             data: {
                 name: data.name,
-                benefits_uuid: data.benefits_uuid,
                 marketing_tax: data.marketing_tax,
                 market_place_tax: data.market_place_tax,
                 admin_tax: data.admin_tax,

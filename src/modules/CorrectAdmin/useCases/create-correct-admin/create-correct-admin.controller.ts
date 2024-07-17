@@ -15,7 +15,7 @@ export class CreateCorrectAdminController {
 
             const result = await adminUseCase.execute(data)
 
-            return res.json(result)
+            return res.status(201).json(result)
         }catch(err: any){
             logger.error(err.stack)
             return res.status(err.statusCode).json({

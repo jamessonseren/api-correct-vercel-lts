@@ -4,15 +4,19 @@ import { CreateBenefitUsecase } from "./create-benefit.usecase";
 const input: InputCreateBenefitDto = {
     name:"Vale Alimentação",
     description: "Descrição do vale",
+    parent_uuid: '',
     item_type: 'gratuito',
-    item_category: 'pre_pago'
+    item_category: 'pre_pago',
+    created_at: '',
+    updated_at: ''
 }
+
 const MockRepository = () => {
     return {
       create: jest.fn(),
-      getByID: jest.fn(),
+      find: jest.fn(),
       update: jest.fn(),
-      list: jest.fn(),
+      findAll: jest.fn(),
     };
   };
 

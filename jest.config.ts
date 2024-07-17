@@ -5,10 +5,12 @@
 
 import type {Config} from 'jest';
 
-const config: Config = {
+export const config: Config = {
   transform:{
     "^.+\.(t|j)sx?$":"@swc/jest",
   },
+
+  preset: "ts-jest",
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 

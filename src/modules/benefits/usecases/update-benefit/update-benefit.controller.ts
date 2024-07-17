@@ -11,19 +11,15 @@ export class UpdateBenefitController {
             const updateBenefitUsecase = new UpdateBenefitUsecase(
                 this.BenefitsRepository
             );
-            const data: BenefitsEntity = req.body;
-            const uuid = req.params.uuid;
+            const data = req.body;
+            data.uuid = req.params.uuid;
 
-            if (!uuid) {
-                return res.status(400).json({
-                    error: 'Benefit uuid is required',
-                });
-            }
-
-            const resp = await updateBenefitUsecase.execute(uuid, data);
+           
+            const resp = await updateBenefitUsecase.execute(data);
 
             return res.status(200).json(resp);
         } catch (err: any) {
+            console.log({err})
             return res.status(err.statusCode).json({
                 error: err.message,
             });
