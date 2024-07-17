@@ -1,4 +1,5 @@
 import { CustomError } from "../../../../errors/custom.error"
+import { InputCreateAdminDTO } from "../../correct-dto/correct.dto"
 import { CorrectAdminEntity } from "../../entities/correct-admin.entity"
 import { ICorrectAdminRepository } from "../../repositories/correct-admin.repository"
 
@@ -15,15 +16,21 @@ export class CreateCorrectAdminUseCase{
         private adminRepository: ICorrectAdminRepository
     ){}
     
-    async execute(data: CorrectAdminRequest){
+    async execute(data: InputCreateAdminDTO){
         const admin = await CorrectAdminEntity.create(data)
 
         const adminExists = await this.adminRepository.findByUserName(data.userName)
 
-        if(adminExists) throw new CustomError("UserName already exists", 409, "ERROR")
+        if(adminExists) throw new CustomError("UserName already exists", 409)
 
-        const createAdmin = await this.adminRepository.save(admin)
+        await this.adminRepository.create(admin)
 
-        return createAdmin
+        return {
+            uuid: admin.uuid,
+            name: admin.name,
+            email: admin.email,
+            userName: admin.userName,
+            isAdmin: admin.isAdmin
+        }
     }
 }

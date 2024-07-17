@@ -3,10 +3,14 @@ import { CustomError } from '../../../errors/custom.error';
 import { ItemType, ItemCategory } from '../usecases/create-benefit/create-benefit.dto';
 
 export type BenefitsProps = {
+    uuid?: string
     name: string;
     description: string;
     item_type: ItemType;
     item_category: ItemCategory;
+    parent_uuid: string | null
+    created_at: string | null
+    updated_at: string | null
 };
 
 export class BenefitsEntity {
@@ -15,13 +19,19 @@ export class BenefitsEntity {
     private _description: string;
     private _item_type: ItemType;
     private _item_category: ItemCategory;
+    private _parent_uuid: string | null
+    private _created_at: string | null
+    private _updated_at: string | null
 
     constructor(props: BenefitsProps) {
-        this._uuid = randomUUID();
+        this._uuid = props.uuid? props.uuid : randomUUID();
         this._name = props.name;
         this._description = props.description;
         this._item_type = props.item_type;
         this._item_category = props.item_category;
+        this._parent_uuid = props.parent_uuid
+        this._created_at = props.created_at
+        this._updated_at = props.updated_at
         this.validate();
     }
 
@@ -52,6 +62,18 @@ export class BenefitsEntity {
         return this._item_category;
     }
 
+    get parent_uuid(): string | null {
+        return this._parent_uuid || null
+    }
+
+    get created_at(): string | null{
+        return this._created_at || null
+    }
+
+    get updated_at(): string | null{
+        return this._updated_at || null
+    }
+
     changeName(name: string) {
         this._name = name;
         this.validate();
@@ -72,5 +94,8 @@ export class BenefitsEntity {
         this.validate();
     }
 
-    
+    changeParentUuid(parent_uuid: string | null){
+        this._parent_uuid = parent_uuid
+        this.validate()
+    }
 }

@@ -19,7 +19,7 @@ export class AuthenticateAdminUseCase{
     async execute( {userName, password }: AuthenticateAdminRequest){
         if(!userName || !password) throw new CustomError("Username/password is incorrect", 401)
 
-        const admin = await this.correctAdminRepository.findByUserName(userName)
+        const admin = await this.correctAdminRepository.findByUserNameAuth(userName)
         if(!admin) throw new CustomError("Username/password is incorrect", 401)
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, admin.password)
@@ -27,7 +27,9 @@ export class AuthenticateAdminUseCase{
 
         const tokenGenerated = await this.token.create(admin)
 
-        return tokenGenerated
+        return {
+            token: tokenGenerated
+        }
 
     }
 }

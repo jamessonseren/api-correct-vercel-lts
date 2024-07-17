@@ -11,7 +11,7 @@ export class GetListBenefitController {
                 this.BenefitsRepository
             );
 
-            const resp = await getListBenefitUsecase.execute();
+            const resp = await getListBenefitUsecase.execute({});
 
             return res.json(resp);
         } catch (err: any) {
