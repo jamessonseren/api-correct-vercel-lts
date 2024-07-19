@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { IAppUserAuthRepository } from "../../../../modules/AppUser/AppUserManagement/repositories/app-use-auth-repository";
 import { EnsureValidAppUserUsecase } from "./ensure-valid-app-user.usecase.middleware";
+import { IAppUserAuthRepository } from "../../../../modules/AppUser/AppUserManagement/repositories/app-use-auth-repository";
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
 
 export class EnsureValidAppUserController {
     constructor(
@@ -14,7 +15,7 @@ export class EnsureValidAppUserController {
             const validAppUserUsecase = new EnsureValidAppUserUsecase(
                 this.appUserAutRepository
             )
-            const appUser = await validAppUserUsecase.execute(appUserId)
+            const appUser = await validAppUserUsecase.execute(new Uuid(appUserId))
 
             return appUser
 

@@ -1,14 +1,17 @@
 
+import { Uuid } from '../../../@shared/ValueObjects/uuid.vo';
 import { CustomError } from '../../../errors/custom.error';
-import { BenefitsEntity, BenefitsProps } from './benefit.entity';
+import { BenefitCreateCommand, BenefitsEntity, BenefitsProps } from './benefit.entity';
 
 describe('Benefit unit tests', () => {
-    const validInput: BenefitsProps = {
+   
+
+    const validInput: BenefitCreateCommand = {
         name: 'Benefit name',
         description: 'benefit description',
         item_type: 'gratuito',
         item_category: 'pre_pago',
-        parent_uuid: '',
+        parent_uuid: null,
         created_at: '',
         updated_at: ''
     };
@@ -16,7 +19,7 @@ describe('Benefit unit tests', () => {
     it('Should throw error if name is empty', () => {
         const input = { ...validInput, name: '' };
         expect(() => {
-            new BenefitsEntity(input);
+            BenefitsEntity.create(input);
         }).toThrow(CustomError);
         expect(() => {
             new BenefitsEntity(input);
@@ -26,7 +29,7 @@ describe('Benefit unit tests', () => {
     it('Should throw error if description is empty', () => {
         const input = { ...validInput, description: '' };
         expect(() => {
-            new BenefitsEntity(input);
+           BenefitsEntity.create(input);
         }).toThrow(CustomError);
         expect(() => {
             new BenefitsEntity(input);
@@ -55,6 +58,13 @@ describe('Benefit unit tests', () => {
     it('Should change item category', () => {
         const benefit = new BenefitsEntity(validInput);
         benefit.changeItemCategory('pre_pago');
+        expect(benefit.item_category).toBe('pre_pago');
+    });
+
+    it('Should create a benefit', () => {
+        const benefit = BenefitsEntity.create(validInput);
+
+        expect(benefit.uuid).toBeInstanceOf(Uuid)
         expect(benefit.item_category).toBe('pre_pago');
     });
 });

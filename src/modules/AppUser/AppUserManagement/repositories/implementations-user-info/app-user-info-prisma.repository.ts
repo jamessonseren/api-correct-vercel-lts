@@ -1,51 +1,65 @@
+import { Uuid } from "../../../../../@shared/ValueObjects/uuid.vo";
 import { prismaClient } from "../../../../../infra/databases/prisma.config";
 import { newDateF } from "../../../../../utils/date";
 import { AppUserDataEntity } from "../../../UserByCorrect/entities/appuser-data.entity";
-import { UserInfoResponse, AppUserInfoRequest } from "../../../app-user-dto/app-user.dto";
+import { UserInfoResponse, AppUserInfoRequest, InputCreateUserInfoDTO } from "../../../app-user-dto/app-user.dto";
 import { AppUserInfoEntity } from "../../entities/app-user-info.entity";
 import { IAppUserInfoRepository } from "../app-user-info.repository";
 
 export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
-    async findManyByBusiness(business_info_uuid: string): Promise<UserInfoResponse[] | []> {
-       const user = await prismaClient.userInfo.findMany({
-            where:{
-                business_info_uuid
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: {
-                    select: {
-                        uuid: true,
-                        document_front_status: true,
-                        document_back_status: true,
-                        selfie_status: true,
-                        document_selfie_status: true,
-                        created_at: true,
-                        updated_at: true
-                    }
-                },
-                
-                
-            }
-        })
-
-        if(user.length > 0) return user as UserInfoResponse[]
-
-        return []
+    
+    create(entity: AppUserInfoEntity): Promise<void> {
+        throw new Error("Method not implemented.");
     }
-    async saveOrUpdate(data: AppUserInfoEntity): Promise<void> {
+    update(entity: AppUserInfoEntity): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    find(id: Uuid): Promise<AppUserInfoEntity> {
+        throw new Error("Method not implemented.");
+    }
+    findAll(): Promise<AppUserInfoEntity[]> {
+        throw new Error("Method not implemented.");
+    }
+    // async findManyByBusiness(business_info_uuid: string): Promise<AppUserInfoEntity[] | []> {
+    //    const user = await prismaClient.userInfo.findMany({
+    //         where:{
+    //             business_info_uuid
+    //         },
+    //         include: {
+    //             BusinessInfo: {
+    //                 select: {
+    //                     fantasy_name: true
+    //                 }
+    //             },
+    //             Address: true,
+    //             UserValidation: {
+    //                 select: {
+    //                     uuid: true,
+    //                     document_front_status: true,
+    //                     document_back_status: true,
+    //                     selfie_status: true,
+    //                     document_selfie_status: true,
+    //                     created_at: true,
+    //                     updated_at: true
+    //                 }
+    //             },
+                
+                
+    //         }
+    //     })
+
+    //     if(user.length > 0) return user as UserInfoResponse[]
+
+    //     return []
+    // }
+    async saveOrUpdate(data: InputCreateUserInfoDTO): Promise<void> {
         await prismaClient.userInfo.upsert({
             where:{
                 document: data.document
             },
             create:{
-                uuid: data.uuid,
-                business_info_uuid: data.business_info_uuid,
+                uuid: data.uuid.uuid,
+                business_info_uuid: data.business_info_uuid.uuid,
                 document: data.document,
                 document2: data.document2,
                 full_name: data.full_name,
@@ -53,13 +67,21 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                 gender: data.gender,
                 date_of_birth: data.date_of_birth,
                 salary: data.salary,
+                phone: data.phone,
+                email: data.email,
                 company_owner: data.company_owner,
+                status: data.status,
+                function: data.function,
+                recommendation_code: data.recommendation_code,
+                is_authenticated: data.is_authenticated,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity,
+                user_document_validation_uuid: data.user_document_validation_uuid.uuid,
                 created_at: data.created_at
 
             },
             update:{
+                business_info_uuid: data.business_info_uuid.uuid,
                 document: data.document,
                 document2: data.document2,
                 full_name: data.full_name,
@@ -67,10 +89,17 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                 gender: data.gender,
                 date_of_birth: data.date_of_birth,
                 salary: data.salary,
+                phone: data.phone,
+                email: data.email,
                 company_owner: data.company_owner,
+                status: data.status,
+                function: data.function,
+                recommendation_code: data.recommendation_code,
+                is_authenticated: data.is_authenticated,
                 marital_status: data.marital_status,
                 dependents_quantity: data.dependents_quantity,
-                updated_at: newDateF(new Date())
+                user_document_validation_uuid: data.user_document_validation_uuid.uuid,
+                updated_at: data.updated_at
 
             }
         })
@@ -79,187 +108,188 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
     }
     
 
-    async findById(id: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
-            where: {
-                uuid: id
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: {
-                    select: {
-                        uuid: true,
-                        document_front_status: true,
-                        document_back_status: true,
-                        selfie_status: true,
-                        document_selfie_status: true,
-                        document_back_base64: true,
-                        created_at: true,
-                        updated_at: true
-                    }
-                },
+    // async findById(id: string): Promise<UserInfoResponse | null> {
+    //     const user = await prismaClient.userInfo.findUnique({
+    //         where: {
+    //             uuid: id
+    //         },
+    //         include: {
+    //             BusinessInfo: {
+    //                 select: {
+    //                     fantasy_name: true
+    //                 }
+    //             },
+    //             Address: true,
+    //             UserValidation: {
+    //                 select: {
+    //                     uuid: true,
+    //                     document_front_status: true,
+    //                     document_back_status: true,
+    //                     selfie_status: true,
+    //                     document_selfie_status: true,
+    //                     document_back_base64: true,
+    //                     created_at: true,
+    //                     updated_at: true
+    //                 }
+    //             },
                 
                 
-            }
-        })
+    //         }
+    //     })
 
-        return user as UserInfoResponse | null
-    }
+    //     return user as UserInfoResponse | null
+    // }
 
-    async save(data: AppUserInfoEntity): Promise<void> {
+    // async save(data: AppUserInfoEntity): Promise<void> {
 
-        await prismaClient.$transaction([
+    //     await prismaClient.$transaction([
 
-            prismaClient.userInfo.create({
-                data: {
-                    uuid: data.uuid,
-                    business_info_uuid: data.business_info_uuid,
-                    document: data.document,
-                    document2: data.document2,
-                    full_name: data.full_name,
-                    internal_company_code: data.internal_company_code,
-                    gender: data.gender,
-                    date_of_birth: data.date_of_birth,
-                    salary: data.salary,
-                    company_owner: data.company_owner,
-                    marital_status: data.marital_status,
-                    dependents_quantity: data.dependents_quantity,
-                    created_at: newDateF(new Date()),
+    //         prismaClient.userInfo.create({
+    //             data: {
+    //                 uuid: data.uuid,
+    //                 business_info_uuid: data.business_info_uuid,
+    //                 document: data.document,
+    //                 document2: data.document2,
+    //                 full_name: data.full_name,
+    //                 internal_company_code: data.internal_company_code,
+    //                 gender: data.gender,
+    //                 date_of_birth: data.date_of_birth,
+    //                 salary: data.salary,
+    //                 company_owner: data.company_owner,
+    //                 marital_status: data.marital_status,
+    //                 dependents_quantity: data.dependents_quantity,
+    //                 created_at: newDateF(new Date()),
                     
-                }
-            }),
+    //             }
+    //         }),
 
-            prismaClient.userAuth.update({
-                where: {
-                    document: data.document
-                },
-                data: {
-                    user_info_uuid: data.uuid,
-                    updated_at: newDateF(new Date())
-                }
-            })
-        ])
-    }
+    //         prismaClient.userAuth.update({
+    //             where: {
+    //                 document: data.document
+    //             },
+    //             data: {
+    //                 user_info_uuid: data.uuid,
+    //                 updated_at: newDateF(new Date())
+    //             }
+    //         })
+    //     ])
+    // }
    
 
-    async findByDocumentUserInfo(document: string): Promise<UserInfoResponse | null> {
+    async findByDocumentUserInfo(document: string): Promise<AppUserInfoEntity | null> {
         const user = await prismaClient.userInfo.findUnique({
             where: {
-                document
-            },
-            include:{
-                BusinessInfo:{
-                    select:{
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: {
-                    select:{
-                        uuid: true,
-                        document_front_status: true,
-                        document_back_status: true,
-                        selfie_status: true,
-                        document_selfie_status: true,
-                        created_at: true,
-                        updated_at: true
-                    }
-                },
-                UserAuth: {
-                    select:{
-                        uuid: true,
-                        document: true,
-                        email: true,
-                    }
-                }
+                document: document
             }
             
         })
+        if(!user) return null
 
-        return user as UserInfoResponse | null
+        return {
+            uuid: new Uuid(user.uuid),
+            business_info_uuid: user.business_info_uuid ? new Uuid(user.business_info_uuid) : null,
+            address_uuid: user.address_uuid ? new Uuid(user.address_uuid) : null,
+            document: user.document,
+            document2: user.document2,
+            document3: user.document3,
+            full_name: user.full_name,
+            display_name: user.display_name,
+            internal_company_code: user.internal_company_code,
+            gender: user.gender,
+            date_of_birth: user.date_of_birth,
+            phone: user.phone,
+            email: user.email,
+            salary: user.salary,
+            company_owner: user.company_owner,
+            status: user.status,
+            function: user.function,
+            recommendation_code: user.recommendation_code,
+            is_authenticated: user.is_authenticated,
+            marital_status: user.marital_status,
+            dependents_quantity: user.dependents_quantity,
+            user_document_validation_uuid: user.user_document_validation_uuid ? new Uuid(user.user_document_validation_uuid) : null,
+            created_at: user.created_at,
+            updated_at: user.updated_at
+
+        } as AppUserInfoEntity || null
     }
 
-    async findByEmailUserInfo(email: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
-            where: {
-                email
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: true,
-                UserAuth: {
-                    select:{
-                        uuid: true,
-                        document: true,
-                        email: true,
-                    }
-                }
-            }
-        })
+    // async findByEmailUserInfo(email: string): Promise<UserInfoResponse | null> {
+    //     const user = await prismaClient.userInfo.findUnique({
+    //         where: {
+    //             email
+    //         },
+    //         include: {
+    //             BusinessInfo: {
+    //                 select: {
+    //                     fantasy_name: true
+    //                 }
+    //             },
+    //             Address: true,
+    //             UserValidation: true,
+    //             UserAuth: {
+    //                 select:{
+    //                     uuid: true,
+    //                     document: true,
+    //                     email: true,
+    //                 }
+    //             }
+    //         }
+    //     })
 
-        return user as UserInfoResponse | null
-    }
+    //     return user as UserInfoResponse | null
+    // }
 
-    async findByDocument2UserInfo(document2: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findUnique({
-            where: {
-                document2
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: true,
-                UserAuth: {
-                    select:{
-                        uuid: true,
-                        document: true,
-                        email: true,
-                    }
-                }
-            }
-        })
+    // async findByDocument2UserInfo(document2: string): Promise<UserInfoResponse | null> {
+    //     const user = await prismaClient.userInfo.findUnique({
+    //         where: {
+    //             document2
+    //         },
+    //         include: {
+    //             BusinessInfo: {
+    //                 select: {
+    //                     fantasy_name: true
+    //                 }
+    //             },
+    //             Address: true,
+    //             UserValidation: true,
+    //             UserAuth: {
+    //                 select:{
+    //                     uuid: true,
+    //                     document: true,
+    //                     email: true,
+    //                 }
+    //             }
+    //         }
+    //     })
 
-        return user as UserInfoResponse | null
-    }
-    async findByDocument3UserInfo(document3: string): Promise<UserInfoResponse | null> {
-        const user = await prismaClient.userInfo.findFirst({
-            where: {
-                document3
-            },
-            include: {
-                BusinessInfo: {
-                    select: {
-                        fantasy_name: true
-                    }
-                },
-                Address: true,
-                UserValidation: true,
-                UserAuth: {
-                    select:{
-                        uuid: true,
-                        document: true,
-                        email: true,
-                    }
-                }
-            }
-        })
+    //     return user as UserInfoResponse | null
+    // }
+    // async findByDocument3UserInfo(document3: string): Promise<UserInfoResponse | null> {
+    //     const user = await prismaClient.userInfo.findFirst({
+    //         where: {
+    //             document3
+    //         },
+    //         include: {
+    //             BusinessInfo: {
+    //                 select: {
+    //                     fantasy_name: true
+    //                 }
+    //             },
+    //             Address: true,
+    //             UserValidation: true,
+    //             UserAuth: {
+    //                 select:{
+    //                     uuid: true,
+    //                     document: true,
+    //                     email: true,
+    //                 }
+    //             }
+    //         }
+    //     })
 
-        return user as UserInfoResponse | null
-    }
+    //     return user as UserInfoResponse | null
+    // }
 
 
 

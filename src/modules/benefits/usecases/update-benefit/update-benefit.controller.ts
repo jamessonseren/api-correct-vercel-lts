@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { UpdateBenefitUsecase } from './update-benefit.usercase';
-import { BenefitsEntity } from '../../entities/benefit.entity';
+import { logger } from '../../../../utils/logger';
+import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo';
 
 export class UpdateBenefitController {
     constructor(private BenefitsRepository: IBenefitsRepository) {}
@@ -12,14 +13,14 @@ export class UpdateBenefitController {
                 this.BenefitsRepository
             );
             const data = req.body;
-            data.uuid = req.params.uuid;
-
+            data.uuid = new Uuid(req.params.uuid)
            
             const resp = await updateBenefitUsecase.execute(data);
 
             return res.status(200).json(resp);
         } catch (err: any) {
-            console.log({err})
+            console.log("update error: ", err)
+            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message,
             });

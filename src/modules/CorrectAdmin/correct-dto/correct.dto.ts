@@ -1,3 +1,5 @@
+import { Uuid } from "../../../@shared/ValueObjects/uuid.vo"
+
 export interface InputCreateAdminDTO {
     name: string
     email: string
@@ -7,7 +9,7 @@ export interface InputCreateAdminDTO {
 }
 
 export interface OutputCreateAdminDTO{
-    uuid: string
+    uuid: Uuid
     name: string
     email: string
     userName: string
@@ -15,7 +17,7 @@ export interface OutputCreateAdminDTO{
 }
 
 export interface OutputFindAdminDTO{
-    uuid: string
+    uuid: Uuid
     name: string
     email: string
     userName: string
@@ -24,7 +26,7 @@ export interface OutputFindAdminDTO{
 
 
 export interface OutputFindAdminAuthDTO{
-    uuid: string
+    uuid: Uuid
     name: string
     email: string
     userName: string

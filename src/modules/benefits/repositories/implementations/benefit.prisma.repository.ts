@@ -4,59 +4,64 @@ import { IBenefitsRepository } from '../benefit.repository';
 import { newDateF } from '../../../../utils/date';
 import { OutputGetBenefitsDTO } from '../../usecases/get-benefit-by-id/get-benefit.dto';
 import { ItemCategory, ItemType } from '../../usecases/create-benefit/create-benefit.dto';
+import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo';
 
 export class BenefitPrismaRepository implements IBenefitsRepository {
-    
+
 
     async create(data: BenefitsEntity): Promise<void> {
         await prismaClient.item.create({
             data: {
-                uuid: data.uuid,
+                uuid: data.uuid.uuid,
                 name: data.name,
                 description: data.description,
                 item_type: data.item_type,
                 item_category: data.item_category,
+                parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
                 created_at: newDateF(new Date()),
             },
         });
 
     }
 
-    async find(id: string): Promise<BenefitsEntity> {
+    async find(id: Uuid): Promise<BenefitsEntity> {
+        
         const item = await prismaClient.item.findUnique({
             where: {
-                uuid: id,
-            },
-            select: {
-                uuid: true,
-                name: true,
-                description: true,
-                item_type: true,
-                item_category: true,
-                parent_uuid: true,
-                created_at: true,
-                updated_at: true,
-            },
+                uuid: id.uuid,
+            }
         });
 
-        return item as BenefitsEntity
+        return {
+            uuid: new Uuid(item.uuid),
+            name: item.name,
+            description: item.description,
+            item_type: item.item_type as ItemType,
+            item_category: item.item_category as ItemCategory,
+            parent_uuid: new Uuid(item.parent_uuid),
+            created_at: item.created_at,
+            updated_at: item.updated_at
 
-        
+        } as BenefitsEntity
+
+
     }
-    
+
 
 
     async update(data: BenefitsEntity): Promise<void> {
-         await prismaClient.item.update({
+        const result = await prismaClient.item.update({
+            where: { 
+                uuid: data.uuid.uuid as string
+            },
             data: {
                 name: data.name,
                 description: data.description,
                 item_type: data.item_type,
                 item_category: data.item_category,
-                parent_uuid: data.parent_uuid,
+                parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
                 updated_at: newDateF(new Date()),
-            },
-            where: { uuid: data.uuid },
+            }
         });
     }
 

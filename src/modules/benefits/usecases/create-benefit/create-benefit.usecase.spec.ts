@@ -1,10 +1,11 @@
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
 import { InputCreateBenefitDto } from "./create-benefit.dto";
 import { CreateBenefitUsecase } from "./create-benefit.usecase";
 
 const input: InputCreateBenefitDto = {
     name:"Vale Alimentação",
     description: "Descrição do vale",
-    parent_uuid: '',
+    parent_uuid: null,
     item_type: 'gratuito',
     item_category: 'pre_pago',
     created_at: '',
@@ -28,7 +29,7 @@ describe("Unit test create benefit usecase", () => {
         const output = await createBenefitUsecase.execute(input)
 
         expect(output).toEqual({
-            uuid: expect.any(String),
+            uuid: expect.any(Uuid),
             name: input.name,
             description: input.description,
             item_type: input.item_type,

@@ -1,8 +1,7 @@
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { InputUpdateBenefitDTO, OutputUpdateBenefitDTO } from './update-benefit.dto';
 import { CustomError } from '../../../../errors/custom.error';
-import { BenefitsEntity, BenefitsProps } from '../../entities/benefit.entity';
-import { ItemCategory, ItemType } from '../create-benefit/create-benefit.dto';
+import { BenefitsEntity } from '../../entities/benefit.entity';
 
 export class UpdateBenefitUsecase {
     private BenefitsRepository: IBenefitsRepository
@@ -11,24 +10,21 @@ export class UpdateBenefitUsecase {
     }
 
     async execute(input: InputUpdateBenefitDTO): Promise<OutputUpdateBenefitDTO> {
+        if (!input.uuid) throw new CustomError("UUID is required", 400)
 
         const findBenefit = await this.BenefitsRepository.find(input.uuid)
         if (!findBenefit) throw new CustomError("Item not found", 404)
 
 
         const benefit = new BenefitsEntity(findBenefit);
-        
+
         benefit.changeName(input.name)
         benefit.changeDescription(input.description)
         benefit.changeItemType(input.item_type)
         benefit.changeItemCategory(input.item_category)
         benefit.changeParentUuid(input.parent_uuid)
 
-
-
-
         await this.BenefitsRepository.update(benefit)
-
         return {
             uuid: benefit.uuid,
             name: benefit.name,

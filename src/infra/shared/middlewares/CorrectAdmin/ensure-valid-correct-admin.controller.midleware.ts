@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ICorrectAdminRepository } from "../../../../modules/CorrectAdmin/repositories/correct-admin.repository";
 import { EnsureValidCorrectAdminUsecase } from "./ensure-valid-correct-admin.usecase.middlware";
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
 
 export class EnsureValidCorrectAdminController{
     constructor(
@@ -15,7 +16,7 @@ export class EnsureValidCorrectAdminController{
                 this.correctAdminRepository
             )
 
-            const admin = await validAdminUsecase.execute(correctAdminId)
+            const admin = await validAdminUsecase.execute(new Uuid(correctAdminId))
 
             return admin
 
