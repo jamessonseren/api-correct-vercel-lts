@@ -1,8 +1,9 @@
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo"
 import { ItemCategory, ItemType } from "../create-benefit/create-benefit.dto"
 
 export interface InputListCustomerDTO {}
 type Benefit = {
-    uuid: string
+    uuid: Uuid
     name: string
     description: string
     item_type: ItemType

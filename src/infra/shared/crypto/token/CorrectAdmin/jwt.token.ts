@@ -15,11 +15,11 @@ export class JWTToken implements IToken {
         const token = sign({
             admin: {
                 userName,
-                uuid,
+                uuid: uuid.uuid,
                 email
             }
         }, this.TOKEN_SECRET_CRYPTO, {
-            subject: uuid,
+            subject: uuid.uuid,
             expiresIn: '1D'
         })
 

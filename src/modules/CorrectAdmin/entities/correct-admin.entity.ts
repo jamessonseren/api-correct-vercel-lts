@@ -1,10 +1,19 @@
 import { randomUUID } from 'crypto'
 import { PasswordBcrypt } from '../../../crypto/password.bcrypt'
 import { CustomError } from '../../../errors/custom.error'
+import { Uuid } from '../../../@shared/ValueObjects/uuid.vo'
 
 
 export type ICorrectAdmin = {
-    uuid?:string
+    uuid?:Uuid
+    name: string
+    email: string
+    userName: string
+    password: string
+    isAdmin: boolean
+}
+
+export type CorrectAdminCreateCommand = {
     name: string
     email: string
     userName: string
@@ -13,7 +22,7 @@ export type ICorrectAdmin = {
 }
 
 export class CorrectAdminEntity {
-    private _uuid: string
+    private _uuid: Uuid
     private _name: string
     private _email: string
     private _userName: string
@@ -23,12 +32,12 @@ export class CorrectAdminEntity {
 
     constructor(props: ICorrectAdmin) {
 
-        this._uuid = props.uuid ? props.uuid : randomUUID()
+        this._uuid = props.uuid ?? new Uuid()
         this._name = props.name
         this._email = props.email
         this._userName = props.userName
         this._password = props.password
-        this._isAdmin = props.isAdmin
+        this._isAdmin = props.isAdmin ?? true
         this.validate()
     }
 
@@ -38,7 +47,7 @@ export class CorrectAdminEntity {
         if (!this._email) throw new CustomError("Email is required!", 400)
     }
 
-    get uuid(): string {
+    get uuid(): Uuid {
         return this._uuid;
     }
 
@@ -80,7 +89,7 @@ export class CorrectAdminEntity {
         this.validate();
     }
 
-    static async create(data: ICorrectAdmin) {
+    static async create(data: CorrectAdminCreateCommand) {
 
         const bcrypt = new PasswordBcrypt()
         const passwordHash = await bcrypt.hash(data.password)

@@ -1,5 +1,6 @@
 import { CreateCorrectAdminUseCase } from '../create-correct-admin.usecase';
 import { InputCreateAdminDTO } from '../../../correct-dto/correct.dto';
+import { Uuid } from '../../../../../@shared/ValueObjects/uuid.vo';
 
 const input: InputCreateAdminDTO = {
     email: 'admin@admin.com',
@@ -28,7 +29,7 @@ describe("Unity Test Create Correct Admin Usecase", () => {
         const output = await createAdminUseCase.execute(input);
 
         expect(output).toEqual({
-            uuid: expect.any(String),
+            uuid: expect.any(Uuid),
             name: input.name,
             email: input.email,
             userName: input.userName,

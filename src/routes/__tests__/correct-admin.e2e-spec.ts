@@ -17,7 +17,6 @@ describe("E2E Correct admin test", () => {
 
     it("Should create a new admin", async () => {
         const result = await request(app).post('/admin').send(inputNewAdmin)
-
         expect(result.statusCode).toBe(201)
     })
 

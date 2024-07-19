@@ -1,13 +1,5 @@
 import { AuthenticateAdminUseCase } from '../authenticate-admin.usecase';
-import { InputCreateAdminDTO } from "../../../correct-dto/correct.dto";
 
-const inputCreate: InputCreateAdminDTO = {
-    email: 'admin@admin.com',
-    name: 'Correct Admin',
-    userName: 'correct_admin',
-    password: 'admin123',
-    isAdmin: false
-};
 
 const AdminMockRepository = () => {
     return {

@@ -139,7 +139,7 @@ model UserInfo {
   email                         String? @unique
   date_of_birth                 String
   phone                         String?
-  salary                        String?
+  salary                        Int?
   company_owner                 Boolean @default(false)
   status                        Status  @default(pending)
   function                      String?
@@ -194,6 +194,7 @@ model UserAuth {
   document       String  @unique
   email          String  @unique
   password       String
+  is_active      Boolean @default(true)
 
   created_at String?
   updated_at String?
@@ -202,7 +203,6 @@ model UserAuth {
 
   @@map("users_auth")
 }
-
 
 model Item {
   uuid          String  @id @default(uuid())

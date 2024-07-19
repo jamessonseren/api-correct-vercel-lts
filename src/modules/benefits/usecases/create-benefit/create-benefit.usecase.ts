@@ -7,7 +7,7 @@ export class CreateBenefitUsecase {
 
     async execute(input: InputCreateBenefitDto): Promise<OutputCreateBenefitDto> {
 
-        const benefit = new BenefitsEntity(input)
+        const benefit = BenefitsEntity.create(input)
        
         await this.benefitsRepository.create(benefit)
 

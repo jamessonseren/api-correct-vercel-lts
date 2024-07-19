@@ -24,7 +24,7 @@ export class AuthenticateAdminUseCase{
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, admin.password)
         if(!comparePasswordHash) throw new CustomError("Username/password is incorrect", 401)
-
+        
         const tokenGenerated = await this.token.create(admin)
 
         return {

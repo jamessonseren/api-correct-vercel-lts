@@ -1,3 +1,4 @@
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
 import { prismaClient } from "../../../../infra/databases/prisma.config";
 import { OutputFindAdminAuthDTO, OutputFindAdminDTO } from "../../correct-dto/correct.dto";
 import { CorrectAdminEntity } from "../../entities/correct-admin.entity";
@@ -20,7 +21,7 @@ export class CorrectAdminPrismaRepository implements ICorrectAdminRepository {
     async update(data: CorrectAdminEntity): Promise<void> {
         await prismaClient.correctAdmin.update({
             where: {
-                uuid: data.uuid
+                uuid: data.uuid.uuid
             },
             data: {
                 name: data.name,
@@ -29,15 +30,23 @@ export class CorrectAdminPrismaRepository implements ICorrectAdminRepository {
             }
         })
     }
-    async find(id: string): Promise<OutputFindAdminDTO | null> {
+    async find(id: Uuid): Promise<OutputFindAdminDTO | null> {
         
         const admin = await prismaClient.correctAdmin.findUnique({
             where: {
-                uuid: id
+                uuid: id.uuid
             }
         })
 
-        return admin
+        if(!admin) return null
+
+        return {
+            uuid: new Uuid(admin.uuid),
+            name: admin.name,
+            email: admin.email,
+            userName: admin.userName,
+            isAdmin: admin.isAdmin
+        }
     }
     findAll(): Promise<CorrectAdminEntity[]> {
         throw new Error("Method not implemented.");
@@ -47,35 +56,40 @@ export class CorrectAdminPrismaRepository implements ICorrectAdminRepository {
         const admin = await prismaClient.correctAdmin.findUnique({
             where: {
                 userName: userName
-            },
-            select: {
-                uuid: true,
-                name: true,
-                email: true,
-                userName: true,
-                isAdmin: true
             }
         })
 
-        return admin
+
+        if (!admin) {
+            return null;
+        }
+
+        return {
+            uuid: new Uuid(admin.uuid),
+            name: admin.name,
+            email: admin.email,
+            userName: admin.userName,
+            isAdmin: admin.isAdmin
+        }
     }
 
     async findByUserNameAuth(userName: string): Promise<CorrectAdminEntity | null> {
         const admin = await prismaClient.correctAdmin.findUnique({
             where: {
                 userName: userName
-            },
-            select: {
-                uuid: true,
-                name: true,
-                email: true,
-                userName: true,
-                isAdmin: true,
-                password: true
             }
         })
 
-        return admin as CorrectAdminEntity
+        if(!admin) return null
+
+        return {
+            uuid: new Uuid(admin.uuid),
+            name: admin.name,
+            email: admin.email,
+            password: admin.password,
+            userName: admin.userName,
+            isAdmin: admin.isAdmin
+        } as CorrectAdminEntity
     }
 
 }

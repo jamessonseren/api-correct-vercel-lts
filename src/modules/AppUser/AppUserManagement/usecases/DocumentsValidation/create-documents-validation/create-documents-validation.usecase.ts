@@ -1,6 +1,6 @@
 import { CustomError } from "../../../../../../errors/custom.error";
 import { DocumentValidationEntity, DocumentValidationProps } from "../../../entities/app-user-document-validation.entity";
-import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
+import IAppUserAuthRepository from "../../../repositories/app-use-auth-repository";
 import { IAppUserDocumentValidationRepository } from "../../../repositories/app-user-document-validation.repository";
 
 export class CreateDocumentsValidationUsecase {

@@ -1,3 +1,4 @@
+import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo'
 import { CorrectAdminEntity, ICorrectAdmin } from '../correct-admin.entity'
 
 
@@ -37,8 +38,9 @@ describe("Unity test Correct Admin Entity ", () => {
 
     it("Should create an admin", async () => {
         const admin = await CorrectAdminEntity.create(validInput)
-        
-        expect(admin).toHaveProperty('uuid');
+        console.log({admin})
+        // expect(admin).toHaveProperty('uuid');
+        expect(admin.uuid).toBeInstanceOf(Uuid)
         
     })
 })
