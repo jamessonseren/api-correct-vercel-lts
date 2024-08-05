@@ -1,9 +1,22 @@
+import { Uuid } from "../../../../../@shared/ValueObjects/uuid.vo";
 import { prismaClient } from "../../../../../infra/databases/prisma.config";
 import { newDateF } from "../../../../../utils/date";
 import { AppUserAddressEntity } from "../../entities/app-user-address.entity";
 import { IAppUserAddressRepository } from "../app-user-address.repository";
 
 export class AppUserAddressPrismaRepository implements IAppUserAddressRepository{
+    create(entity: AppUserAddressEntity): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    update(entity: AppUserAddressEntity): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    find(id: Uuid): Promise<AppUserAddressEntity | null> {
+        throw new Error("Method not implemented.");
+    }
+    findAll(): Promise<AppUserAddressEntity[]> {
+        throw new Error("Method not implemented.");
+    }
     async findById(id: string): Promise<AppUserAddressEntity | null> {
         return await prismaClient.address.findUnique({
             where:{

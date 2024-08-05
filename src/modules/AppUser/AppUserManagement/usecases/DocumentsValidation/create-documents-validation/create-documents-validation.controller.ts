@@ -4,10 +4,11 @@ import { DocumentValidationProps } from "../../../entities/app-user-document-val
 import { CreateDocumentsValidationUsecase } from "./create-documents-validation.usecase";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { IAppUserDocumentValidationRepository } from "../../../repositories/app-user-document-validation.repository";
+import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
 
 export class CreateDocumentsValidationController{
     constructor(
-        private userAuthRepository: IAppUserAuthRepository,
+        private userInfoRepository: IAppUserInfoRepository,
         private documentsValidationRepository: IAppUserDocumentValidationRepository
 
     ){}
@@ -17,14 +18,14 @@ export class CreateDocumentsValidationController{
 
             const data: DocumentValidationProps = req.body
 
-            const user_id = req.appUserId
+            const document = req.params.document
 
             const documentsValidationUsecase = new CreateDocumentsValidationUsecase(
-                this.userAuthRepository,
+                this.userInfoRepository,
                 this.documentsValidationRepository
             )
 
-            await documentsValidationUsecase.execute(data, user_id)
+            await documentsValidationUsecase.execute(data, document)
 
             return res.status(201).json({success: "Documents registered successfully"})
             

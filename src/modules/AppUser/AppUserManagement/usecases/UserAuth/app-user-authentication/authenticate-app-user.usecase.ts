@@ -27,7 +27,7 @@ export class AuthenticateAppuserUsecase {
         if (!this.isValidCPF(onlyNumberDocument)) throw new CustomError("Invalid document - 3", 401);
 
         const appUser = await this.appUserRepository.findByDocument(onlyNumberDocument)
-        if (!appUser) throw new CustomError("Document/password is incorrect", 401)
+        if (!appUser) throw new CustomError("Document/password is incorrect 1", 401)
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, appUser.password)
         if (!comparePasswordHash) throw new CustomError("Document/password is incorrect", 401)

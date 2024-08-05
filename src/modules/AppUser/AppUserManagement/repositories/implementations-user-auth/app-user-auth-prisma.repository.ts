@@ -1,5 +1,4 @@
 import { prismaClient } from "../../../../../infra/databases/prisma.config";
-import { AppUserAuthRequest, AppUserAuthResponse, AppUserAuthResponseAuthentication, UpdateAppUserRequest } from "../../../app-user-dto/app-user.dto";
 import { AppUserAuthSignUpEntity } from "../../entities/app-user-auth.entity";
 import { Uuid } from "../../../../../@shared/ValueObjects/uuid.vo";
 import { IAppUserAuthRepository } from "../app-use-auth-repository";
@@ -9,8 +8,25 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
         throw new Error("Method not implemented.");
     }
    
-    find(id: Uuid): Promise<AppUserAuthSignUpEntity> {
-        throw new Error("Method not implemented.");
+    async find(id: Uuid): Promise<AppUserAuthSignUpEntity | null> {
+        const user = await prismaClient.userAuth.findUnique({
+            where:{
+                uuid: id.uuid
+            }
+        })
+
+        if(!user) return null
+
+        return {
+            uuid: new Uuid(user.uuid),
+            user_info_uuid: user.user_info_uuid ? new Uuid(user.user_info_uuid) : null,
+            document: user.document,
+            email: user.email,
+            password: user.password,
+            is_active: user.is_active,
+            created_at: user.created_at,
+            updated_at: user.updated_at
+        } as AppUserAuthSignUpEntity
     }
     findAll(): Promise<AppUserAuthSignUpEntity[]> {
         throw new Error("Method not implemented.");
@@ -99,7 +115,7 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
 
         return {
             uuid: new Uuid(appUser.uuid),
-            user_info_uuid: new Uuid(appUser.user_info_uuid),
+            user_info_uuid: appUser.user_info_uuid ? new Uuid(appUser.user_info_uuid) : null,
             document: appUser.document,
             email: appUser.email,
             password: appUser.password,
@@ -121,7 +137,7 @@ export class AppUserAuthPrismaRepository implements IAppUserAuthRepository {
 
         return {
             uuid: new Uuid(appUser.uuid),
-            user_info_uuid: new Uuid(appUser.user_info_uuid),
+            user_info_uuid: appUser.user_info_uuid ? new Uuid(appUser.user_info_uuid) : null,
             document: appUser.document,
             email: appUser.email,
             password: appUser.password,

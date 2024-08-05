@@ -1,3 +1,4 @@
+import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 import { CustomError } from "../../../../../../errors/custom.error";
 import { AppUserAddressEntity, AppUserAddressProps } from "../../../entities/app-user-address.entity";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
@@ -11,7 +12,7 @@ export class CreateAppUserAddressUsecase{
 
     async execute(data: AppUserAddressProps, user_id: string){
 
-        const findUser = await this.userAuthRepository.findById(user_id)
+        const findUser = await this.userAuthRepository.find(new Uuid(user_id))
         if(!findUser) throw new CustomError("Unauthorized access", 401)
 
         const userAddress = await AppUserAddressEntity.create(data)

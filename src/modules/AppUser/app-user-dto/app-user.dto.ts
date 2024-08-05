@@ -1,5 +1,6 @@
 import { Status, UserDocumentValidationStatus } from "@prisma/client"
 import { Uuid } from "../../../@shared/ValueObjects/uuid.vo"
+import { boolean } from "zod"
 
 
 //App User auth
@@ -12,7 +13,7 @@ export interface InputCreateAppUserDTO {
 }
 
 export interface OutputCreateappUserDTO {
-    uuid: Uuid
+    uuid: string
     user_info_uuid: Uuid | null,
     document: string
     email: string
@@ -67,13 +68,7 @@ export interface InputCreateUserInfoDTO {
 }
 
 
-export type AppUserAuthResponseAuthentication = {
-    uuid: string
-    document: string
-    password: string
-    created_at: string
-    updated_at: string
-}
+
 
 export type OutputAppUserDetailsDTO = {
     status: boolean,
@@ -90,7 +85,27 @@ export type OutputAppUserDetailsDTO = {
     UserValidation: boolean
 }
 
+export interface OutputGetByDocument {
+    status: boolean,
+    UserAuth: boolean,
+    UserInfo: boolean,
+    Address: boolean,
+    UserValidation:{
+        document_front_status: string
+        document_back_status: string
+        selfie_status: string
+        document_selfie_status: string
+    }
+}
 
+
+export type AppUserAuthResponseAuthentication = {
+    uuid: string
+    document: string
+    password: string
+    created_at: string
+    updated_at: string
+}
 export type UpdateAppUserRequest = Omit<AppUserAuthResponseAuthentication, 'password'>
 // export type AppUserAuthResponse = Omit<AppUserAuthResponseAuthentication, 'password'>
 

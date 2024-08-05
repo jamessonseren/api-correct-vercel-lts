@@ -20,7 +20,7 @@ describe("Unity Test App User auth Entity", () => {
     it("Should throw an error if password is empty", () => {
         const input: AppUserAuthProps = {
             user_info_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             email: 'email@email.com',
             password: '',
             is_active: true
@@ -34,7 +34,7 @@ describe("Unity Test App User auth Entity", () => {
     it("Should throw an error if email is empty", () => {
         const input: AppUserAuthProps = {
             user_info_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             email: '',
             password: 'senha123',
             is_active: true

@@ -4,6 +4,7 @@ import { newDateF } from "../../../../utils/date";
 import { CustomError } from "../../../../errors/custom.error";
 import { z } from "zod";
 import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
+import { DocumentValidator } from "../../../../utils/document-validation";
 
 export type AppUserInfoProps = {
     uuid?: Uuid
@@ -46,7 +47,7 @@ export type AppUserInfoCreateCommand = {
     phone: string | null;
     email: string
     salary: number | null;
-    company_owner: boolean;
+    company_owner: boolean
     status: Status;
     function: string | null;
     recommendation_code: string | null;
@@ -74,7 +75,7 @@ export class AppUserInfoEntity {
     private _email: string
     private _salary: number | null;
     private _company_owner: boolean;
-    private _status: Status;
+    private _status: Status
     private _function: string | null;
     private _recommendation_code: string | null;
     private _is_authenticated: boolean;
@@ -99,11 +100,11 @@ export class AppUserInfoEntity {
         this._phone = props.phone;
         this._email = props.email
         this._salary = props.salary;
-        this._company_owner = props.company_owner;
-        this._status = props.status;
+        this._company_owner = props.company_owner ?? false
+        this._status = props.status ?? Status.pending_validation
         this._function = props.function;
         this._recommendation_code = props.recommendation_code;
-        this._is_authenticated = props.is_authenticated;
+        this._is_authenticated = props.is_authenticated ?? false
         this._marital_status = props.marital_status;
         this._dependents_quantity = props.dependents_quantity;
         this._user_document_validation_uuid = props.user_document_validation_uuid;
@@ -379,11 +380,14 @@ export class AppUserInfoEntity {
         }
 
         //validate document length
-        if (this._document.length !== 11) throw new CustomError("Document must have 11 characters")
+        if (this._document) {
 
-        //validate if document has only numbers
-        const documentRegex = /^[0-9]+$/;
-        if (!documentRegex.test(this._document)) throw new CustomError("Document must contain only numeric characters", 400);
+            const adjustedDocument = new DocumentValidator()
+            const validator = adjustedDocument.validator(this._document)
+            if (validator) {
+                this._document = validator
+            }
+        }
 
         // Validate email
         const emailSchema = z.string().email();

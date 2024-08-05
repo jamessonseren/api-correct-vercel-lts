@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo'
 import { newDateF } from '../../../../utils/date'
 import { DocumentValidator } from '../../../../utils/document-validation'
+import { validate } from 'class-validator'
 export type AppUserAuthProps = {
     uuid?: Uuid
     user_info_uuid: Uuid | null,
@@ -18,7 +19,7 @@ export type AppUserAuthProps = {
 }
 export class AppUserAuthSignUpEntity {
     private _uuid: Uuid
-    private _user_info_uuid: Uuid| null
+    private _user_info_uuid: Uuid | null
     private _document: string
     private _email: string
     private _password: string
@@ -62,7 +63,7 @@ export class AppUserAuthSignUpEntity {
         return this._is_active
     }
 
-    get created_at(): string | undefined{
+    get created_at(): string | undefined {
         return this._created_at
     }
 
@@ -73,6 +74,9 @@ export class AppUserAuthSignUpEntity {
     private set password(password: string) {
         this._password = password
 
+    }
+    private set document(document: string) {
+        this._document = document
     }
 
     changeUserInfo(user_info_uuid: Uuid) {
@@ -86,7 +90,7 @@ export class AppUserAuthSignUpEntity {
     }
 
     changeEmail(email: string) {
-        this._email= email
+        this._email = email
         this.validate()
     }
 
@@ -110,7 +114,7 @@ export class AppUserAuthSignUpEntity {
 
     validate() {
         //Validate if necessary fields are present
-        // if (!this._document) throw new CustomError("Document is required", 400)
+        if (!this._document) throw new CustomError("Document is required", 400)
         if (!this._password) throw new CustomError("Password is required", 400)
         if (!this._email) throw new CustomError("Email is required", 400)
 
@@ -119,15 +123,17 @@ export class AppUserAuthSignUpEntity {
         if (typeof this._password !== 'string') throw new CustomError("Password must be string type", 400)
         if (typeof this._email !== 'string') throw new CustomError("Email must be string type", 400)
 
-
         // Validate email
         const emailSchema = z.string().email();
         const emailValidation = emailSchema.safeParse(this._email);
 
         if (!emailValidation.success) throw new CustomError("Invalid email format", 400);
 
-        new DocumentValidator(this.document).validator()
-
+        const adjustedDocument = new DocumentValidator()
+        const validator = adjustedDocument.validator(this._document)
+        if (validator) {
+            this._document = validator
+        }
     }
 
     static async create(data: AppUserAuthProps) {

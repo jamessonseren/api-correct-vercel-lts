@@ -6,6 +6,7 @@ import { AppUserInfoRequest } from '../../../app-user-dto/app-user.dto';
 import { IAppUserInfoRepository } from '../../../AppUserManagement/repositories/app-user-info.repository';
 import { AppUserInfoEntity, AppUserInfoProps } from '../../../AppUserManagement/entities/app-user-info.entity';
 import { ICompanyDataRepository } from '../../../../Company/CompanyData/repositories/company-data.repository';
+import { Uuid } from '../../../../../@shared/ValueObjects/uuid.vo';
 
 
 
@@ -89,7 +90,7 @@ export class CreateAppUserByCorrectUsecase {
                     //after adding everything, pass each user from Results array
                     for (const user of results) {
                         const data: AppUserInfoProps = {
-                            business_info_uuid: business_info_uuid,
+                            business_info_uuid: new Uuid(business_info_uuid),
                             document: user.document,
                             document2: user.document2,
                             document3: null,
@@ -108,7 +109,7 @@ export class CreateAppUserByCorrectUsecase {
                             marital_status: user.marital_status,
                             display_name: '',
                             email: null,
-                            user_document_validation_uuid:'',
+                            user_document_validation_uuid:null,
                             recommendation_code: ''
 
                         }
@@ -116,17 +117,17 @@ export class CreateAppUserByCorrectUsecase {
                         
                         const findUser = await this.appUserInfoRepository.findByDocumentUserInfo(user.document)
 
-                        const findByDocument2 = await this.appUserInfoRepository.findByDocument2UserInfo(user.document2)
+                        // const findByDocument2 = await this.appUserInfoRepository.findByDocument2UserInfo(user.document2)
                         
                         if (findUser) {
-                            if(findByDocument2?.document === findUser.document){
-                                alreadyRegistered.push(user.document);
-                            } else {
-                                alreadyRegistered.push(user.document);
+                            // if(findByDocument2?.document === findUser.document){
+                            //     alreadyRegistered.push(user.document);
+                            // } else {
+                            //     alreadyRegistered.push(user.document);
 
-                            }
+                            // }
 
-
+                            alreadyRegistered.push(user.document);
                         } else {
                             await this.appUserInfoRepository.saveOrUpdate(appUser)
                             usersRegistered.push(user)
