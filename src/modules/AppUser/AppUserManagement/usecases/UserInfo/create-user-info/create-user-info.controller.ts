@@ -4,6 +4,7 @@ import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repo
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { AppUserInfoUsecase } from "./create-user-info.usecase";
 import { logger } from "../../../../../../utils/logger";
+import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 
 export class CreateUserInfoController{
     constructor(
@@ -16,17 +17,17 @@ export class CreateUserInfoController{
 
         try{
 
-            const data:AppUserInfoProps = req.body
+            const data = req.body
     
             const user_id = req.appUserId
     
             const userInfoUsecase = new AppUserInfoUsecase(this.appUserInfoRepository, this.appUserAuthRepository)
     
-            await userInfoUsecase.execute(data, user_id)
+            await userInfoUsecase.execute(data, new Uuid(user_id))
             
             return res.status(201).json({sucess: "User info registered successfully"})
         }catch(err: any){
-            logger.error(err.stack);
+            console.log({err})
             return res.status(err.statusCode).json({
                 error: err.message,
             });

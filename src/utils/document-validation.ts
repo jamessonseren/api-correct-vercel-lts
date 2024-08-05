@@ -2,16 +2,11 @@ import { CustomError } from "../errors/custom.error";
 
 export class DocumentValidator {
 
-    private document: string
-    constructor(document: string) {
-        this.document = document
-    }
+    validator(document: string) {
 
-    validator() {
+        if (!document) throw new CustomError("Document is required", 400)
 
-        if (!this.document) throw new CustomError("Document is required", 400)
-
-        const onlyNumberDocument = this.processDocument(this.document)
+        const onlyNumberDocument = this.processDocument(document)
 
         //validate document length
         if (onlyNumberDocument.length !== 11) throw new CustomError("Document must have 11 characters", 400)
@@ -22,6 +17,8 @@ export class DocumentValidator {
 
         const isValid = this.isValidCPF(onlyNumberDocument)
         if (!isValid) throw new CustomError("Invalid Document", 400)
+
+        return onlyNumberDocument
     }
 
     private processDocument(document: string) {

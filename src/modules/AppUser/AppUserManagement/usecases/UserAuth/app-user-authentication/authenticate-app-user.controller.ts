@@ -27,7 +27,7 @@ export class AuthenticateAppUserController {
 
             const appUser = await authAppUserUsecase.execute({ document, password })
 
-            return res.json({token: appUser})
+            return res.json(appUser)
 
         } catch (err: any) {
             return res.status(err.statusCode).json({

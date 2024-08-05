@@ -4,6 +4,29 @@ import { DocumentValidationEntity, DocumentValidationProps } from "../../entitie
 import { IAppUserDocumentValidationRepository } from "../app-user-document-validation.repository";
 
 export class DocumentValidationPrismaRepository implements IAppUserDocumentValidationRepository {
+    async find(id: string): Promise<DocumentValidationEntity | null> {
+        const document = await prismaClient.userDocumentValidation.findUnique({
+            where:{
+                uuid: id
+            }
+        })
+
+        if(!document) return null
+
+        return {
+            uuid: document.uuid,
+            document_front_base64: document.document_back_base64,
+            document_front_status: document.document_front_status,
+            document_back_base64: document.document_back_base64,
+            document_back_status: document.document_back_status,
+            selfie_base64: document.selfie_base64,
+            selfie_status: document.selfie_status,
+            document_selfie_base64: document.document_selfie_base64,
+            document_selfie_status: document.document_selfie_status
+
+        }
+    }
+    
     async save(data: DocumentValidationEntity, user_info_uuid: string): Promise<void> {
 
         await prismaClient.$transaction([

@@ -36,7 +36,7 @@ export class AppUserAuthSignUpUsecase {
         await this.appUserSingUpRepository.create(createEntity)
 
         return {
-            uuid: createEntity.uuid,
+            uuid: createEntity.uuid.uuid,
             user_info_uuid: createEntity.user_info_uuid,
             document: createEntity.document,
             email: createEntity.email,

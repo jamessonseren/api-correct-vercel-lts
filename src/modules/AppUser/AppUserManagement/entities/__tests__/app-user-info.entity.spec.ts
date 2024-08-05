@@ -8,7 +8,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: '',
@@ -38,7 +38,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -68,7 +68,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -98,7 +98,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -123,7 +123,7 @@ describe("Unit Test AppUserInfoEntity", () => {
 
         expect(userInfo).toHaveProperty('uuid');
         expect(userInfo.full_name).toEqual(input.full_name);
-        expect(userInfo.document).toEqual(input.document);
+        expect(userInfo.document).toEqual('40353978060');
     });
 
 
@@ -131,7 +131,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -162,7 +162,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -192,7 +192,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -214,16 +214,16 @@ describe("Unit Test AppUserInfoEntity", () => {
         };
 
         const userInfo = new AppUserInfoEntity(input);
-        userInfo.changeDocument('09876543210');
+        userInfo.changeDocument('727.646.740-66');
 
-        expect(userInfo.document).toEqual('09876543210');
+        expect(userInfo.document).toEqual('72764674066');
     });
 
     it("Should change document2", async () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -253,7 +253,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -284,7 +284,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '403.539.780-60',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -316,7 +316,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -347,7 +347,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -378,7 +378,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -409,7 +409,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -440,7 +440,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -471,7 +471,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -502,7 +502,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -533,7 +533,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -564,7 +564,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -595,7 +595,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -625,7 +625,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -656,7 +656,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678900',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',
@@ -683,36 +683,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         expect(userInfo.status).toEqual(Status.inactive);
     });
 
-    it("Should throw an error if document does not have only numbers", () => {
-        const input: AppUserInfoProps = {
-            business_info_uuid: null,
-            address_uuid: null,
-            document: '12.56.78-00',
-            document2: null,
-            document3: null,
-            full_name: 'John Doe',
-            display_name: null,
-            internal_company_code: null,
-            gender: 'M',
-            date_of_birth: '1990-01-01',
-            phone: null,
-            email: 'email@email.com',
-            salary: null,
-            company_owner: false,
-            status: Status.active,
-            function: null,
-            recommendation_code: null,
-            is_authenticated: false,
-            marital_status: null,
-            dependents_quantity: 0,
-            user_document_validation_uuid: null
-        };
-
-        expect(() => {
-            new AppUserInfoEntity(input);
-        }).toThrow("Document must contain only numeric characters")
-    })
-
+   
     it("Should throw an error if document does not have only numbers", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
@@ -747,7 +718,7 @@ describe("Unit Test AppUserInfoEntity", () => {
         const input: AppUserInfoProps = {
             business_info_uuid: null,
             address_uuid: null,
-            document: '12345678925',
+            document: '727.646.740-66',
             document2: null,
             document3: null,
             full_name: 'John Doe',

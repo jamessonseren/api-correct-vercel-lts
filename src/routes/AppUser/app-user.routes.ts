@@ -11,7 +11,6 @@ import { createUserInfoController } from "../../modules/AppUser/AppUserManagemen
 import { createUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/create-app-user-address";
 import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
 import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCorrect/usecases/create-appuser-data-by-correct";
-import { getUserInfoController } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-by-document";
 import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
 import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
@@ -47,10 +46,7 @@ appUserRouter.get("/app-user/document/:document", async (request, response) => {
 
 
 
-//get User Info by document
-appUserRouter.get("/app-user-info/document/:document", async (request, response) => {
-    await getUserInfoController.handle(request, response)
-})
+
 //register user info by authenticated user
 appUserRouter.post("/app-user/info", appUserIsAuth, async (request, response) => {
     await createUserInfoController.handle(request, response)
@@ -63,7 +59,7 @@ appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response)
 
 
 //create documents for validation
-appUserRouter.post("/app-user/document-validation", appUserIsAuth, async (request, response) => {
+appUserRouter.post("/app-user/document-validation/:document", appUserIsAuth, async (request, response) => {
     await createDocumentsController.handle(request, response)
 })
 

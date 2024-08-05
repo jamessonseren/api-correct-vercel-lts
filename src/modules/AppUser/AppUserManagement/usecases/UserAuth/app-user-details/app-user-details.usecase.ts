@@ -15,13 +15,11 @@ export class AppUserDetailsUsecase {
 
     async execute(uuid: Uuid): Promise<OutputAppUserDetailsDTO> {
 
-        if (!uuid) throw new CustomError("User Id is required", 400)
-
         //Find User
         const findUser = await this.appUserAuthRepository.find(uuid)
         if (!findUser) throw new CustomError("User not found", 404)
-
-        if (!findUser.user_info_uuid) {
+        
+            if (!findUser.user_info_uuid) {
             return {
                 status: false,
                 UserAuthDetails: {

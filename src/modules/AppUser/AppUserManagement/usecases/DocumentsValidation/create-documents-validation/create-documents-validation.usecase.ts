@@ -1,37 +1,43 @@
 import { CustomError } from "../../../../../../errors/custom.error";
+import { DocumentValidator } from "../../../../../../utils/document-validation";
 import { DocumentValidationEntity, DocumentValidationProps } from "../../../entities/app-user-document-validation.entity";
-import IAppUserAuthRepository from "../../../repositories/app-use-auth-repository";
 import { IAppUserDocumentValidationRepository } from "../../../repositories/app-user-document-validation.repository";
+import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
 
 export class CreateDocumentsValidationUsecase {
     constructor(
-        private userAuthRepository: IAppUserAuthRepository,
+        private userInfoRepository: IAppUserInfoRepository,
         private documentsValidationRepository: IAppUserDocumentValidationRepository
     ) { }
 
-    async execute(data: DocumentValidationProps, user_id: string) {
-        
+    async execute(data: DocumentValidationProps, document: string) {
+
+        if (!document) throw new CustomError("Document is required", 400)
+        const adjustedDocument = new DocumentValidator()
+
+        const validatedDocument = adjustedDocument.validator(document)
+
         ///find user
-        const getUser = await this.userAuthRepository.findById(user_id)
-        if(!getUser) throw new CustomError("User not found", 400)
-        
+        const getUser = await this.userInfoRepository.findByDocumentUserInfo(validatedDocument)
+        if (!getUser) throw new CustomError("User not found", 400)
+
         //Check which document is being sent and update status to 'under_analysis'
         await this.getDocumentType(data)
 
-        if(getUser.UserInfo.UserValidation?.uuid){
+        if (getUser.user_document_validation_uuid) {
             const updateDocuments = {
-                uuid: getUser.UserInfo.UserValidation?.uuid,
+                uuid: getUser.user_document_validation_uuid.uuid,
                 ...data
             }
-            await this.documentsValidationRepository.save(updateDocuments, getUser.UserInfo.uuid)
+            await this.documentsValidationRepository.save(updateDocuments, getUser.uuid.uuid)
             return
         }
 
         const documentsEntity = await DocumentValidationEntity.create(data)
 
-        await this.documentsValidationRepository.save(documentsEntity, getUser.UserInfo.uuid)
+        await this.documentsValidationRepository.save(documentsEntity, getUser.uuid.uuid)
         return
-        
+
     }
     private async getDocumentType(data: DocumentValidationProps): Promise<void> {
 

@@ -16,7 +16,7 @@ const authenticateAdmin = {
     password: inputNewAdmin.password
 };
 
-let authToken: string;
+let authUserToken: string;
 
 const inputNewAppUser: InputCreateAppUserDTO = {
     user_info_uuid: null,
@@ -30,11 +30,25 @@ const authenticateAppUser = {
     document: inputNewAppUser.document,
     password: inputNewAppUser.password
 }
+
+const inputUserwithInfo = {
+    user_info_uuid: new Uuid("8ecfc6ca-b943-4c50-afd2-f86c32542b8c"),
+    document: '40353978060',
+    email: 'other-user@email.com',
+    password: 'senha123',
+    is_active: true
+}
+
+const authenticateOtherAppUser = {
+    document: inputNewAppUser.document,
+    password: inputNewAppUser.password
+}
+
 const inputUserInfo: InputCreateUserInfoDTO = {
     uuid: new Uuid("8ecfc6ca-b943-4c50-afd2-f86c32542b8c"),
     business_info_uuid: null,
     address_uuid: null,
-    document: '11234644053',
+    document: '40353978060',
     document2: null,
     document3: null,
     full_name: "ksjhfd qjf asfa ",
@@ -43,7 +57,7 @@ const inputUserInfo: InputCreateUserInfoDTO = {
     gender: null,
     date_of_birth: null,
     phone: null,
-    email: "email@email.com",
+    email: "other-user@email.com",
     salary: null,
     company_owner: false,
     status: Status.active,
@@ -55,9 +69,8 @@ const inputUserInfo: InputCreateUserInfoDTO = {
     user_document_validation_uuid: null,
 }
 
-beforeAll(async () => {
-    await request(app).post('/')
-})
+let otherUserToken: string
+
 
 describe("E2E App User Auth tests", () => {
 
@@ -73,7 +86,7 @@ describe("E2E App User Auth tests", () => {
                 is_active: true
             }
             const user2 = await request(app).post("/app-user").send(inputNewAppUser2)
-
+            
             expect(user2.statusCode).toBe(400)
             expect(user2.body.error).toEqual("Document must have 11 characters")
 
@@ -97,6 +110,7 @@ describe("E2E App User Auth tests", () => {
         it("Should create a new app user", async () => {
 
             const result = await request(app).post("/app-user").send(inputNewAppUser)
+
             expect(result.statusCode).toBe(201)
             expect(result.body.document).toEqual(inputNewAppUser.document)
             expect(result.body.email).toEqual(inputNewAppUser.email)
@@ -118,7 +132,7 @@ describe("E2E App User Auth tests", () => {
 
         })
 
-        
+
         it("Should throw an error if email is already registered", async () => {
             const inputNewAppUser2: InputCreateAppUserDTO = {
                 user_info_uuid: null,
@@ -140,7 +154,7 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if document is missing ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: '',
-                password:'password'
+                password: 'password'
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Document/password is incorrect - 0")
@@ -149,7 +163,7 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if password is missing ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: 'document',
-                password:''
+                password: ''
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Document/password is incorrect - 0")
@@ -158,7 +172,7 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if document does not have 11 digits ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: '112346440535485',
-                password:'password'
+                password: 'password'
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Invalid document - 1")
@@ -166,7 +180,7 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if all digits are equals ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: '00000000000',
-                password:'password'
+                password: 'password'
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Invalid document - 2")
@@ -174,7 +188,7 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if document is invalid ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: '12345678912',
-                password:'password'
+                password: 'password'
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Invalid document - 3")
@@ -183,24 +197,64 @@ describe("E2E App User Auth tests", () => {
         it("Should throw an error if document is not found ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: '40353978060',
-                password:inputNewAppUser.password
+                password: inputNewAppUser.password
             })
             expect(result.statusCode).toBe(401)
-            expect(result.body.error).toBe("Document/password is incorrect")
+            expect(result.body.error).toBe("Document/password is incorrect 1")
         })
 
         it("Should throw an error if password is incorrect ", async () => {
             const result = await request(app).post("/login-app-user").send({
                 document: inputNewAppUser.document,
-                password:'inputNewAppUser.password'
+                password: 'inputNewAppUser.password'
             })
             expect(result.statusCode).toBe(401)
             expect(result.body.error).toBe("Document/password is incorrect")
         })
 
-        it("Should login app user", async () => {
+        it("Should login app user with only number document", async () => {
             const result = await request(app).post("/login-app-user").send(authenticateAppUser)
+
+            authUserToken = result.body.token
             expect(result.statusCode).toBe(200)
+        })
+        it("Should login app user with only number document", async () => {
+            const input = {
+                document: '112.346.440-53',
+                password: authenticateAppUser.password
+            }
+
+            const result = await request(app).post("/login-app-user").send(input)
+
+            authUserToken = result.body.token
+            expect(result.statusCode).toBe(200)
+        })
+    })
+
+    describe("App user details", () => {
+
+        it("Should throw an error if token is missing", async () => {
+
+            const result = await request(app).get("/app-user")
+
+            expect(result.statusCode).toBe(401)
+            expect(result.body.error).toBe("Token is missing")
+        })
+
+        it("Should return only user auth", async () => {
+
+            const result = await request(app)
+                .get("/app-user")
+                .set('Authorization', `Bearer ${authUserToken}`)
+
+
+            expect(result.statusCode).toBe(200)
+            expect(result.body.status).toBeFalsy()
+            expect(result.body.UserAuthDetails.document).toEqual(inputNewAppUser.document)
+            expect(result.body.UserAuthDetails.email).toEqual(inputNewAppUser.email)
+            expect(result.body.UserInfo).toBeFalsy()
+            expect(result.body.UserAddress).toBeFalsy()
+            expect(result.body.UserValidation).toBeFalsy()
         })
 
     })

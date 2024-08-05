@@ -25,9 +25,10 @@ const AppUserInfoMockRepository = () => {
         saveOrUpdate: jest.fn(),
         findByDocumentUserInfo: jest.fn(),
         //findByEmailUserInfo: jest.fn(),
-        // findByDocument2UserInfo: jest.fn(),
+        findByDocument2UserInfo: jest.fn(),
         // findByDocument3UserInfo: jest.fn(),
-        // findManyByBusiness: jest.fn(),
+        findManyByBusiness: jest.fn(),
+        save: jest.fn(),
         // create: jest.fn(),
         // update: jest.fn(),
         // find: jest.fn(),
@@ -90,7 +91,7 @@ describe("Unity test create app user auth", () => {
     it("Should create a new User", async () => {
         const appUserInput: InputCreateAppUserDTO = {
             user_info_uuid: null,
-            document: '40353978060',
+            document: '403.539.780-60',
             email: 'email@email.com',
             password: 'senha123',
             is_active: true
@@ -102,10 +103,9 @@ describe("Unity test create app user auth", () => {
         const usecase = new AppUserAuthSignUpUsecase(appUserAuthMockRepository, appUserInfoMockRepository)
 
         const output = await usecase.execute(appUserInput)
-
         //expect(output).toHaveProperty('uuid')
         expect(output.user_info_uuid).toEqual(appUserInput.user_info_uuid)
-        expect(output.document).toEqual(appUserInput.document)
+        expect(output.document).toEqual('40353978060')
         expect(output.email).toEqual(appUserInput.email)
         expect(output.is_active).toEqual(appUserInput.is_active)
     })
