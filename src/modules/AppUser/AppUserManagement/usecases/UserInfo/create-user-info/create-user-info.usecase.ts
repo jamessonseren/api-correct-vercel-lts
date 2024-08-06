@@ -1,21 +1,21 @@
 import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 import { CustomError } from "../../../../../../errors/custom.error";
-import { InputCreateUserInfoDTO } from "../../../../app-user-dto/app-user.dto";
+import { InputCreateUserInfoDTO, OutputCreateUserInfoDTO } from "../../../../app-user-dto/app-user.dto";
 import { AppUserAuthSignUpEntity } from "../../../entities/app-user-auth.entity";
 import { AppUserInfoEntity, AppUserInfoProps } from "../../../entities/app-user-info.entity";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
 
-export class AppUserInfoUsecase {
+export class CreateAppUserInfoUsecase {
     constructor(
         private appUserInfoRepository: IAppUserInfoRepository,
         private appUserAuthRepository: IAppUserAuthRepository
     ) { }
 
-    async execute(data: InputCreateUserInfoDTO, user_id: Uuid) {
+    async execute(data: InputCreateUserInfoDTO): Promise<OutputCreateUserInfoDTO> {
 
         //find authenticated user
-        const findAuthUser = await this.appUserAuthRepository.find(user_id)
+        const findAuthUser = await this.appUserAuthRepository.find(data.user_id)
         if (!findAuthUser) throw new CustomError("Authorization Error", 401)
 
         data.document = findAuthUser.document
@@ -24,24 +24,24 @@ export class AppUserInfoUsecase {
         //check if document is already registered
         const findBydocument = await this.appUserInfoRepository.findByDocumentUserInfo(findAuthUser.document)
 
-        if (findBydocument && !findAuthUser.user_info_uuid.uuid) {
+        if (findBydocument && !findAuthUser.user_info_uuid) {
+            //In this situation, we are making sure that the tables UserAuth and UserInfo are connected
 
             const authEntity = new AppUserAuthSignUpEntity(findAuthUser)
             authEntity.changeUserInfo(findBydocument.uuid)
 
             //update authUser table
             await this.appUserAuthRepository.update(authEntity)
-
-            throw new CustomError("User already registered", 409)
+            throw new CustomError("User Info already registered", 409)
         }
 
-        if (findBydocument) throw new CustomError("User Info already registered", 409)
+        if (findBydocument) throw new CustomError("User Info already registered - 1", 409)
 
         const userInfoEntity = await AppUserInfoEntity.create(data)
 
-        const user = await this.appUserInfoRepository.save(userInfoEntity)
+        await this.appUserInfoRepository.create(userInfoEntity)
 
-        return user
+        return {}
 
 
     }

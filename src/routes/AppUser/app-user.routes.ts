@@ -15,6 +15,7 @@ import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/compa
 import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { getSingleUserByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-single-user-by-business-admin";
+import { getUserInfobyUser } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-user-info-by-user";
 
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
@@ -57,6 +58,10 @@ appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response)
     await createUserAddressController.handle(request, response)
 })
 
+//get user info by user
+appUserRouter.get("/app-user/info", appUserIsAuth, async (request, response) => {
+    await getUserInfobyUser.handle(request, response)
+})
 
 //create documents for validation
 appUserRouter.post("/app-user/document-validation/:document", appUserIsAuth, async (request, response) => {

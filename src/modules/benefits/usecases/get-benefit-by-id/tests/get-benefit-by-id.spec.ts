@@ -8,7 +8,7 @@ const benefitInput: InputCreateBenefitDto = {
   description: "Descrição Vale Alimentação",
   item_type: 'gratuito',
   item_category: 'pre_pago',
-  parent_uuid: '',
+  parent_uuid: null,
   created_at: '',
   updated_at: ''
 }

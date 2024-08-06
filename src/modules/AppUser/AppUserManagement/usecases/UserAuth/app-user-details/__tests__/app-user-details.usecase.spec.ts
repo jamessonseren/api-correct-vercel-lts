@@ -35,6 +35,9 @@ const AppUserInfoMockRepository = () => {
         findAll: jest.fn(),
         saveOrUpdate: jest.fn(),
         findByDocumentUserInfo: jest.fn(),
+        save: jest.fn(),
+        findByDocument2UserInfo: jest.fn(),
+        findManyByBusiness:jest.fn()
         // create: jest.fn(),
         // update: jest.fn(),
         // find: jest.fn(),

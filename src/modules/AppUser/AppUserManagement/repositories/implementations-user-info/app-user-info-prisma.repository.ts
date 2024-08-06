@@ -14,8 +14,38 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
         throw new Error("Method not implemented.");
     }
     
-    create(entity: AppUserInfoEntity): Promise<void> {
-        throw new Error("Method not implemented.");
+    async create(data: AppUserInfoEntity): Promise<void> {
+        await prismaClient.$transaction([
+
+            prismaClient.userInfo.create({
+                data: {
+                    uuid: data.uuid.uuid,
+                    business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
+                    document: data.document,
+                    document2: data.document2,
+                    full_name: data.full_name,
+                    internal_company_code: data.internal_company_code,
+                    gender: data.gender,
+                    date_of_birth: data.date_of_birth,
+                    salary: data.salary,
+                    company_owner: data.company_owner,
+                    marital_status: data.marital_status,
+                    dependents_quantity: data.dependents_quantity,
+                    created_at: newDateF(new Date()),
+                    
+                }
+            }),
+
+            prismaClient.userAuth.update({
+                where: {
+                    document: data.document
+                },
+                data: {
+                    user_info_uuid: data.uuid.uuid,
+                    updated_at: newDateF(new Date())
+                }
+            })
+        ])
     }
     update(entity: AppUserInfoEntity): Promise<void> {
         throw new Error("Method not implemented.");
@@ -92,57 +122,58 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
     //     return []
     // }
     async saveOrUpdate(data: InputCreateUserInfoDTO): Promise<void> {
-    
-        await prismaClient.userInfo.upsert({
-            where:{
-                document: data.document
-            },
-            create:{
-                uuid: data.uuid.uuid,
-                business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
-                document: data.document,
-                document2: data.document2,
-                full_name: data.full_name,
-                internal_company_code: data.internal_company_code,
-                gender: data.gender,
-                date_of_birth: data.date_of_birth,
-                salary: data.salary,
-                phone: data.phone,
-                email: data.email,
-                company_owner: data.company_owner,
-                status: data.status,
-                function: data.function,
-                recommendation_code: data.recommendation_code,
-                is_authenticated: data.is_authenticated,
-                marital_status: data.marital_status,
-                dependents_quantity: data.dependents_quantity,
-                user_document_validation_uuid: data.user_document_validation_uuid ? data.user_document_validation_uuid.uuid : null,
-                created_at: data.created_at
+        throw new Error("Method not implemented.");
 
-            },
-            update:{
-                business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
-                document: data.document,
-                document2: data.document2,
-                full_name: data.full_name,
-                internal_company_code: data.internal_company_code,
-                gender: data.gender,
-                date_of_birth: data.date_of_birth,
-                salary: data.salary,
-                phone: data.phone,
-                email: data.email,
-                company_owner: data.company_owner,
-                status: data.status,
-                function: data.function,
-                recommendation_code: data.recommendation_code,
-                is_authenticated: data.is_authenticated,
-                marital_status: data.marital_status,
-                dependents_quantity: data.dependents_quantity,
-                user_document_validation_uuid: data.user_document_validation_uuid ? data.user_document_validation_uuid.uuid : null,
-                updated_at: data.updated_at
+        // await prismaClient.userInfo.upsert({
+        //     where:{
+        //         document: data.document
+        //     },
+        //     create:{
+        //         uuid: data.uuid.uuid,
+        //         business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
+        //         document: data.document,
+        //         document2: data.document2,
+        //         full_name: data.full_name,
+        //         internal_company_code: data.internal_company_code,
+        //         gender: data.gender,
+        //         date_of_birth: data.date_of_birth,
+        //         salary: data.salary,
+        //         phone: data.phone,
+        //         email: data.email,
+        //         company_owner: data.company_owner,
+        //         status: data.status,
+        //         function: data.function,
+        //         recommendation_code: data.recommendation_code,
+        //         is_authenticated: data.is_authenticated,
+        //         marital_status: data.marital_status,
+        //         dependents_quantity: data.dependents_quantity,
+        //         user_document_validation_uuid: data.user_document_validation_uuid ? data.user_document_validation_uuid.uuid : null,
+        //         created_at: data.created_at
 
-            }
-        })
+        //     },
+        //     update:{
+        //         business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
+        //         document: data.document,
+        //         document2: data.document2,
+        //         full_name: data.full_name,
+        //         internal_company_code: data.internal_company_code,
+        //         gender: data.gender,
+        //         date_of_birth: data.date_of_birth,
+        //         salary: data.salary,
+        //         phone: data.phone,
+        //         email: data.email,
+        //         company_owner: data.company_owner,
+        //         status: data.status,
+        //         function: data.function,
+        //         recommendation_code: data.recommendation_code,
+        //         is_authenticated: data.is_authenticated,
+        //         marital_status: data.marital_status,
+        //         dependents_quantity: data.dependents_quantity,
+        //         user_document_validation_uuid: data.user_document_validation_uuid ? data.user_document_validation_uuid.uuid : null,
+        //         updated_at: data.updated_at
+
+        //     }
+        // })
 
        
     }
