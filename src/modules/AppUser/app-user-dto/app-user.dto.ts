@@ -41,7 +41,6 @@ export interface OutputfindByDocumentDTO {
 
 //App User Info
 export interface InputCreateUserInfoDTO {
-    uuid: Uuid,
     business_info_uuid: Uuid | null;
     address_uuid: Uuid | null;
     document: string;
@@ -65,8 +64,12 @@ export interface InputCreateUserInfoDTO {
     user_document_validation_uuid: Uuid | null;
     created_at?: string
     updated_at?: string
+    user_id: Uuid | null
 }
 
+export interface OutputCreateUserInfoDTO {
+
+}
 
 
 

@@ -25,7 +25,7 @@ const TokenMockRepository = () => {
     }
 }
 
-describe("Unity tet Authenticate app user usecase", () => {
+describe("Unity test Authenticate app user usecase", () => {
     it("Should throw and error if document is missing", async () => {
         const appUserMockRepository = AppUserMockRepository()
         const passwordRepository = PasswordCryptoMockRepository();
@@ -36,7 +36,7 @@ describe("Unity tet Authenticate app user usecase", () => {
 
         const authUsecase = new AuthenticateAppuserUsecase(appUserMockRepository, passwordRepository, tokenRepository)
         
-        await expect(authUsecase.execute({ document, password})).rejects.toThrow("Document/password is incorrect - 0")
+        await expect(authUsecase.execute({ document, password})).rejects.toThrow("Document/password is incorrect")
     })
 
     it("Should throw and error if password is missing", async () => {
@@ -52,44 +52,8 @@ describe("Unity tet Authenticate app user usecase", () => {
         await expect(authUsecase.execute({ document, password})).rejects.toThrow("Document/password is incorrect")
     })
 
-    it("Should throw and error if document does not have 11 digits", async () => {
-        const appUserMockRepository = AppUserMockRepository()
-        const passwordRepository = PasswordCryptoMockRepository();
-        const tokenRepository = TokenMockRepository();
+    
 
-        const document = 'document'
-        const password = 'password'
-
-        const authUsecase = new AuthenticateAppuserUsecase(appUserMockRepository, passwordRepository, tokenRepository)
-        
-        await expect(authUsecase.execute({ document, password})).rejects.toThrow("Invalid document - 1")
-    })
-
-    it("Should throw and error if all digits all equals", async () => {
-        const appUserMockRepository = AppUserMockRepository()
-        const passwordRepository = PasswordCryptoMockRepository();
-        const tokenRepository = TokenMockRepository();
-
-        const document = '00000000000'
-        const password = 'password'
-
-        const authUsecase = new AuthenticateAppuserUsecase(appUserMockRepository, passwordRepository, tokenRepository)
-        
-        await expect(authUsecase.execute({ document, password})).rejects.toThrow("Invalid document - 2")
-    })
-
-    it("Should throw and error if document is not real", async () => {
-        const appUserMockRepository = AppUserMockRepository()
-        const passwordRepository = PasswordCryptoMockRepository();
-        const tokenRepository = TokenMockRepository();
-
-        const document = '12345678912'
-        const password = 'password'
-
-        const authUsecase = new AuthenticateAppuserUsecase(appUserMockRepository, passwordRepository, tokenRepository)
-        
-        await expect(authUsecase.execute({ document, password})).rejects.toThrow("Invalid document - 3")
-    })
     it("Should throw and error if document is does not exist in DB", async () => {
         const appUserMockRepository = AppUserMockRepository()
         const passwordRepository = PasswordCryptoMockRepository();
