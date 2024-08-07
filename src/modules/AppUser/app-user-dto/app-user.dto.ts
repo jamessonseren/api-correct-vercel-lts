@@ -39,37 +39,6 @@ export interface OutputfindByDocumentDTO {
     updated_at: string
 }
 
-//App User Info
-export interface InputCreateUserInfoDTO {
-    business_info_uuid: Uuid | null;
-    address_uuid: Uuid | null;
-    document: string;
-    document2: string | null;
-    document3: string | null;
-    full_name: string;
-    display_name: string | null;
-    internal_company_code: string | null;
-    gender: string | null;
-    date_of_birth: string;
-    salary: number | null;
-    phone: string | null;
-    email: string
-    company_owner: boolean;
-    status: Status;
-    function: string | null;
-    recommendation_code: string | null;
-    is_authenticated: boolean;
-    marital_status: string | null;
-    dependents_quantity: number;
-    user_document_validation_uuid: Uuid | null;
-    created_at?: string
-    updated_at?: string
-    user_id: Uuid | null
-}
-
-export interface OutputCreateUserInfoDTO {
-
-}
 
 
 

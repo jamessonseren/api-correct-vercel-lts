@@ -1,6 +1,6 @@
 import { Uuid } from '../../../../../../../@shared/ValueObjects/uuid.vo';
-import { InputCreateUserInfoDTO } from '../../../../../app-user-dto/app-user.dto';
 import { CreateAppUserInfoUsecase } from '../create-user-info.usecase'
+import { InputCreateUserInfoDTO } from '../dto/create-user-info.dto';
 
 const AppUserInfoMockRepository = () => {
     return {

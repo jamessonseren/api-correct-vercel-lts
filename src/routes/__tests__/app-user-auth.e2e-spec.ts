@@ -1,9 +1,7 @@
 import request from "supertest"
 import { app } from "../../app"
-import { InputCreateAppUserDTO, InputCreateUserInfoDTO } from "../../modules/AppUser/app-user-dto/app-user.dto"
-import { Status } from "@prisma/client"
-import { Uuid } from "../../@shared/ValueObjects/uuid.vo"
-import { OutputFindUserByUserDTO } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-user-info-by-user/dto/get-user-by-user.dto"
+import { InputCreateAppUserDTO } from "../../modules/AppUser/app-user-dto/app-user.dto"
+import { InputCreateUserInfoDTO } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/create-user-info/dto/create-user-info.dto";
 
 const inputNewAdmin = {
     name: "Admin Correct",
