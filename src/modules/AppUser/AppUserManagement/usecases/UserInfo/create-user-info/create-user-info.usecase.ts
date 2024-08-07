@@ -1,10 +1,10 @@
 import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 import { CustomError } from "../../../../../../errors/custom.error";
-import { InputCreateUserInfoDTO, OutputCreateUserInfoDTO } from "../../../../app-user-dto/app-user.dto";
 import { AppUserAuthSignUpEntity } from "../../../entities/app-user-auth.entity";
 import { AppUserInfoEntity, AppUserInfoProps } from "../../../entities/app-user-info.entity";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
+import { InputCreateUserInfoDTO, OutputCreateUserInfoDTO } from "./dto/create-user-info.dto";
 
 export class CreateAppUserInfoUsecase {
     constructor(

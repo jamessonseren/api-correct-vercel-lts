@@ -38,7 +38,6 @@ describe("Unity test Correct Admin Entity ", () => {
 
     it("Should create an admin", async () => {
         const admin = await CorrectAdminEntity.create(validInput)
-        console.log({admin})
         // expect(admin).toHaveProperty('uuid');
         expect(admin.uuid).toBeInstanceOf(Uuid)
         
