@@ -1,5 +1,4 @@
 import { AddressEntity } from "../../../../../../infra/shared/address/address.entity";
-import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { IAppUserAddressRepository } from "../../../repositories/app-user-address.repository";
 import { InputCreateUserAddressDTO, OutputCreateUserAddressDTO } from "./dto/create-app-user-address.dto";
 

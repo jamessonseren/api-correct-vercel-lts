@@ -22,7 +22,6 @@ export class AppUserDetailsController {
             
             return res.json(userDetails)
         }catch(err: any){
-            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message
             })
