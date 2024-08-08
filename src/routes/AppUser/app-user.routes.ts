@@ -20,6 +20,9 @@ import { getUserInfobyUser } from "../../modules/AppUser/AppUserManagement/useca
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
 
+
+//**********User Auth*********** */
+
 //sign up user
 appUserRouter.post('/app-user', async (request, response) => {
     await appUserAuthSignUpController.handle(request, response)
@@ -30,33 +33,24 @@ appUserRouter.post("/login-app-user", async (request, response) => {
     await authenticateAppUserController.handle(request, response)
 })
 
-//User details Authenticated
+//User details Authenticated by user
 appUserRouter.get("/app-user", appUserIsAuth, async (request, response) => {
     await userDetailsController.handle(request, response)
 })
 
-//Get user details by business admin
-appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, response) => {
-    await getSingleUserByAdmin.handle(request, response)
-})
+
+//**********User Info*********** */
 
 //user Details by document
 appUserRouter.get("/app-user/document/:document", async (request, response) => {
     await getByDocumentController.handle(request, response)
 })
 
-
-
-
 //register user info by authenticated user
 appUserRouter.post("/app-user/info", appUserIsAuth, async (request, response) => {
     await createUserInfoController.handle(request, response)
 })
 
-//register user info by authenticated user
-appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response) => {
-    await createUserAddressController.handle(request, response)
-})
 
 //get user info by user
 appUserRouter.get("/app-user/info", appUserIsAuth, async (request, response) => {
@@ -77,6 +71,19 @@ appUserRouter.post("/app-users-by-correct", correctIsAuth, upload.single('file')
 //Get app users by business admin
 appUserRouter.get("/business-admin/app-users", companyIsAuth, async (request, response) => {
     await getUsersByAdmin.handle(request, response)
+})
+
+//Get user details by business admin
+appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, response) => {
+    await getSingleUserByAdmin.handle(request, response)
+})
+
+
+//**********User Address*********** */
+
+//create app user address by authenticated user
+appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response) => {
+    await createUserAddressController.handle(request, response)
 })
 
 
