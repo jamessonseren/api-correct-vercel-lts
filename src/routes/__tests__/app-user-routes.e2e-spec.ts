@@ -377,7 +377,7 @@ describe("E2E App User Auth tests", () => {
             })
         })
     })
-    describe("User Address", () => {
+    describe("Unity test User Address", () => {
         describe("Create app user address", () => {
             it("Should throw an error if line 1 is missing", async () => {
                 const input = {
@@ -389,7 +389,6 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -407,7 +406,7 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -426,8 +425,9 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
+
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
 
@@ -445,7 +445,7 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -464,7 +464,7 @@ describe("E2E App User Auth tests", () => {
                     city: "",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -483,7 +483,7 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -502,7 +502,7 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 }
 
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input)
@@ -521,15 +521,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Line1 must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if line 2 is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -540,15 +540,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Line2 must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if line 3 is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -559,15 +559,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Line3 must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if postal code is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -578,15 +578,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Postal code must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if neighborhood is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -597,15 +597,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Neighborhood must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if city is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -616,15 +616,15 @@ describe("E2E App User Auth tests", () => {
                     city: 123,
                     state: "Estado teste",
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("City must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if state is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -635,15 +635,15 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: 123,
                     country: "País",
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("State must be a string");
                 expect(result.statusCode).toBe(400);
             });
-    
+
             it("Should throw an error if country is not a string", async () => {
                 const input = {
                     line1: "Rua teste",
@@ -654,14 +654,148 @@ describe("E2E App User Auth tests", () => {
                     city: "Cidade teste",
                     state: "Estado teste",
                     country: 123,
-                    user_uuid: new Uuid("3c17d070-d708-4eb3-a981-f5fb69182c74")
+
                 };
-    
+
                 const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
-    
+
                 expect(result.body.error).toBe("Country must be a string");
                 expect(result.statusCode).toBe(400);
             });
+
+            it("Should create a new user address", async () => {
+                const input = {
+                    line1: "Rua teste",
+                    line2: "41B",
+                    line3: "",
+                    postal_code: "02457-458",
+                    neighborhood: "Bairro Teste",
+                    city: "Cidade teste",
+                    state: "Estado teste",
+                    country: "Brasil",
+
+                };
+
+                const result = await request(app).post("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
+                const inputUserInfo = {
+                    document: '11234644053',
+                }
+
+                const userInfo = await request(app).get("/app-user/info").set('Authorization', `Bearer ${authUserToken}`).send(inputUserInfo)
+               
+                expect(result.statusCode).toBe(201);
+                expect(result.body.line1).toEqual(input.line1)
+                expect(result.body.line2).toEqual(input.line2)
+                expect(result.body.line3).toEqual(input.line3)
+                expect(result.body.postal_code).toEqual(input.postal_code)
+                expect(result.body.neighborhood).toEqual(input.neighborhood)
+                expect(result.body.city).toEqual(input.city)
+                expect(result.body.state).toEqual(input.state)
+                expect(result.body.country).toEqual(input.country)
+                expect(result.body.uuid).toEqual(userInfo.body.address_uuid)
+            });
+        })
+
+        describe("Get User address", () => {
+            it("Should throw an error if user document is missing", async () => {
+                const input = {
+                    document: ''
+                }
+                const result = await request(app).get("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
+
+                expect(result.body.error).toBe("User document is required")
+                expect(result.statusCode).toBe(400);
+
+            })
+
+            it("Should throw an error if user cannot be found by document", async () => {
+                const input = {
+                    document: '321564894518'
+                }
+                const result = await request(app).get("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(input);
+
+                expect(result.body.error).toBe("Unable to find user by document")
+                expect(result.statusCode).toBe(404);
+
+            })
+            it("Should throw an error if address does not exist", async () => {
+                const inputOtherUser: InputCreateAppUserDTO = {
+                    user_info_uuid: null,
+                    document: '630.996.530-12',
+                    email: 'email-new@email.com',
+                    password: 'senha123',
+                    is_active: true
+                }
+
+                const inputLoginUser = {
+                    document: inputOtherUser.document,
+                    password: inputOtherUser.password,
+                }
+                
+                const inputCreateUserInfo: InputCreateUserInfoDTO = {
+                    business_info_uuid: null,
+                    address_uuid: null,
+                    document: '630.996.530-12',
+                    document2: null,
+                    document3: null,
+                    full_name: "User Full Name",
+                    display_name: null,
+                    internal_company_code: null,
+                    gender: 'Male',
+                    date_of_birth: '05/04/94',
+                    salary: null,
+                    phone: null,
+                    email: "email-new@email.com",
+                    company_owner: false,
+                    status: 'pending',
+                    function: null,
+                    recommendation_code: null,
+                    is_authenticated: false,
+                    marital_status: null,
+                    dependents_quantity: 1,
+                    user_document_validation_uuid: null,
+                    user_id: null
+                }
+
+                const inputGetUserAddress = {
+                    document: inputCreateUserInfo.document
+                }
+
+                //create new User
+                const otherUser = await request(app).post("/app-user").send(inputOtherUser)
+                //login user
+                const loginUser = await request(app).post("/login-app-user").send(inputLoginUser)
+                const newAuthUserToken = loginUser.body.token
+
+                //create user info
+                await request(app).post("/app-user/info").set('Authorization', `Bearer ${newAuthUserToken}`).send(inputCreateUserInfo)
+                //find address
+                const result = await request(app).get("/app-user/address").set('Authorization', `Bearer ${newAuthUserToken}`).send(inputGetUserAddress);
+
+                expect(result.body.error).toBe("Unable to find user address")
+                expect(result.statusCode).toBe(404);
+
+            })
+
+            it("Should return user Address", async () => {
+                const inputUserAddress = {
+                    document: '11234644053',
+                }
+
+            
+                const result = await request(app).get("/app-user/address").set('Authorization', `Bearer ${authUserToken}`).send(inputUserAddress);
+
+                expect(result.statusCode).toBe(200);
+                expect(result.body.line1).toBe("Rua teste")
+                expect(result.body.line2).toBe("41B")
+                expect(result.body.line3).toBeFalsy()
+                expect(result.body.postal_code).toBe("02457-458")
+                expect(result.body.neighborhood).toBe("Bairro Teste")
+                expect(result.body.city).toBe("Cidade teste")
+                expect(result.body.state).toBe("Estado teste")
+                expect(result.body.country).toBe("Brasil")
+
+            })
         })
     })
     //Fazer testes de quando o usuário já estiver registrado em userInfo

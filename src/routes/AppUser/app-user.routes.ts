@@ -16,6 +16,7 @@ import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecase
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { getSingleUserByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-single-user-by-business-admin";
 import { getUserInfobyUser } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-user-info-by-user";
+import { getUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/get-app-user-address";
 
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
@@ -84,6 +85,11 @@ appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, res
 //create app user address by authenticated user
 appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response) => {
     await createUserAddressController.handle(request, response)
+})
+
+//get app user address by authenticated user
+appUserRouter.get("/app-user/address", appUserIsAuth, async (request, response) => {
+    await getUserAddressController.handle(request, response)
 })
 
 
