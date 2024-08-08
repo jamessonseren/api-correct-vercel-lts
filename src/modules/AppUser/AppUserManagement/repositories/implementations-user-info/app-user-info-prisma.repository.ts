@@ -2,8 +2,9 @@ import { Uuid } from "../../../../../@shared/ValueObjects/uuid.vo";
 import { prismaClient } from "../../../../../infra/databases/prisma.config";
 import { newDateF } from "../../../../../utils/date";
 import { AppUserDataEntity } from "../../../UserByCorrect/entities/appuser-data.entity";
-import { UserInfoResponse, AppUserInfoRequest, InputCreateUserInfoDTO } from "../../../app-user-dto/app-user.dto";
+import { UserInfoResponse, AppUserInfoRequest } from "../../../app-user-dto/app-user.dto";
 import { AppUserInfoEntity } from "../../entities/app-user-info.entity";
+import { InputCreateUserInfoDTO } from "../../usecases/UserInfo/create-user-info/dto/create-user-info.dto";
 import { IAppUserInfoRepository } from "../app-user-info.repository";
 
 export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
