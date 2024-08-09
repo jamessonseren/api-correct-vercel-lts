@@ -14,6 +14,7 @@ export class GetAppUserAddressUsecase{
         if(!document) throw new CustomError("User document is required", 400)
         
         const numberDocuments = this.processDocument(document)
+        
         //get user info
         const userInfo = await this.userInfoRepository.findByDocumentUserInfo(numberDocuments)
         if(!userInfo) throw new CustomError("Unable to find user by document", 404)

@@ -16,27 +16,41 @@ export class AppUserAddressPrismaRepository implements IAppUserAddressRepository
                     neighborhood: data.neighborhood,
                     city: data.city,
                     state: data.state,
-                    country: data.country
+                    country: data.country,
+                    created_at: data.created_at
                 }
-            })
-        ]),
-
-            await prismaClient.userInfo.update({
+            }),
+            prismaClient.userInfo.update({
                 where: {
-                    document
+                    document: document 
                 },
                 data: {
                     address_uuid: data.uuid.uuid,
-                    updated_at: newDateF(new Date())
+                    updated_at: newDateF(new Date()) 
                 }
             })
+        ]);
     }
     async create(data: AddressEntity): Promise<void> {
         throw new Error("Method not implemented.");
 
     }
-    update(entity: AddressEntity): Promise<void> {
-        throw new Error("Method not implemented.");
+    async update(data: AddressEntity): Promise<void> {
+        await prismaClient.address.update({
+            where: {
+                uuid: data.uuid.uuid
+            },
+            data: {
+                line1: data.line1,
+                line2: data.line2,
+                postal_code: data.postal_code,
+                neighborhood: data.neighborhood,
+                city: data.city,
+                state: data.state,
+                country: data.country,
+                updated_at: data.updated_at
+            }
+        })
     }
     async find(id: Uuid): Promise<AddressEntity | null> {
         const address = await prismaClient.address.findUnique({
@@ -45,7 +59,7 @@ export class AppUserAddressPrismaRepository implements IAppUserAddressRepository
             }
         })
 
-        if(!address) return null
+        if (!address) return null
 
         return {
             uuid: new Uuid(address.uuid),
