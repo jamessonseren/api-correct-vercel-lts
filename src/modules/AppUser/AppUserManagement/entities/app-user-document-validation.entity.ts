@@ -2,8 +2,11 @@ import { UserDocumentValidationStatus } from "@prisma/client";
 import { randomUUID } from 'crypto';
 import { CustomError } from "../../../../errors/custom.error";
 import validator from "validator";
+import { newDateF } from "../../../../utils/date";
+import { Uuid } from "../../../../@shared/ValueObjects/uuid.vo";
 
 export type DocumentValidationProps = {
+    uuid?: Uuid
     document_front_base64: string;
     document_front_status: UserDocumentValidationStatus;
     document_back_base64: string;
@@ -12,10 +15,12 @@ export type DocumentValidationProps = {
     selfie_status: UserDocumentValidationStatus;
     document_selfie_base64: string;
     document_selfie_status: UserDocumentValidationStatus;
+    created_at?: string
+    updated_at?: string
 };
 
 export class DocumentValidationEntity {
-    private _uuid: string;
+    private _uuid: Uuid;
     private _document_front_base64: string;
     private _document_front_status: UserDocumentValidationStatus;
     private _document_back_base64: string;
@@ -24,9 +29,11 @@ export class DocumentValidationEntity {
     private _selfie_status: UserDocumentValidationStatus;
     private _document_selfie_base64: string;
     private _document_selfie_status: UserDocumentValidationStatus;
+    private _created_at?: string;
+    private _updated_at?: string
 
     constructor(props: DocumentValidationProps) {
-        this._uuid = randomUUID();
+        this._uuid = props.uuid ?? new Uuid();
         this._document_front_base64 = props.document_front_base64;
         this._document_front_status = props.document_front_status;
         this._document_back_base64 = props.document_back_base64;
@@ -35,10 +42,13 @@ export class DocumentValidationEntity {
         this._selfie_status = props.selfie_status;
         this._document_selfie_base64 = props.document_selfie_base64;
         this._document_selfie_status = props.document_selfie_status;
+        this._created_at = newDateF(new Date())
+        this._updated_at = newDateF(new Date())
+
         this.validate();
     }
 
-    get uuid(): string {
+    get uuid(): Uuid {
         return this._uuid;
     }
 
@@ -73,7 +83,13 @@ export class DocumentValidationEntity {
     get document_selfie_status(): UserDocumentValidationStatus {
         return this._document_selfie_status;
     }
+    get created_at(): string | undefined {
+        return this._created_at;
+    }
 
+    get updated_at(): string | undefined {
+        return this._updated_at
+    }
     changeDocumentFrontBase64(base64: string) {
         this._document_front_base64 = base64;
         this.validate();
