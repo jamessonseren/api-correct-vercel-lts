@@ -18,10 +18,10 @@ const authenticateAdmin = {
 };
 
 let userToken1: string;
+let userToken2: string;
+let userToken3: string
 
-let userToen2: string;
-
-const inputNewAppUser: InputCreateAppUserDTO = {
+const inputNewAppUser1: InputCreateAppUserDTO = {
     user_info_uuid: null,
     document: '11234644053',
     email: 'email@email.com',
@@ -29,11 +29,22 @@ const inputNewAppUser: InputCreateAppUserDTO = {
     is_active: true
 }
 
+const inputNewAppUser2: InputCreateAppUserDTO = {
+    user_info_uuid: null,
+    document: '283.330.980-53',
+    email: 'email2@email.com',
+    password: 'senha123',
+    is_active: true
+}
 
+const authenticateAppUser1 = {
+    document: inputNewAppUser1.document,
+    password: inputNewAppUser1.password
+}
 
-const authenticateAppUser = {
-    document: inputNewAppUser.document,
-    password: inputNewAppUser.password
+const authenticateAppUser2 = {
+    document: inputNewAppUser2.document,
+    password: inputNewAppUser2.password
 }
 
 
@@ -46,28 +57,28 @@ describe("E2E App User Auth tests", () => {
 
 
             it("Should throw an error if document is invalid", async () => {
-                const inputNewAppUser2: InputCreateAppUserDTO = {
+                const inputNewAppUser12: InputCreateAppUserDTO = {
                     user_info_uuid: null,
                     document: '112346440535454',
                     email: 'email@email.com',
                     password: 'senha123',
                     is_active: true
                 }
-                const user2 = await request(app).post("/app-user").send(inputNewAppUser2)
+                const user2 = await request(app).post("/app-user").send(inputNewAppUser12)
 
                 expect(user2.statusCode).toBe(400)
                 expect(user2.body.error).toEqual("Document must have 11 characters")
 
             })
             it("Should throw an error if email is invalid", async () => {
-                const inputNewAppUser2: InputCreateAppUserDTO = {
+                const inputNewAppUser12: InputCreateAppUserDTO = {
                     user_info_uuid: null,
                     document: '11234644053',
                     email: 'email.com',
                     password: 'senha123',
                     is_active: true
                 }
-                const user2 = await request(app).post("/app-user").send(inputNewAppUser2)
+                const user2 = await request(app).post("/app-user").send(inputNewAppUser12)
 
                 expect(user2.statusCode).toBe(400)
                 expect(user2.body.error).toEqual("Invalid email format")
@@ -77,23 +88,23 @@ describe("E2E App User Auth tests", () => {
 
             it("Should create a new app user", async () => {
 
-                const result = await request(app).post("/app-user").send(inputNewAppUser)
+                const result = await request(app).post("/app-user").send(inputNewAppUser1)
 
                 expect(result.statusCode).toBe(201)
-                expect(result.body.document).toEqual(inputNewAppUser.document)
-                expect(result.body.email).toEqual(inputNewAppUser.email)
-                expect(result.body.is_active).toEqual(inputNewAppUser.is_active)
+                expect(result.body.document).toEqual(inputNewAppUser1.document)
+                expect(result.body.email).toEqual(inputNewAppUser1.email)
+                expect(result.body.is_active).toEqual(inputNewAppUser1.is_active)
 
             })
             it("Should throw an error if document is already registered", async () => {
-                const inputNewAppUser2: InputCreateAppUserDTO = {
+                const inputNewAppUser12: InputCreateAppUserDTO = {
                     user_info_uuid: null,
                     document: '11234644053',
                     email: 'email@email.com',
                     password: 'senha123',
                     is_active: true
                 }
-                const user2 = await request(app).post("/app-user").send(inputNewAppUser2)
+                const user2 = await request(app).post("/app-user").send(inputNewAppUser12)
 
                 expect(user2.statusCode).toBe(409)
                 expect(user2.body.error).toEqual("User already has an account")
@@ -102,14 +113,14 @@ describe("E2E App User Auth tests", () => {
 
 
             it("Should throw an error if email is already registered", async () => {
-                const inputNewAppUser2: InputCreateAppUserDTO = {
+                const inputNewAppUser12: InputCreateAppUserDTO = {
                     user_info_uuid: null,
                     document: '40353978060',
                     email: 'email@email.com',
                     password: 'senha123',
                     is_active: true
                 }
-                const user2 = await request(app).post("/app-user").send(inputNewAppUser2)
+                const user2 = await request(app).post("/app-user").send(inputNewAppUser12)
 
                 expect(user2.statusCode).toBe(409)
                 expect(user2.body.error).toEqual("Email already in use")
@@ -142,7 +153,7 @@ describe("E2E App User Auth tests", () => {
             it("Should throw an error if document is not found ", async () => {
                 const result = await request(app).post("/login-app-user").send({
                     document: '40353978060',
-                    password: inputNewAppUser.password
+                    password: inputNewAppUser1.password
                 })
                 expect(result.statusCode).toBe(401)
                 expect(result.body.error).toBe("Document/password is incorrect")
@@ -150,15 +161,15 @@ describe("E2E App User Auth tests", () => {
 
             it("Should throw an error if password is incorrect ", async () => {
                 const result = await request(app).post("/login-app-user").send({
-                    document: inputNewAppUser.document,
-                    password: 'inputNewAppUser.password'
+                    document: inputNewAppUser1.document,
+                    password: 'inputNewAppUser1.password'
                 })
                 expect(result.statusCode).toBe(401)
                 expect(result.body.error).toBe("Document/password is incorrect")
             })
 
             it("Should login app user with only number document", async () => {
-                const result = await request(app).post("/login-app-user").send(authenticateAppUser)
+                const result = await request(app).post("/login-app-user").send(authenticateAppUser1)
 
                 userToken1 = result.body.token
                 expect(result.statusCode).toBe(200)
@@ -166,7 +177,7 @@ describe("E2E App User Auth tests", () => {
             it("Should login app user with full document", async () => {
                 const input = {
                     document: '112.346.440-53',
-                    password: authenticateAppUser.password
+                    password: authenticateAppUser1.password
                 }
 
                 const result = await request(app).post("/login-app-user").send(input)
@@ -194,8 +205,8 @@ describe("E2E App User Auth tests", () => {
 
                 expect(result.statusCode).toBe(200)
                 expect(result.body.status).toBeFalsy()
-                expect(result.body.UserAuthDetails.document).toEqual(inputNewAppUser.document)
-                expect(result.body.UserAuthDetails.email).toEqual(inputNewAppUser.email)
+                expect(result.body.UserAuthDetails.document).toEqual(inputNewAppUser1.document)
+                expect(result.body.UserAuthDetails.email).toEqual(inputNewAppUser1.email)
                 expect(result.body.UserInfo).toBeFalsy()
                 expect(result.body.UserAddress).toBeFalsy()
                 expect(result.body.UserValidation).toBeFalsy()
@@ -285,7 +296,7 @@ describe("E2E App User Auth tests", () => {
                 //this test still need to be created
 
 
-                // const inputNewAppUser: InputCreateAppUserDTO = {
+                // const inputNewAppUser1: InputCreateAppUserDTO = {
                 //     user_info_uuid: null,
                 //     document: '329.552.380-07',
                 //     email: 'new-user@new-user.com',
@@ -293,12 +304,12 @@ describe("E2E App User Auth tests", () => {
                 //     is_active: true
                 // }
                 // //create new user auth
-                //  await request(app).post("/app-user").send(inputNewAppUser)
+                //  await request(app).post("/app-user").send(inputNewAppUser1)
 
                 // //login user
                 // const userLogin = {
-                //     document: inputNewAppUser.document,
-                //     password: inputNewAppUser.password
+                //     document: inputNewAppUser1.document,
+                //     password: inputNewAppUser1.password
                 // }
                 // const loginUser = await request(app).post("/login-app-user").send(userLogin)
                 // const userToken1New = loginUser.body.token
@@ -830,9 +841,9 @@ describe("E2E App User Auth tests", () => {
 
                 //login user
                 const token = await request(app).post("/login-app-user").send(inputLoginUser)
-                userToen2 = token.body.token
+                userToken2 = token.body.token
 
-                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToen2}`).send(inputAddress)
+                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToken2}`).send(inputAddress)
 
                 expect(result.body.error).toBe("User info not found")
                 expect(result.statusCode).toBe(404)
@@ -884,13 +895,11 @@ describe("E2E App User Auth tests", () => {
                     user_uuid: new Uuid("8c47d070-d708-4eb3-a981-f5fb69184c74")
                 }
 
-                //create appuser
-                await request(app).post("/app-user").send(inputAppUser)
 
                 //create user info
-                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToen2}`).send(inputCreateUserInfo)
+                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToken2}`).send(inputCreateUserInfo)
 
-                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToen2}`).send(inputAddress)
+                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToken2}`).send(inputAddress)
 
                 expect(result.body.error).toBe("User address not found")
                 expect(result.statusCode).toBe(404)
@@ -899,13 +908,7 @@ describe("E2E App User Auth tests", () => {
 
             it("Should throw an error if user address is not found", async () => {
 
-                const inputAppUser: InputCreateAppUserDTO = {
-                    user_info_uuid: null,
-                    document: '777.690.850-98',
-                    email: 'email-test2@email.com',
-                    password: 'senha123',
-                    is_active: true
-                }
+
 
                 const inputCreateUserInfo: InputCreateUserInfoDTO = {
                     business_info_uuid: null,
@@ -943,13 +946,11 @@ describe("E2E App User Auth tests", () => {
                     user_uuid: new Uuid("8c47d070-d708-4eb3-a981-f5fb69184c74")
                 }
 
-                //create appuser
-                await request(app).post("/app-user").send(inputAppUser)
 
                 //create user info
-                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToen2}`).send(inputCreateUserInfo)
+                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToken2}`).send(inputCreateUserInfo)
 
-                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToen2}`).send(inputAddress)
+                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToken2}`).send(inputAddress)
 
                 expect(result.body.error).toBe("User address not found")
                 expect(result.statusCode).toBe(404)
@@ -1003,7 +1004,7 @@ describe("E2E App User Auth tests", () => {
 
                 };
 
-                await request(app).post("/app-user/address").set('Authorization', `Bearer ${userToen2}`).send(inputCreateAddress);
+                await request(app).post("/app-user/address").set('Authorization', `Bearer ${userToken2}`).send(inputCreateAddress);
 
                 const inputUpdateAddress: InputUpdateAppUserAddressDTO = {
                     line1: "Rua teste",
@@ -1021,9 +1022,9 @@ describe("E2E App User Auth tests", () => {
                 await request(app).post("/app-user").send(inputAppUser)
 
                 //create user info
-                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToen2}`).send(inputCreateUserInfo)
+                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToken2}`).send(inputCreateUserInfo)
 
-                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToen2}`).send(inputUpdateAddress)
+                const result = await request(app).put("/app-user/address").set('Authorization', `Bearer ${userToken2}`).send(inputUpdateAddress)
 
                 expect(result.body.line1).toEqual(inputUpdateAddress.line1)
                 expect(result.body.line2).toEqual(inputUpdateAddress.line2)
@@ -1036,6 +1037,125 @@ describe("E2E App User Auth tests", () => {
 
             })
         })
+    })
+
+    describe("E2E test Document Validation", () => {
+        describe("Create document validation", () => {
+            it("Should throw and error if user info is not found", async () => {
+                //create user2
+                await request(app).post("/app-user").send(inputNewAppUser2)
+                //login user 2
+                const token = await request(app).post("/login-app-user").send(authenticateAppUser2)
+                userToken3 = token.body.token
+
+                const input = {
+                    selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_front_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_back_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                };
+
+                const result = await request(app).post("/app-user/document-validation").set('Authorization', `Bearer ${userToken3}`).send(input)
+
+                expect(result.statusCode).toBe(404)
+                expect(result.body.error).toBe("User info not found")
+            })
+
+            it("Should throw an error if any document was not sent", async () => {
+                //create user2
+                await request(app).post("/app-user").send(inputNewAppUser2)
+
+                //login user 2
+                const token = await request(app).post("/login-app-user").send(authenticateAppUser2)
+                userToken3 = token.body.token
+
+                //create user info
+                const inputCreateUserInfo: InputCreateUserInfoDTO = {
+                    business_info_uuid: null,
+                    address_uuid: null,
+                    document: inputNewAppUser2.document,
+                    document2: null,
+                    document3: null,
+                    full_name: "User Full Name",
+                    display_name: null,
+                    internal_company_code: null,
+                    gender: 'Male',
+                    date_of_birth: '05/04/94',
+                    salary: null,
+                    phone: null,
+                    email: inputNewAppUser2.email,
+                    company_owner: false,
+                    status: 'pending',
+                    function: null,
+                    recommendation_code: null,
+                    is_authenticated: false,
+                    marital_status: null,
+                    dependents_quantity: 1,
+                    user_document_validation_uuid: null,
+                    user_id: null
+                }
+
+                //create user info
+                await request(app).post("/app-user/info").set('Authorization', `Bearer ${userToken3}`).send(inputCreateUserInfo)
+
+                const input = {
+                    selfie_base64: '',
+                    document_front_base64: '',
+                    document_back_base64: '',
+                    document_selfie_base64: '',
+                };
+
+                const result = await request(app).post("/app-user/document-validation").set('Authorization', `Bearer ${userToken3}`).send(input)
+
+                expect(result.statusCode).toBe(400)
+                expect(result.body.error).toBe("No documents to be registered")
+            })
+
+            it("Should register one document", async () => {
+                //create user2
+                await request(app).post("/app-user").send(inputNewAppUser2)
+                //login user 2
+                const token = await request(app).post("/login-app-user").send(authenticateAppUser2)
+                userToken3 = token.body.token
+
+                const input = {
+                    selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_front_base64: '',
+                    document_back_base64: '',
+                    document_selfie_base64: '',
+                };
+
+                const result = await request(app).post("/app-user/document-validation").set('Authorization', `Bearer ${userToken3}`).send(input)
+
+                expect(result.statusCode).toBe(201)
+                expect(result.body.result.selfie_status).toBe("under_analysis")
+            })
+
+            it("Should update documents", async () => {
+                //create user2
+                await request(app).post("/app-user").send(inputNewAppUser2)
+                //login user 2
+                const token = await request(app).post("/login-app-user").send(authenticateAppUser2)
+                userToken3 = token.body.token
+
+                const input = {
+                    selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_front_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_back_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                    document_selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                };
+
+                const result = await request(app).post("/app-user/document-validation").set('Authorization', `Bearer ${userToken3}`).send(input)
+
+                expect(result.statusCode).toBe(201)
+                expect(result.body.result.selfie_status).toBe("under_analysis")
+                expect(result.body.result.document_front_status).toBe("under_analysis")
+                expect(result.body.result.document_back_status).toBe("under_analysis")
+                expect(result.body.result.document_selfie_status).toBe("under_analysis")
+            })
+        })
+
+
     })
     //Fazer testes de quando o usuário já estiver registrado em userInfo
 })

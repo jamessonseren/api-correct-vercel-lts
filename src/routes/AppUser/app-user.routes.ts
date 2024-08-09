@@ -60,11 +60,6 @@ appUserRouter.get("/app-user/info", appUserIsAuth, async (request, response) => 
     await getUserInfobyUser.handle(request, response)
 })
 
-//create documents for validation
-appUserRouter.post("/app-user/document-validation/:document", appUserIsAuth, async (request, response) => {
-    await createDocumentsController.handle(request, response)
-})
-
 
 //Register app users by Correct
 appUserRouter.post("/app-users-by-correct", correctIsAuth, upload.single('file'), async (request, response) => {
@@ -99,5 +94,12 @@ appUserRouter.put("/app-user/address", appUserIsAuth, async (request, response) 
     await updateUserAddressController.handle(request, response)
 })
 
+//**********Document Validation*********** */
+
+
+//create documents for validation
+appUserRouter.post("/app-user/document-validation", appUserIsAuth, async (request, response) => {
+    await createDocumentsController.handle(request, response)
+})
 
 export { appUserRouter }

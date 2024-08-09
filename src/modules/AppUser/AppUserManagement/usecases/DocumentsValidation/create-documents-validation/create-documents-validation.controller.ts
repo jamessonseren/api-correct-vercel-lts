@@ -4,9 +4,12 @@ import { DocumentValidationProps } from "../../../entities/app-user-document-val
 import { CreateDocumentsValidationUsecase } from "./create-documents-validation.usecase";
 import { IAppUserDocumentValidationRepository } from "../../../repositories/app-user-document-validation.repository";
 import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
+import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
+import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 
 export class CreateDocumentsValidationController{
     constructor(
+        private userAuthRepository: IAppUserAuthRepository,
         private userInfoRepository: IAppUserInfoRepository,
         private documentsValidationRepository: IAppUserDocumentValidationRepository
 
@@ -16,20 +19,19 @@ export class CreateDocumentsValidationController{
         try{
 
             const data = req.body
-
-            const document = req.params.document
+            data.user_uuid = new Uuid(req.appUserId)
 
             const documentsValidationUsecase = new CreateDocumentsValidationUsecase(
+                this.userAuthRepository,
                 this.userInfoRepository,
                 this.documentsValidationRepository
             )
 
-            await documentsValidationUsecase.execute(data, document)
+            const result = await documentsValidationUsecase.execute(data)
 
-            return res.status(201).json({success: "Documents registered successfully"})
+            return res.status(201).json({success: "Documents registered successfully", result})
             
         }catch(err: any){
-            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message
             })
