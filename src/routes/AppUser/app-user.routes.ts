@@ -11,14 +11,20 @@ import { createUserInfoController } from "../../modules/AppUser/AppUserManagemen
 import { createUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/create-app-user-address";
 import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/correct-admin-auth.middleware";
 import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCorrect/usecases/create-appuser-data-by-correct";
-import { getUserInfoController } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-by-document";
 import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
 import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
 import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { getSingleUserByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-single-user-by-business-admin";
+import { getUserInfobyUser } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-user-info-by-user";
+import { getUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/get-app-user-address";
+import { UpdateAppUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/update-app-user-address/update-app-user-address.controller";
+import { updateUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/update-app-user-address";
 
 const appUserRouter = Router()
 const upload = multer(uploadConfig.upload("./tmp"))
+
+
+//**********User Auth*********** */
 
 //sign up user
 appUserRouter.post('/app-user', async (request, response) => {
@@ -30,41 +36,28 @@ appUserRouter.post("/login-app-user", async (request, response) => {
     await authenticateAppUserController.handle(request, response)
 })
 
-//User details Authenticated
+//User details Authenticated by user
 appUserRouter.get("/app-user", appUserIsAuth, async (request, response) => {
     await userDetailsController.handle(request, response)
 })
 
-//Get user details by business admin
-appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, response) => {
-    await getSingleUserByAdmin.handle(request, response)
-})
+
+//**********User Info*********** */
 
 //user Details by document
 appUserRouter.get("/app-user/document/:document", async (request, response) => {
     await getByDocumentController.handle(request, response)
 })
 
-
-
-//get User Info by document
-appUserRouter.get("/app-user-info/document/:document", async (request, response) => {
-    await getUserInfoController.handle(request, response)
-})
 //register user info by authenticated user
 appUserRouter.post("/app-user/info", appUserIsAuth, async (request, response) => {
     await createUserInfoController.handle(request, response)
 })
 
-//register user info by authenticated user
-appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response) => {
-    await createUserAddressController.handle(request, response)
-})
 
-
-//create documents for validation
-appUserRouter.post("/app-user/document-validation", appUserIsAuth, async (request, response) => {
-    await createDocumentsController.handle(request, response)
+//get user info by user
+appUserRouter.get("/app-user/info", appUserIsAuth, async (request, response) => {
+    await getUserInfobyUser.handle(request, response)
 })
 
 
@@ -78,5 +71,35 @@ appUserRouter.get("/business-admin/app-users", companyIsAuth, async (request, re
     await getUsersByAdmin.handle(request, response)
 })
 
+//Get user details by business admin
+appUserRouter.get("/app-user/business-admin", companyIsAuth, async (request, response) => {
+    await getSingleUserByAdmin.handle(request, response)
+})
+
+
+//**********User Address*********** */
+
+//create app user address by authenticated user
+appUserRouter.post("/app-user/address", appUserIsAuth, async (request, response) => {
+    await createUserAddressController.handle(request, response)
+})
+
+//get app user address by authenticated user
+appUserRouter.get("/app-user/address", appUserIsAuth, async (request, response) => {
+    await getUserAddressController.handle(request, response)
+})
+
+//update appuser address by authenticated user
+appUserRouter.put("/app-user/address", appUserIsAuth, async (request, response) => {
+    await updateUserAddressController.handle(request, response)
+})
+
+//**********Document Validation*********** */
+
+
+//create documents for validation
+appUserRouter.post("/app-user/document-validation", appUserIsAuth, async (request, response) => {
+    await createDocumentsController.handle(request, response)
+})
 
 export { appUserRouter }

@@ -1,5 +1,74 @@
 import { Status, UserDocumentValidationStatus } from "@prisma/client"
-import { JsonValue } from "@prisma/client/runtime/library"
+import { Uuid } from "../../../@shared/ValueObjects/uuid.vo"
+import { boolean } from "zod"
+
+
+//App User auth
+export interface InputCreateAppUserDTO {
+    user_info_uuid: Uuid | null,
+    document: string,
+    email: string,
+    password: string,
+    is_active: boolean
+}
+
+export interface OutputCreateappUserDTO {
+    uuid: string
+    user_info_uuid: Uuid | null,
+    document: string
+    email: string
+    is_active: boolean
+}
+
+export interface OutputFindByDocumentAuthDTO {
+    uuid: Uuid
+    document: string
+    email: string
+    password: string
+    is_active: boolean
+    created_at: string
+    updated_at: string
+}
+
+export interface OutputfindByDocumentDTO {
+    uuid: Uuid
+    document: string
+    email: string
+    is_active: boolean
+    created_at: string
+    updated_at: string
+}
+
+
+
+
+export type OutputAppUserDetailsDTO = {
+    status: boolean,
+    UserAuthDetails:{
+        uuid: string,
+        user_info_uuid: string | null,
+        document: string,
+        email: string,
+        created_at?: string,
+        updated_at?: string,
+    },
+    UserInfo: boolean,
+    UserAddress: boolean,
+    UserValidation: boolean
+}
+
+export interface OutputGetByDocument {
+    status: boolean,
+    UserAuth: boolean,
+    UserInfo: boolean,
+    Address: boolean,
+    UserValidation:{
+        document_front_status: string
+        document_back_status: string
+        selfie_status: string
+        document_selfie_status: string
+    }
+}
 
 
 export type AppUserAuthResponseAuthentication = {
@@ -9,7 +78,6 @@ export type AppUserAuthResponseAuthentication = {
     created_at: string
     updated_at: string
 }
-
 export type UpdateAppUserRequest = Omit<AppUserAuthResponseAuthentication, 'password'>
 // export type AppUserAuthResponse = Omit<AppUserAuthResponseAuthentication, 'password'>
 
@@ -27,7 +95,7 @@ export type UserInfoResponse = {
     email: string | null
     date_of_birth: string
     phone: string | null
-    salary: string | null
+    salary: number | null
     company_owner: boolean
     status: Status
     function: string | null
@@ -59,10 +127,10 @@ export type UserInfoResponse = {
         document_selfie_status: UserDocumentValidationStatus
         created_at: string | null
         updated_at: string | null
-    
-        
+
+
     } | null
-    UserAuth?:{
+    UserAuth?: {
         uuid: string
         document: string
         email: string
@@ -91,7 +159,7 @@ export type AppUserAuthResponse = {
         email: string | null,
         date_of_birth: string
         phone: string | null
-        salary: string | null
+        salary: number | null
         company_owner: boolean,
         status: Status,
         function: string | null,
@@ -123,7 +191,7 @@ export type AppUserAuthResponse = {
             document_selfie_status: UserDocumentValidationStatus
             created_at: string | null
             updated_at: string | null
-        
+
         } | null
 
     }
@@ -164,7 +232,7 @@ export type AppUserInfoRequest = {
     internal_company_code: string | null,
     gender: string | null,
     date_of_birth: string,
-    salary: string | null,
+    salary: number | null,
     company_owner: boolean
     user_function: string | null
     marital_status: string | null,

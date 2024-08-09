@@ -1,24 +1,47 @@
 import { CustomError } from "../../../../../../errors/custom.error";
-import { AppUserAddressEntity, AppUserAddressProps } from "../../../entities/app-user-address.entity";
+import { AddressEntity } from "../../../../../../infra/shared/address/address.entity";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { IAppUserAddressRepository } from "../../../repositories/app-user-address.repository";
+import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
+import { InputCreateUserAddressDTO, OutputCreateUserAddressDTO } from "./dto/create-app-user-address.dto";
 
 export class CreateAppUserAddressUsecase{
     constructor(
         private addressRepository: IAppUserAddressRepository,
+        private userInfoRepository: IAppUserInfoRepository,
         private userAuthRepository: IAppUserAuthRepository
     ){}
 
-    async execute(data: AppUserAddressProps, user_id: string){
+    async execute(data: InputCreateUserAddressDTO):Promise<OutputCreateUserAddressDTO>{
 
-        const findUser = await this.userAuthRepository.findById(user_id)
-        if(!findUser) throw new CustomError("Unauthorized access", 401)
+        //find user auth
+        const userAuth = await this.userAuthRepository.find(data.user_uuid)
 
-        const userAddress = await AppUserAddressEntity.create(data)
+        if(!userAuth) throw new CustomError("User not found", 401)
+        
+        //find user info
+        const userInfo = await this.userInfoRepository.findByDocumentUserInfo(userAuth.document)
+        if(!userInfo) throw new CustomError("User info must be completed first", 404)
+        
+                
+        const userAddress = await AddressEntity.create(data)
 
-        const registerAddress = await this.addressRepository.save(userAddress, findUser.document)
+        await this.addressRepository.createAddress(userAddress, userAuth.document)
 
-        return registerAddress
+        return {
+            uuid: userAddress.uuid,
+            line1: userAddress.line1,
+            line2: userAddress.line2,
+            line3: userAddress.line3,
+            postal_code: userAddress.postal_code,
+            neighborhood: userAddress.neighborhood,
+            city: userAddress.city,
+            state: userAddress.state,
+            country: userAddress.country,
+            created_at: userAddress.created_at,
+            updated_at: userAddress.updated_at,
+            user_uuid: data.user_uuid
+        }
 
     }
 }

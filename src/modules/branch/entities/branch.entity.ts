@@ -31,15 +31,19 @@ export class BranchEntity {
         this.market_place_tax = props.market_place_tax
         this.created_at = props.created_at;
         this.updated_at = props.updated_at;
+        this.validate()
     }
 
-    static create(data: BranchProps) {
-        if (!data.name) throw new CustomError('Branch name is required', 400);
-        if (!data.benefits_uuid || data.benefits_uuid.length === 0)
+    validate(){
+        if (!this.name) throw new CustomError('Branch name is required', 400);
+        if (!this.benefits_uuid || this.benefits_uuid.length === 0)
             throw new CustomError(
                 'Invalid benefits group. One or more benefits is required',
                 400
             );
+
+    }
+    static create(data: BranchProps) {
 
         const branch = new BranchEntity(data);
         return branch;

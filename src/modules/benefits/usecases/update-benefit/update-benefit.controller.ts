@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { UpdateBenefitUsecase } from './update-benefit.usercase';
-import { BenefitsEntity } from '../../entities/benefit.entity';
+import { logger } from '../../../../utils/logger';
+import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo';
 
 export class UpdateBenefitController {
     constructor(private BenefitsRepository: IBenefitsRepository) {}
@@ -11,19 +12,15 @@ export class UpdateBenefitController {
             const updateBenefitUsecase = new UpdateBenefitUsecase(
                 this.BenefitsRepository
             );
-            const data: BenefitsEntity = req.body;
-            const uuid = req.params.uuid;
-
-            if (!uuid) {
-                return res.status(400).json({
-                    error: 'Benefit uuid is required',
-                });
-            }
-
-            const resp = await updateBenefitUsecase.execute(uuid, data);
+            const data = req.body;
+            data.uuid = new Uuid(req.params.uuid)
+           
+            const resp = await updateBenefitUsecase.execute(data);
 
             return res.status(200).json(resp);
         } catch (err: any) {
+            console.log("update error: ", err)
+            logger.error(err.stack)
             return res.status(err.statusCode).json({
                 error: err.message,
             });
