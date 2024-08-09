@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import {  AppUserInfoProps } from "../../../entities/app-user-info.entity";
 import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
-import { AppUserInfoUsecase } from "./create-user-info.usecase";
-import { logger } from "../../../../../../utils/logger";
+import { CreateAppUserInfoUsecase } from "./create-user-info.usecase";
+import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
+import { InputCreateUserInfoDTO } from "./dto/create-user-info.dto";
 
 export class CreateUserInfoController{
     constructor(
@@ -16,17 +16,16 @@ export class CreateUserInfoController{
 
         try{
 
-            const data:AppUserInfoProps = req.body
+            const data = req.body as InputCreateUserInfoDTO
     
-            const user_id = req.appUserId
+            data.user_id = new Uuid(req.appUserId)
     
-            const userInfoUsecase = new AppUserInfoUsecase(this.appUserInfoRepository, this.appUserAuthRepository)
+            const userInfoUsecase = new CreateAppUserInfoUsecase(this.appUserInfoRepository, this.appUserAuthRepository)
     
-            await userInfoUsecase.execute(data, user_id)
+            await userInfoUsecase.execute(data)
             
             return res.status(201).json({sucess: "User info registered successfully"})
         }catch(err: any){
-            logger.error(err.stack);
             return res.status(err.statusCode).json({
                 error: err.message,
             });

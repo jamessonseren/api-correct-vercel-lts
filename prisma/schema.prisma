@@ -90,8 +90,7 @@ model BusinessInfo {
   email               String              @unique
   business_type       BusinessTypeOptions
 
-  Address Address?    @relation(fields: [address_uuid], references: [uuid])
-  Branch  BranchInfo? @relation(fields: [branch_info_uuid], references: [uuid])
+  Address Address? @relation(fields: [address_uuid], references: [uuid])
 
   BusinessUser     BusinessUser[]
   UserInfo         UserInfo[]
@@ -111,7 +110,7 @@ enum BusinessTypeOptions {
 }
 
 model Address {
-  uuid         String         @id @default(uuid())
+  uuid         String  @id @default(uuid())
   line1        String?
   line2        String?
   line3        String?
@@ -120,6 +119,9 @@ model Address {
   city         String?
   state        String?
   country      String?
+  created_at   String?
+  updated_at   String?
+
   BusinessInfo BusinessInfo[]
   UserInfo     UserInfo[]
 
@@ -140,7 +142,7 @@ model UserInfo {
   email                         String? @unique
   date_of_birth                 String
   phone                         String?
-  salary                        String?
+  salary                        Int?
   company_owner                 Boolean @default(false)
   status                        Status  @default(pending)
   function                      String?
@@ -195,6 +197,7 @@ model UserAuth {
   document       String  @unique
   email          String  @unique
   password       String
+  is_active      Boolean @default(true)
 
   created_at String?
   updated_at String?
@@ -204,34 +207,38 @@ model UserAuth {
   @@map("users_auth")
 }
 
-enum BenefitType {
-  pos_pago
-  pre_pago
-}
+model Item {
+  uuid          String  @id @default(uuid())
+  name          String
+  description   String
+  item_type     String
+  item_category String
+  parent_uuid   String?
+  created_at    String
+  updated_at    String?
 
-model Benefit {
-  uuid              String      @id @default(uuid())
-  benefit_name      String
-  benefit_type      BenefitType
-  short_description String?
-  created_at        String
-  updated_at        String?
-
-  @@map("benefits")
+  @@map("items")
 }
 
 model BranchInfo {
-  uuid             String         @id @default(uuid())
+  uuid             String  @id @default(uuid())
   name             String
-  benefits_uuid    String[]
   marketing_tax    Int
   admin_tax        Int
   market_place_tax Int
   created_at       String
   updated_at       String?
-  BusinessInfo     BusinessInfo[]
 
   @@map("branch_info")
+}
+
+model BranchItem {
+  uuid            String @id @default(uuid())
+  branchInfo_uuid String
+  item_uuid       String
+  created_at      String
+
+  @@map("branch_item")
 }
 
 model UserWallet {
@@ -249,11 +256,12 @@ model UserWallet {
 }
 
 model ContractInfo {
-  uuid        String  @id @default(uuid())
-  name        String?
-  content     String
-  version     String?
-  assigned_at String
+  uuid               String  @id @default(uuid())
+  name               String?
+  content            String
+  version            String?
+  assigned_at        String
+  business_info_uuid String
 
   BusinessInfo     BusinessInfo[]
   BusinessContract BusinessContract[]

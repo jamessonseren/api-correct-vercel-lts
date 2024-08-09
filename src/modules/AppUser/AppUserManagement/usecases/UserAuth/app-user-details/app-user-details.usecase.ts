@@ -1,86 +1,112 @@
 import { UserDocumentValidationStatus } from "@prisma/client";
 import { CustomError } from "../../../../../../errors/custom.error";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
+import { OutputAppUserDetailsDTO } from "../../../../app-user-dto/app-user.dto";
+import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
+import { AppUserAuthSignUpEntity } from "../../../entities/app-user-auth.entity";
+import { IAppUserAddressRepository } from "../../../repositories/app-user-address.repository";
+import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 
 export class AppUserDetailsUsecase {
     constructor(
-        private appUserRepository: IAppUserAuthRepository
+        private appUserAuthRepository: IAppUserAuthRepository,
+        private appUserInfoRepository: IAppUserInfoRepository,
     ) { }
 
-    async execute(uuid: string) {
+    async execute(uuid: Uuid): Promise<OutputAppUserDetailsDTO> {
 
-        if (!uuid) throw new CustomError("User Id is required", 400)
-
-        const findUser = await this.appUserRepository.findById(uuid)
+        //Find User
+        const findUser = await this.appUserAuthRepository.find(uuid)
         if (!findUser) throw new CustomError("User not found", 404)
+        
+            if (!findUser.user_info_uuid) {
+            return {
+                status: false,
+                UserAuthDetails: {
+                    uuid: findUser.uuid.uuid,
+                    user_info_uuid: findUser.user_info_uuid ? findUser.user_info_uuid.uuid : null,
+                    document: findUser.document,
+                    email: findUser.email,
+                    created_at: findUser.created_at,
+                    updated_at: findUser.updated_at
+                },
+                UserInfo: false,
+                UserAddress: false,
+                UserValidation: false
+
+            }
+        }
+
+        //Check if User has more info
+        const userInfo = await this.appUserInfoRepository.findByDocumentUserInfo(findUser.document)
+
+        if (!userInfo) {
+            return {
+                status: false,
+                UserAuthDetails: {
+                    uuid: findUser.uuid.uuid,
+                    user_info_uuid: findUser.user_info_uuid ? findUser.user_info_uuid.uuid : null,
+                    document: findUser.document,
+                    email: findUser.email,
+                    created_at: findUser.created_at,
+                    updated_at: findUser.updated_at
+                },
+                UserInfo: false,
+                UserAddress: false,
+                UserValidation: false
+
+            }
+        }
+
+        if (!userInfo.address_uuid) {
+            return {
+                status: false,
+                UserAuthDetails: {
+                    uuid: findUser.uuid.uuid,
+                    user_info_uuid: findUser.user_info_uuid ? findUser.user_info_uuid.uuid : null,
+                    document: findUser.document,
+                    email: findUser.email,
+                    created_at: findUser.created_at,
+                    updated_at: findUser.updated_at
+                },
+                UserInfo: true,
+                UserAddress: false,
+                UserValidation: false
+            }
+        }
+
+        if (!userInfo.user_document_validation_uuid) {
+            return {
+                status: false,
+                UserAuthDetails: {
+                    uuid: findUser.uuid.uuid,
+                    user_info_uuid: findUser.user_info_uuid ? findUser.user_info_uuid.uuid : null,
+                    document: findUser.document,
+                    email: findUser.email,
+                    created_at: findUser.created_at,
+                    updated_at: findUser.updated_at
+                },
+                UserInfo: true,
+                UserAddress: true,
+                UserValidation: false
+            }
+        }
+
+        return {
+            status: true,
+            UserAuthDetails: {
+                uuid: findUser.uuid.uuid,
+                user_info_uuid: findUser.user_info_uuid ? findUser.user_info_uuid.uuid : null,
+                document: findUser.document,
+                email: findUser.email,
+                created_at: findUser.created_at,
+                updated_at: findUser.updated_at
+            },
+            UserInfo: true,
+            UserAddress: true,
+            UserValidation: true
+        }
 
        
-
-        let status: boolean = false
-        let message = {
-            UserAuth: "OK",
-            UserInfo: findUser.UserInfo ? "OK" : null,
-            Address: findUser.UserInfo?.Address ? "OK" : null,
-            UserValidation: {
-                document_front_status: findUser.UserInfo?.UserValidation?.document_front_status ? findUser.UserInfo.UserValidation?.document_front_status : 'pending to send',
-                document_back_status: findUser.UserInfo?.UserValidation?.document_back_status ? findUser.UserInfo.UserValidation?.document_back_status : 'pending to send',
-                selfie_status: findUser.UserInfo?.UserValidation?.selfie_status ? findUser.UserInfo.UserValidation?.selfie_status : 'pending to send',
-                document_selfie_status: findUser.UserInfo?.UserValidation?.document_selfie_status ? findUser.UserInfo.UserValidation?.document_selfie_status : 'pending to send'
-
-            }
-        }
-        if (
-            message.UserAuth === "OK" &&
-            message.UserInfo === "OK" &&
-            message.Address === "OK" &&
-            message.UserValidation.document_front_status === 'approved' &&
-            message.UserValidation.document_back_status === 'approved' &&
-            message.UserValidation.document_selfie_status === 'approved' &&
-            message.UserValidation.selfie_status === 'approved'
-        ) {
-            status = true
-            return { status, findUser }
-        }
-
-        
-        if(!findUser.UserInfo){
-            return {status, next_step: "Dados do usuário", message, findUser}
-        }
-
-        if(!findUser.UserInfo.Address){
-            return {status, next_step: "Endereço do usuário", message, findUser}
-        }
-
-
-        if(!findUser.UserInfo.UserValidation){
-
-            return {status, next_step: "Todos os documentos pendentes de envio",message, findUser}
-        }
-
-        const documentValidationArray = [
-            findUser.UserInfo?.UserValidation?.document_front_status, 
-            findUser.UserInfo?.UserValidation?.document_back_status,
-            findUser.UserInfo?.UserValidation?.selfie_status,
-            findUser.UserInfo?.UserValidation?.document_selfie_status
-        ]
-
-        let pendingDocumentsArray: any = []
-        let underAnalysisdocumentsArray: any = []
-
-        documentValidationArray.find((document) => {
-            if(document === "pending_to_send"){ 
-                pendingDocumentsArray.push(document)
-            }
-
-            if(document === "under_analysis") underAnalysisdocumentsArray.push(document)
-        })
-        if(pendingDocumentsArray.length > 0) return { status: false, next_step: "Há documentos a serem enviados", message, findUser }
-        
-        if(documentValidationArray.length === 4){
-           return { status: false, next_step:"Todos os documentos sob análise", message, findUser }
-        }
-        
-        
-        return { status, message, findUser }
     }
 }

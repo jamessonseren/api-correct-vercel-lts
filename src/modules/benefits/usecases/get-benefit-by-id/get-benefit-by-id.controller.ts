@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { GetBenefitByIDUsecase } from './get-benefit-by-id.usecase';
+import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo';
 
 export class GetBenefitByIDController {
     constructor(private BenefitsRepository: IBenefitsRepository) {}
@@ -12,13 +13,7 @@ export class GetBenefitByIDController {
             );
             const uuid = req.params.uuid;
 
-            if (!uuid) {
-                return res.status(400).json({
-                    error: 'Benefit uuid is required',
-                });
-            }
-
-            const resp = await getBenefitByIDUsecase.execute(uuid);
+            const resp = await getBenefitByIDUsecase.execute(new Uuid(uuid));
 
             return res.json(resp);
         } catch (err: any) {

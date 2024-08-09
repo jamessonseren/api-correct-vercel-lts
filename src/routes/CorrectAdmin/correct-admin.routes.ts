@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCorrectAdminController } from "../../modules/CorrectAdmin/useCases";
+import { createCorrectAdminController } from "../../modules/CorrectAdmin/useCases/create-correct-admin";
 import { authAdminController } from "../../modules/CorrectAdmin/useCases/authenticate-admin";
 
 const correctAdminRouter = Router()
