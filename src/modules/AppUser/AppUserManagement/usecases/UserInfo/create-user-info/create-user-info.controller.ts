@@ -3,7 +3,7 @@ import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repo
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { CreateAppUserInfoUsecase } from "./create-user-info.usecase";
 import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
-import { InputCreateUserInfoDTO } from "../../../../app-user-dto/app-user.dto";
+import { InputCreateUserInfoDTO } from "./dto/create-user-info.dto";
 
 export class CreateUserInfoController{
     constructor(

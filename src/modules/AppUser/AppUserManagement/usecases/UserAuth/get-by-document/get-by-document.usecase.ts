@@ -120,7 +120,7 @@ export class GetByDocumentUsecase{
                 }
             }
         }
-        const userValidations = await this.appUserValidationRepository.find(getUserInfo.user_document_validation_uuid.uuid)
+        const userValidations = await this.appUserValidationRepository.find(getUserInfo.user_document_validation_uuid)
         if(!userValidations) {
             status = false
             userInfo = true
