@@ -111,8 +111,11 @@ describe("Unity test create document validation", () => {
         const userinfoRepository = UserInfoMockRepository()
         const userAuthRepository = AppUserAuthMockRepository()
 
-        userAuthRepository.find.mockResolvedValueOnce({})
-        userinfoRepository.find.mockResolvedValueOnce({})
+        userAuthRepository.find.mockResolvedValueOnce({
+            user_info_uuid: new Uuid('8ecfc6ca-b943-4c50-afd2-f86c32542b8c')
+        })
+        userinfoRepository.find.mockResolvedValueOnce({
+        })
 
         const input: InputCreateDocumentValidationDTO = {
             selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
@@ -133,7 +136,7 @@ describe("Unity test create document validation", () => {
         )
 
         const result = await usecase.execute(input)
-        expect(result.selfie_status).toBe("under_analysis")        
+        expect(result.selfie_status).toBe("under_analysis")
         expect(result.document_back_status).toBe("pending_to_send")
         expect(result.document_front_status).toBe("pending_to_send")
         expect(result.document_selfie_status).toBe("pending_to_send")
@@ -144,7 +147,9 @@ describe("Unity test create document validation", () => {
         const userinfoRepository = UserInfoMockRepository()
         const userAuthRepository = AppUserAuthMockRepository()
 
-        userAuthRepository.find.mockResolvedValueOnce({})
+        userAuthRepository.find.mockResolvedValueOnce({
+            user_info_uuid: new Uuid('8ecfc6ca-b943-4c50-afd2-f86c32542b8c')
+        })
         userinfoRepository.find.mockResolvedValueOnce({})
 
         const input: InputCreateDocumentValidationDTO = {
@@ -166,7 +171,7 @@ describe("Unity test create document validation", () => {
         )
 
         const result = await usecase.execute(input)
-        expect(result.selfie_status).toBe("under_analysis")        
+        expect(result.selfie_status).toBe("under_analysis")
         expect(result.document_back_status).toBe("under_analysis")
         expect(result.document_front_status).toBe("pending_to_send")
         expect(result.document_selfie_status).toBe("pending_to_send")
@@ -177,7 +182,9 @@ describe("Unity test create document validation", () => {
         const userinfoRepository = UserInfoMockRepository()
         const userAuthRepository = AppUserAuthMockRepository()
 
-        userAuthRepository.find.mockResolvedValueOnce({})
+        userAuthRepository.find.mockResolvedValueOnce({
+            user_info_uuid: new Uuid('8ecfc6ca-b943-4c50-afd2-f86c32542b8c')
+        })
         userinfoRepository.find.mockResolvedValueOnce({})
         documentValidationRepository.find.mockResolvedValueOnce({})
 
@@ -200,7 +207,7 @@ describe("Unity test create document validation", () => {
         )
 
         const result = await usecase.execute(input)
-        expect(result.selfie_status).toBe("under_analysis")        
+        expect(result.selfie_status).toBe("under_analysis")
         expect(result.document_back_status).toBe("under_analysis")
         expect(result.document_front_status).toBe("pending_to_send")
         expect(result.document_selfie_status).toBe("under_analysis")
@@ -211,7 +218,9 @@ describe("Unity test create document validation", () => {
         const userinfoRepository = UserInfoMockRepository()
         const userAuthRepository = AppUserAuthMockRepository()
 
-        userAuthRepository.find.mockResolvedValueOnce({})
+        userAuthRepository.find.mockResolvedValueOnce({
+            user_info_uuid: new Uuid('8ecfc6ca-b943-4c50-afd2-f86c32542b8c')
+        })
         userinfoRepository.find.mockResolvedValueOnce({})
         documentValidationRepository.find.mockResolvedValueOnce({})
 
@@ -234,7 +243,7 @@ describe("Unity test create document validation", () => {
         )
 
         const result = await usecase.execute(input)
-        expect(result.selfie_status).toBe("under_analysis")        
+        expect(result.selfie_status).toBe("under_analysis")
         expect(result.document_back_status).toBe("under_analysis")
         expect(result.document_front_status).toBe("under_analysis")
         expect(result.document_selfie_status).toBe("under_analysis")

@@ -15,9 +15,14 @@ export class CreateDocumentsValidationUsecase {
 
     async execute(data: InputCreateDocumentValidationDTO): Promise<OutputCreateDocumentValidationDTO> {
 
+        if(!data.document_front_base64 && !data.document_back_base64 && !data.document_selfie_base64 && !data.selfie_base64){
+            throw new CustomError("No documents to be registered", 400)
+        }
         ///find user auth
         const getUser = await this.userAuthRepository.find(data.user_uuid)
         if (!getUser) throw new CustomError("User auth not found", 401)
+
+        if(!getUser.user_info_uuid) throw new CustomError("User info not found", 404)
 
         //find user info
         const userInfo = await this.userInfoRepository.find(getUser.user_info_uuid)
@@ -52,9 +57,12 @@ export class CreateDocumentsValidationUsecase {
                 selfie_status: documentsEntity.selfie_status
             }
         }
+        console.log("****************5******************")
 
         const documentsEntity = await DocumentValidationEntity.create(data)
         await this.documentsValidationRepository.saveOrUpdate(documentsEntity, userInfo.uuid)
+        console.log("****************6******************")
+
         return {
             uuid: documentsEntity.uuid,
             document_front_status: documentsEntity.document_front_status,
