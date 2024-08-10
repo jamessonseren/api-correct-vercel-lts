@@ -16,7 +16,7 @@ export interface InputCreateUserInfoDTO {
     phone: string | null;
     email: string
     company_owner: boolean;
-    status: Status;
+    status: Status | null;
     function: string | null;
     recommendation_code: string | null;
     is_authenticated: boolean;

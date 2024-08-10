@@ -57,11 +57,9 @@ export class CreateDocumentsValidationUsecase {
                 selfie_status: documentsEntity.selfie_status
             }
         }
-        console.log("****************5******************")
 
         const documentsEntity = await DocumentValidationEntity.create(data)
         await this.documentsValidationRepository.saveOrUpdate(documentsEntity, userInfo.uuid)
-        console.log("****************6******************")
 
         return {
             uuid: documentsEntity.uuid,
