@@ -25,9 +25,34 @@ export class GetByDocumentUsecase{
         let document_selfie_status: string
 
         const getUserAuth = await this.appUserRepository.findByDocument(documentValidated)
+
         if(!getUserAuth) {
             status = false
             userAuth = false
+            userInfo = false
+            address = false
+            document_front_status = 'pending to send'
+            document_back_status = 'pending to send'
+            selfie_status = 'pending to send'
+            document_selfie_status = 'pending to send'
+
+            return {
+                status: status,
+                UserAuth: userAuth,
+                UserInfo: userInfo,
+                Address: address,
+                UserValidation: {
+                    document_front_status,
+                    document_back_status,
+                    selfie_status,
+                    document_selfie_status
+                }
+            }
+        }
+
+        if(!getUserAuth.user_info_uuid) {
+            status = false
+            userAuth = true
             userInfo = false
             address = false
             document_front_status = 'pending to send'
@@ -120,7 +145,10 @@ export class GetByDocumentUsecase{
                 }
             }
         }
+
+
         const userValidations = await this.appUserValidationRepository.find(getUserInfo.user_document_validation_uuid)
+        
         if(!userValidations) {
             status = false
             userInfo = true
@@ -142,7 +170,8 @@ export class GetByDocumentUsecase{
                     document_selfie_status
                 }
             }
-        }
+        }            
+
 
         return {
             status: status,
