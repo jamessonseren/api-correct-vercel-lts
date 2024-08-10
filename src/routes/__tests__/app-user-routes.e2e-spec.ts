@@ -21,6 +21,7 @@ let userToken1: string;
 let userToken2: string;
 let userToken3: string
 
+
 const inputNewAppUser1: InputCreateAppUserDTO = {
     user_info_uuid: null,
     document: '11234644053',
@@ -37,6 +38,14 @@ const inputNewAppUser2: InputCreateAppUserDTO = {
     is_active: true
 }
 
+const inputNewAppUser3: InputCreateAppUserDTO = {
+    user_info_uuid: null,
+    document: '915.583.910-02',
+    email: 'email3@email.com',
+    password: 'senha123',
+    is_active: true
+}
+
 const authenticateAppUser1 = {
     document: inputNewAppUser1.document,
     password: inputNewAppUser1.password
@@ -47,7 +56,10 @@ const authenticateAppUser2 = {
     password: inputNewAppUser2.password
 }
 
-
+const authenticateAppUser3 = {
+    document: inputNewAppUser3.document,
+    password: inputNewAppUser3.password
+}
 
 describe("E2E App User Auth tests", () => {
 
@@ -212,6 +224,8 @@ describe("E2E App User Auth tests", () => {
                 expect(result.body.UserValidation).toBeFalsy()
             })
 
+            
+
         })
     })
 
@@ -235,7 +249,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -273,7 +287,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -329,7 +343,7 @@ describe("E2E App User Auth tests", () => {
                 //     phone: null,
                 //     email: "email@email.com",
                 //     company_owner: false,
-                //     status: 'pending',
+                //     status: null,
                 //     function: null,
                 //     recommendation_code: null,
                 //     is_authenticated: false,
@@ -756,7 +770,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email-new@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -851,14 +865,7 @@ describe("E2E App User Auth tests", () => {
 
             it("Should throw an error if address FK is null", async () => {
 
-                const inputAppUser: InputCreateAppUserDTO = {
-                    user_info_uuid: null,
-                    document: '777.690.850-98',
-                    email: 'email-test2@email.com',
-                    password: 'senha123',
-                    is_active: true
-                }
-
+             
                 const inputCreateUserInfo: InputCreateUserInfoDTO = {
                     business_info_uuid: null,
                     address_uuid: null,
@@ -874,7 +881,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email-new@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -925,7 +932,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email-new@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -982,7 +989,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: "email-new@email.com",
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -1085,7 +1092,7 @@ describe("E2E App User Auth tests", () => {
                     phone: null,
                     email: inputNewAppUser2.email,
                     company_owner: false,
-                    status: 'pending',
+                    status: null,
                     function: null,
                     recommendation_code: null,
                     is_authenticated: false,
@@ -1154,8 +1161,90 @@ describe("E2E App User Auth tests", () => {
                 expect(result.body.result.document_selfie_status).toBe("under_analysis")
             })
         })
-
-
     })
+
+
+    describe("E2E test User Status by document - Not authenticated", () => {
+        it("Should return user with only user auth registered", async () => {
+
+            //create app user
+            await request(app).post("/app-user").send(inputNewAppUser3)
+
+            const result = await request(app)
+            .get(`/app-user/document/${inputNewAppUser3.document}`)
+            
+            expect(result.body.status).toBeFalsy()
+            expect(result.body.UserAuth).toBeTruthy()
+            expect(result.body.UserInfo).toBeFalsy()
+            expect(result.body.Address).toBeFalsy()
+            expect(result.body.UserValidation.document_front_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_back_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_selfie_status).toBe("pending to send")
+            expect(result.body.UserValidation.selfie_status).toBe("pending to send")
+
+        })
+
+        it("Should return user with user auth and user info registered", async () => {
+
+            const result = await request(app)
+            .get(`/app-user/document/${inputNewAppUser2.document}`)
+
+            expect(result.body.status).toBeFalsy()
+            expect(result.body.UserAuth).toBeTruthy()
+            expect(result.body.UserInfo).toBeTruthy()
+            expect(result.body.Address).toBeFalsy()
+            expect(result.body.UserValidation.document_front_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_back_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_selfie_status).toBe("pending to send")
+            expect(result.body.UserValidation.selfie_status).toBe("pending to send")
+
+        })
+
+        
+        it("Should return user with user auth, user info, and address registered", async () => {
+
+            const result = await request(app)
+            .get(`/app-user/document/${inputNewAppUser1.document}`)
+
+            expect(result.body.status).toBeFalsy()
+            expect(result.body.UserAuth).toBeTruthy()
+            expect(result.body.UserInfo).toBeTruthy()
+            expect(result.body.Address).toBeTruthy()
+            expect(result.body.UserValidation.document_front_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_back_status).toBe("pending to send")
+            expect(result.body.UserValidation.document_selfie_status).toBe("pending to send")
+            expect(result.body.UserValidation.selfie_status).toBe("pending to send")
+
+        })
+
+
+        it("Should return a user with full status", async () => {
+
+            const token = await request(app).post("/login-app-user").send(authenticateAppUser1)
+            const userToken = token.body.token
+            const input = {
+                selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                document_front_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                document_back_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                document_selfie_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+            };
+
+             await request(app).post("/app-user/document-validation").set('Authorization', `Bearer ${userToken}`).send(input)
+
+            const result = await request(app)
+            .get(`/app-user/document/${inputNewAppUser1.document}`)
+
+            expect(result.body.status).toBeTruthy()
+            expect(result.body.UserAuth).toBeTruthy()
+            expect(result.body.UserInfo).toBeTruthy()
+            expect(result.body.Address).toBeTruthy()
+            expect(result.body.UserValidation.document_front_status).toBe("under_analysis")
+            expect(result.body.UserValidation.document_back_status).toBe("under_analysis")
+            expect(result.body.UserValidation.document_selfie_status).toBe("under_analysis")
+            expect(result.body.UserValidation.selfie_status).toBe("under_analysis")
+
+        })
+    })
+   
     //Fazer testes de quando o usuário já estiver registrado em userInfo
 })

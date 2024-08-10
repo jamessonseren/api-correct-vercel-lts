@@ -101,7 +101,7 @@ export class AppUserInfoEntity {
         this._email = props.email
         this._salary = props.salary;
         this._company_owner = props.company_owner ?? false
-        this._status = props.status ?? Status.pending_validation
+        this._status = props.status ?? Status.pending
         this._function = props.function;
         this._recommendation_code = props.recommendation_code;
         this._is_authenticated = props.is_authenticated ?? false
@@ -316,6 +316,8 @@ export class AppUserInfoEntity {
     }
     validate() {
         //rules validations
+        if(!this.document) throw new CustomError("Document is required", 400)
+        if(!this.email) throw new CustomError("Email is required")
         if (!this.full_name) throw new CustomError("Full name is required", 400);
         if (!this.date_of_birth) throw new CustomError("Date of birth is required", 400);
         if (!this.gender) throw new CustomError("Gender is required", 400);

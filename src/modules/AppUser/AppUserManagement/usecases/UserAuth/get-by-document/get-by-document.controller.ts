@@ -24,7 +24,7 @@ export class GetByDocumentController {
             return res.json(user)
 
         } catch (err: any) {
-            logger.error(err.stack)
+            console.log({err})
             return res.status(err.statusCode).json({
                 error: err.message
             })
