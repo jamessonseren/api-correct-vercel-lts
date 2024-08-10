@@ -3,8 +3,6 @@ import { CustomError } from "../../../../../../errors/custom.error";
 import { IAppUserAuthRepository } from "../../../repositories/app-use-auth-repository";
 import { OutputAppUserDetailsDTO } from "../../../../app-user-dto/app-user.dto";
 import { IAppUserInfoRepository } from "../../../repositories/app-user-info.repository";
-import { AppUserAuthSignUpEntity } from "../../../entities/app-user-auth.entity";
-import { IAppUserAddressRepository } from "../../../repositories/app-user-address.repository";
 import { Uuid } from "../../../../../../@shared/ValueObjects/uuid.vo";
 
 export class AppUserDetailsUsecase {
