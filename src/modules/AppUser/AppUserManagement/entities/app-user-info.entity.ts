@@ -315,9 +315,10 @@ export class AppUserInfoEntity {
         this.validate();
     }
     validate() {
+
         //rules validations
-        if(!this.document) throw new CustomError("Document is required", 400)
-        if(!this.email) throw new CustomError("Email is required")
+        // if(!this.document) throw new CustomError("Document is required", 400)
+        // if(!this.email) throw new CustomError("Email is required")
         if (!this.full_name) throw new CustomError("Full name is required", 400);
         if (!this.date_of_birth) throw new CustomError("Date of birth is required", 400);
         if (!this.gender) throw new CustomError("Gender is required", 400);
