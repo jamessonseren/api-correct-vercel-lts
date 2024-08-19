@@ -4,7 +4,7 @@ import { Uuid } from "../../../../../../../@shared/ValueObjects/uuid.vo";
 export interface InputCreateUserInfoDTO {
     business_info_uuid: Uuid | null;
     address_uuid: Uuid | null;
-    document: string;
+    document: string | null;
     document2: string | null;
     document3: string | null;
     full_name: string;
@@ -14,7 +14,7 @@ export interface InputCreateUserInfoDTO {
     date_of_birth: string;
     salary: number | null;
     phone: string | null;
-    email: string
+    email: string | null
     company_owner: boolean;
     status: Status | null;
     function: string | null;
