@@ -25,6 +25,7 @@ export class AppUserInfoPrismaRepository implements IAppUserInfoRepository {
                     document: data.document,
                     document2: data.document2,
                     full_name: data.full_name,
+                    email: data.email,
                     internal_company_code: data.internal_company_code,
                     gender: data.gender,
                     date_of_birth: data.date_of_birth,

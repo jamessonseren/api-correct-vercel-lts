@@ -36,7 +36,6 @@ export class CreateAppUserInfoUsecase {
         }
 
         if (findBydocument) throw new CustomError("User Info already registered - 1", 409)
-
         const userInfoEntity = await AppUserInfoEntity.create(data)
 
         await this.appUserInfoRepository.create(userInfoEntity)
