@@ -3,6 +3,7 @@ import { IPasswordCrypto } from "../../../../crypto/password.crypto"
 import { CustomError } from "../../../../errors/custom.error"
 import { IToken } from "../../../../infra/shared/crypto/token/CorrectAdmin/token"
 import { ICorrectAdminRepository } from "../../repositories/correct-admin.repository"
+import { api } from "../../../../infra/axios/axios.config"
 
 export type AuthenticateAdminRequest = {
     userName: string
@@ -24,12 +25,31 @@ export class AuthenticateAdminUseCase{
 
         const comparePasswordHash = await this.passwordCrypto.compare(password, admin.password)
         if(!comparePasswordHash) throw new CustomError("Username/password is incorrect", 401)
-        
-        const tokenGenerated = await this.token.create(admin)
 
-        return {
-            token: tokenGenerated
-        }
+          //criar token através da api local
+          //const tokenGenerated = await this.token.create(admin)
+
+          //gerar token através da api go
+          try{
+            const response = await api.post("/api/v1/jwt/encode", {
+              data:{
+                user_uuid: admin.uuid.uuid
+              },
+              seconds: 600
+            })
+
+            const tokenGenerated = response.data.token
+
+            return {
+                token: tokenGenerated
+            }
+          }catch(err: any){
+            console.log({err})
+
+            return "Erro ao gerar token"
+          }
+        //const tokenGenerated = await this.token.create(admin)
+
 
     }
 }
