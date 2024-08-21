@@ -1,55 +1,55 @@
-# version: '3.8'
+ volumes:
+   postgres-correct_vol:
+     driver: local
 
-# volumes:
-#   postgres_vol:
-#     driver: local
+ networks:
+   correct_net:
+     driver: bridge
 
-# networks:
-#   correct_net:
-#     driver: bridge
+ services:
+   api:
+     build:
+      context: .
+      dockerfile: Dockerfile
+     ports:
+       - 3333:3333
+     networks:
+       - correct_net
+     depends_on:
+       - postgresdb
+     environment:
+       DATABASE_URL: postgresql://postgres:admin@postgresdb:5432/syscorrect-db?schema=public
+       SECRET_KEY_TOKEN_ADMIN: correct_admin_token
+       SECRET_KEY_TOKEN_COMPANY_ADMIN: company_admin_token
+       SECRET_KEY_TOKEN_APP_USER: app_user_token
+       SECRET_KEY_TOKEN_COMPANY_SECONDARY_USER: company_user_token
+     command: sh -c "npx prisma generate && npm run dev"
 
-# services:
-#   api:
-#     image: jserenarruda/syscorrect:v2
-#     ports: 
-#       - 3333:3333
-#     networks:
-#       - correct_net
-#     depends_on:
-#       - postgresdb
-#     environment:
-#       DATABASE_URL: postgresql://postgres:admin@postgresdb:5432/correct-db?schema=public
-#       SECRET_KEY_TOKEN_ADMIN: correct_admin_token
-#       SECRET_KEY_TOKEN_COMPANY_ADMIN: company_admin_token
-#       SECRET_KEY_TOKEN_APP_USER: app_user_token
-#       SECRET_KEY_TOKEN_COMPANY_SECONDARY_USER: company_user_token
-#     command: sh -c "npx prisma migrate dev && npm run dev"
+   postgresdb:
+     image: postgres:13.4
+     ports:
+       - 5434:5432
+     networks:
+       - correct_net
+     volumes:
+       - postgres-correct_vol:/var/lib/postgresql/data
+     environment:
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: admin
+       POSTGRES_DB: syscorrect-db
 
-#   postgresdb:
-#     image: postgres:13.4
-#     ports:
-#       - 5432:5432
-#     networks:
-#       - correct_net
-#     volumes:
-#       - postgres_vol:/var/lib/postgresql/data  # Mapeamento para o diretório de dados do PostgreSQL
-#     environment:
-#       POSTGRES_USER: postgres
-#       POSTGRES_PASSWORD: admin
-#       POSTGRES_DB: correct-db
-
-# Set the version of docker compose to use
-version: '3.9'
+ #Set the version of docker compose to use
+#version: '3.9'
 
 # The containers that compose the project
-services:
-  db:
-    image: postgres:13
-    restart: always
-    container_name: integration-tests-prisma
-    ports:
-      - '5433:5432'
-    environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: tests
+#services:
+  # db:
+  #   image: postgres:13
+  #   restart: always
+  #   container_name: integration-tests-prisma
+  #   ports:
+  #     - '5433:5432'
+  #   environment:
+  #     POSTGRES_USER: prisma
+  #     POSTGRES_PASSWORD: prisma
+  #     POSTGRES_DB: tests
