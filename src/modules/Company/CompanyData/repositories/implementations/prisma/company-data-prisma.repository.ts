@@ -10,7 +10,6 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
                 uuid: data.uuid
             },
             data:{
-                address_uuid: data.address_uuid,
                 fantasy_name: data.fantasy_name,
                 corporate_reason: data.corporate_reason,
                 document: data.document,
@@ -62,7 +61,7 @@ export class CompanyDataPrismaRepository implements ICompanyDataRepository {
         return companyData
     }
 
-    
+
 
     async deleteById(id: string): Promise<void> {
         await prismaClient.businessInfo.delete({

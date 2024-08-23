@@ -17,12 +17,10 @@ export class CreateBusinessRegisterController {
 
             const businessRegisterUsecase = new CreateBusinessRegisterUsecase(this.businessRegisterRepository, this.companyDataRepository)
 
-            await businessRegisterUsecase.execute(data)
+            const result = await businessRegisterUsecase.execute(data)
+            return res.status(201).json(result)
 
-            return res.json({message:"Business registered successfully"})
-            
         }catch(err: any){
-            console.log({err})
             return res.status(err.statusCode).json({
                 error: err.message
             })

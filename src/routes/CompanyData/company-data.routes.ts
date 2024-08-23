@@ -6,12 +6,18 @@ import { getCompanyDataController } from "../../modules/Company/CompanyData/usec
 
 export const companyDataRouter = Router()
 
-//update company data by Correct Admin
-companyDataRouter.patch('/business/info/correct', correctIsAuth, async (request, response) => {
+//update company data by Correct Admin TESTED
+companyDataRouter.put('/business/info/correct', correctIsAuth, async (request, response) => {
     await updateBusinessInfo.handle(request, response)
 })
 
-//get business data by company admin
+//update company data by Company admin TESTED
+companyDataRouter.put('/business/info/company', companyIsAuth, async (request, response) => {
+  await updateBusinessInfo.handle(request, response)
+})
+
+
+//get business data by company admin TESTED
 companyDataRouter.get('/business/info', companyIsAuth, async (request, response) => {
     await getCompanyDataController.handle(request, response)
 })
