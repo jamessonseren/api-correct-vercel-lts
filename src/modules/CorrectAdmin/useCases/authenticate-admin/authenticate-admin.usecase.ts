@@ -14,7 +14,6 @@ export class AuthenticateAdminUseCase{
     constructor(
         private correctAdminRepository: ICorrectAdminRepository,
         private passwordCrypto: IPasswordCrypto,
-        private token: IToken
     ){}
 
     async execute( {userName, password }: AuthenticateAdminRequest){
@@ -44,7 +43,6 @@ export class AuthenticateAdminUseCase{
                 token: tokenGenerated
             }
           }catch(err: any){
-            console.log({err})
 
             return "Erro ao gerar token"
           }

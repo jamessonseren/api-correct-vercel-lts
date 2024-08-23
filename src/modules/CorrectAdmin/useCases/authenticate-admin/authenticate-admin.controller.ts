@@ -17,11 +17,11 @@ export class AuthenticateAdminController{
         try{
 
             const {userName, password } = req.body
-    
+
             const authAdminUsecase = new AuthenticateAdminUseCase(
                 this.correctAdminRepository,
                 this.passwordCrypto,
-                this.token
+
             )
 
             const admin = await authAdminUsecase.execute({userName, password} )
