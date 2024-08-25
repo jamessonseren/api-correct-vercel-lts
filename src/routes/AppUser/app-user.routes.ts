@@ -13,11 +13,9 @@ import { correctIsAuth } from "../../infra/shared/middlewares/CorrectAdmin/corre
 import { createAppUserByCorrectController } from "../../modules/AppUser/UserByCorrect/usecases/create-appuser-data-by-correct";
 import { companyIsAuth } from "../../infra/shared/middlewares/CompanyAdmin/company-admin-auth.middlware";
 import { getUsersByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-users-by-business-admin";
-import { getSingleUserController } from "../../modules/Company/CompanyUser/usecases/get-single-user";
 import { getSingleUserByAdmin } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-single-user-by-business-admin";
 import { getUserInfobyUser } from "../../modules/AppUser/AppUserManagement/usecases/UserInfo/get-user-info-by-user";
 import { getUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/get-app-user-address";
-import { UpdateAppUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/update-app-user-address/update-app-user-address.controller";
 import { updateUserAddressController } from "../../modules/AppUser/AppUserManagement/usecases/UserAddress/update-app-user-address";
 
 const appUserRouter = Router()
