@@ -1,14 +1,17 @@
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { BenefitsEntity } from '../../entities/benefit.entity';
 import { InputCreateBenefitDto, OutputCreateBenefitDto } from './create-benefit.dto';
+import { IBranchRepository } from '../../../branch/repositories/branch.repository';
 
 export class CreateBenefitUsecase {
-    constructor(private benefitsRepository: IBenefitsRepository) {}
+    constructor(
+      private benefitsRepository: IBenefitsRepository,
+    ) {}
 
     async execute(input: InputCreateBenefitDto): Promise<OutputCreateBenefitDto> {
 
         const benefit = BenefitsEntity.create(input)
-       
+
         await this.benefitsRepository.create(benefit)
 
         return {
