@@ -72,7 +72,7 @@ describe("E2E Benefit tests", () => {
         .send(benefit1);
 
       expect(result.statusCode).toBe(201);
-      benefit1_uuid = result.body.uuid.uuid
+      benefit1_uuid = result.body.uuid
     });
   })
 
@@ -84,6 +84,7 @@ describe("E2E Benefit tests", () => {
         parent_uuid: '',
         item_type: 'gratuito',
         item_category: 'pre_pago',
+        business_info_uuid: '',
         created_at: '',
         updated_at: ''
       };

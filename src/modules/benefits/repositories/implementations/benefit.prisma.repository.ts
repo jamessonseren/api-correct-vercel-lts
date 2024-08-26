@@ -33,6 +33,7 @@ export class BenefitPrismaRepository implements IBenefitsRepository {
         item_type: data.item_type,
         item_category: data.item_category,
         parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
+        business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
         created_at: newDateF(new Date()),
       },
     });
@@ -88,7 +89,7 @@ export class BenefitPrismaRepository implements IBenefitsRepository {
 
 
   async update(data: BenefitsEntity): Promise<void> {
-    const result = await prismaClient.item.update({
+    await prismaClient.item.update({
       where: {
         uuid: data.uuid.uuid as string
       },
@@ -98,6 +99,7 @@ export class BenefitPrismaRepository implements IBenefitsRepository {
         item_type: data.item_type,
         item_category: data.item_category,
         parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
+        business_info_uuid: data.business_info_uuid ? data.business_info_uuid.uuid : null,
         updated_at: newDateF(new Date()),
       }
     });

@@ -1,4 +1,5 @@
 import { prismaClient } from "../../../../../infra/databases/prisma.config";
+import { newDateF } from "../../../../../utils/date";
 import { BusinessRegisterEntity } from "../../entities/business-first-register.entity";
 import { IBusinessFirstRegisterRepository } from "../business-first-register.repository";
 
@@ -27,17 +28,17 @@ export class BusinessRegisterPrismaRepository implements IBusinessFirstRegisterR
                     fantasy_name: data.fantasy_name,
                     corporate_reason: data.corporate_reason,
                     document: data.document,
-                    branch_info_uuid: data.branch_info_uuid,
                     classification: data.classification,
                     colaborators_number: data.colaborators_number,
                     status: data.status,
                     phone_1: data.phone_1,
                     phone_2: data.phone_2,
                     email: data.email,
-                    business_type: data.business_type
+                    business_type: data.business_type,
+                    created_at: newDateF(new Date())
                 }
             })
-        ])    
+        ])
     }
 
 }

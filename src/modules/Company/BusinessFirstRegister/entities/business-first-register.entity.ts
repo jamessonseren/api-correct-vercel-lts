@@ -73,7 +73,7 @@ export class BusinessRegisterEntity {
     this.branch_info_uuid = props.branch_info_uuid
     this.classification = props.classification
     this.colaborators_number = props.colaborators_number
-    this.status = props.status
+    this.status = props.status ?? 'pending_approval'
     this.phone_1 = props.phone_1
     this.phone_2 = props.phone_2
     this.business_type = props.business_type
