@@ -9,7 +9,6 @@ export const benefitsRouter = Router();
 
 benefitsRouter.get(
     '/benefit/:uuid',
-    correctIsAuth,
     async (request, response) =>
         await getBenefitByIDController.handle(request, response)
 );

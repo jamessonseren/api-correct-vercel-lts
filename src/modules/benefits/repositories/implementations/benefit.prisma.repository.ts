@@ -7,69 +7,107 @@ import { ItemCategory, ItemType } from '../../usecases/create-benefit/create-ben
 import { Uuid } from '../../../../@shared/ValueObjects/uuid.vo';
 
 export class BenefitPrismaRepository implements IBenefitsRepository {
+  async findWithBranches(id: string): Promise<any[]> {
+    const item = await prismaClient.branchItem.findMany({
+      where:{
+        item_uuid: id
+      },
+      select:{
+        uuid: true,
+        item_uuid: true,
+        branchInfo_uuid: true,
+        Item: true,
+        Branch: true
+      }
+    })
+
+    return item
+  }
+
+  async create(data: BenefitsEntity): Promise<void> {
+    await prismaClient.item.create({
+      data: {
+        uuid: data.uuid.uuid,
+        name: data.name,
+        description: data.description,
+        item_type: data.item_type,
+        item_category: data.item_category,
+        parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
+        created_at: newDateF(new Date()),
+      },
+    });
+
+  }
+
+  async find(id: Uuid): Promise<BenefitsEntity | null> {
+
+    const item = await prismaClient.item.findUnique({
+      where: {
+        uuid: id.uuid,
+      }
+    });
+
+    if(!item) return null
+
+    return {
+      uuid: new Uuid(item.uuid),
+      name: item.name,
+      description: item.description,
+      item_type: item.item_type as ItemType,
+      item_category: item.item_category as ItemCategory,
+      parent_uuid: new Uuid(item.parent_uuid),
+      created_at: item.created_at,
+      updated_at: item.updated_at
+
+    } as BenefitsEntity
 
 
-    async create(data: BenefitsEntity): Promise<void> {
-        await prismaClient.item.create({
-            data: {
-                uuid: data.uuid.uuid,
-                name: data.name,
-                description: data.description,
-                item_type: data.item_type,
-                item_category: data.item_category,
-                parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
-                created_at: newDateF(new Date()),
-            },
-        });
+  }
 
-    }
+  async findByName(name: string):Promise<BenefitsEntity | null> {
+    const item = await prismaClient.item.findFirst({
+      where: {
+        name
+      }
+    });
+    if(!item) return null
 
-    async find(id: Uuid): Promise<BenefitsEntity> {
-        
-        const item = await prismaClient.item.findUnique({
-            where: {
-                uuid: id.uuid,
-            }
-        });
+    return {
+      uuid: new Uuid(item.uuid),
+      name: item.name,
+      description: item.description,
+      item_type: item.item_type as ItemType,
+      item_category: item.item_category as ItemCategory,
+      parent_uuid: new Uuid(item.parent_uuid),
+      created_at: item.created_at,
+      updated_at: item.updated_at
 
-        return {
-            uuid: new Uuid(item.uuid),
-            name: item.name,
-            description: item.description,
-            item_type: item.item_type as ItemType,
-            item_category: item.item_category as ItemCategory,
-            parent_uuid: new Uuid(item.parent_uuid),
-            created_at: item.created_at,
-            updated_at: item.updated_at
-
-        } as BenefitsEntity
-
-
-    }
+    } as BenefitsEntity
+  }
 
 
 
-    async update(data: BenefitsEntity): Promise<void> {
-        const result = await prismaClient.item.update({
-            where: { 
-                uuid: data.uuid.uuid as string
-            },
-            data: {
-                name: data.name,
-                description: data.description,
-                item_type: data.item_type,
-                item_category: data.item_category,
-                parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
-                updated_at: newDateF(new Date()),
-            }
-        });
-    }
+  async update(data: BenefitsEntity): Promise<void> {
+    const result = await prismaClient.item.update({
+      where: {
+        uuid: data.uuid.uuid as string
+      },
+      data: {
+        name: data.name,
+        description: data.description,
+        item_type: data.item_type,
+        item_category: data.item_category,
+        parent_uuid: data.parent_uuid ? data.parent_uuid.uuid : null,
+        updated_at: newDateF(new Date()),
+      }
+    });
+  }
 
 
-    async findAll(): Promise<(BenefitsEntity)[]> {
-        const r = await prismaClient.item.findMany();
+  async findAll(): Promise<(BenefitsEntity)[]> {
+    const r = await prismaClient.item.findMany();
 
-        return r as BenefitsEntity[] | []
-    }
+    return r as BenefitsEntity[] | []
+  }
 
 }
