@@ -10,6 +10,7 @@ export type BenefitsProps = {
   item_type: ItemType;
   item_category: ItemCategory;
   parent_uuid: Uuid | null
+  business_info_uuid?: Uuid | null
   created_at?: string
   updated_at?: string
 };
@@ -20,6 +21,7 @@ export type BenefitCreateCommand = {
   item_type: ItemType;
   item_category: ItemCategory;
   parent_uuid: Uuid | null
+  business_info_uuid?: Uuid
   created_at?: string
   updated_at?: string
 }
@@ -31,6 +33,7 @@ export class BenefitsEntity {
   private _item_type: ItemType;
   private _item_category: ItemCategory;
   private _parent_uuid: Uuid | null
+  private _business_info_uuid?: Uuid | null
   private _created_at?: string
   private _updated_at?: string
 
@@ -41,6 +44,7 @@ export class BenefitsEntity {
     this._item_type = props.item_type;
     this._item_category = props.item_category;
     this._parent_uuid = props.parent_uuid
+    this._business_info_uuid = props.business_info_uuid ?? null
     this._created_at = props.created_at
     this._updated_at = props.updated_at
     this.validate();
@@ -77,6 +81,9 @@ export class BenefitsEntity {
     return this._parent_uuid || null
   }
 
+  get business_info_uuid(): Uuid {
+    return this._business_info_uuid
+  }
   get created_at(): string | null {
     return this._created_at || null
   }
@@ -107,6 +114,11 @@ export class BenefitsEntity {
 
   changeParentUuid(parent_uuid: Uuid | null) {
     this._parent_uuid = parent_uuid
+    this.validate()
+  }
+
+  changeBusinessInfoUuid(business_info_uuid: Uuid | null){
+    this._business_info_uuid = business_info_uuid
     this.validate()
   }
 

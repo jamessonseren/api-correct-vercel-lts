@@ -9,14 +9,17 @@ export interface InputCreateBenefitDto {
     item_type: ItemType
     item_category: ItemCategory
     parent_uuid: Uuid | null
+    business_info_uuid?: Uuid | null
     created_at?: string
     updated_at?: string
 }
 
 export interface OutputCreateBenefitDto {
-    uuid: Uuid
+    uuid: string
     name: string
     description: string
     item_type: ItemType
     item_category: ItemCategory
+    parent_uuid: string | null
+    business_info_uuid: string
 }

@@ -448,6 +448,7 @@ describe("E2E Business tests", () => {
       expect(result.body.document).toBe(input.document)
       expect(result.body.classification).toBe(input.classification)
       expect(result.body.colaborators_number).toBe(input.colaborators_number)
+      expect(result.body.status).toBe("pending_approval")
       expect(result.body.email).toBe(input.email)
       expect(result.body.phone_1).toBe(input.phone_1)
       expect(result.body.phone_2).toBe(input.phone_2)

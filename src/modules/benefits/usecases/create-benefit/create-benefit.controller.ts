@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { CreateBenefitUsecase } from './create-benefit.usecase';
-import { IBranchRepository } from '../../../branch/repositories/branch.repository';
 
 export class CreateBenefitController {
     constructor(

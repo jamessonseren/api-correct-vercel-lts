@@ -1,7 +1,6 @@
 import { IBenefitsRepository } from '../../repositories/benefit.repository';
 import { BenefitsEntity } from '../../entities/benefit.entity';
 import { InputCreateBenefitDto, OutputCreateBenefitDto } from './create-benefit.dto';
-import { IBranchRepository } from '../../../branch/repositories/branch.repository';
 
 export class CreateBenefitUsecase {
     constructor(
@@ -15,11 +14,13 @@ export class CreateBenefitUsecase {
         await this.benefitsRepository.create(benefit)
 
         return {
-            uuid: benefit.uuid,
+            uuid: benefit.uuid.uuid,
             name: benefit.name,
             description: benefit.description,
             item_type: benefit.item_type,
-            item_category: benefit.item_category
+            item_category: benefit.item_category,
+            parent_uuid: benefit.parent_uuid ? benefit.parent_uuid.uuid : null,
+            business_info_uuid: benefit.business_info_uuid ? benefit.business_info_uuid.uuid : null
         }
 
     }

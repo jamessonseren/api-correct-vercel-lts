@@ -1,4 +1,5 @@
 import { CustomError } from "../../../../../errors/custom.error";
+import { NewBusinessNotification } from "../../../../Notification/CorrectNotification/notification.service";
 import { ICompanyDataRepository } from "../../../CompanyData/repositories/company-data.repository";
 import { BusinessRegisterEntity, BusinessRegisterProps } from "../../entities/business-first-register.entity";
 import { IBusinessFirstRegisterRepository } from "../../repositories/business-first-register.repository";
@@ -15,7 +16,16 @@ export class CreateBusinessRegisterUsecase {
 
         const register = await BusinessRegisterEntity.create(data)
 
-         await this.businessRegisterRepository.save(register)
+        await this.businessRegisterRepository.save(register)
+
+        const notififyCorrectAdmin = new NewBusinessNotification()
+
+        await notififyCorrectAdmin.notififyCorrectAdmin({
+          business_email: register.email,
+          document: register.document,
+          fantasy_name: register.fantasy_name,
+          corporate_reason: register.corporate_reason
+        })
 
         return {
           address_uuid: register.address_pk_uuid,
