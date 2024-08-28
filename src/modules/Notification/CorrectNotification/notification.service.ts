@@ -1,7 +1,4 @@
 import { api } from "../../../infra/axios/axios.config";
-import * as dotenv from 'dotenv';
-
-dotenv.config()
 
 const baseUrl = process.env.MS_NOTIFICATION_BASEURL as string
 const receiver1 = process.env.NEW_BUSINESS_NOTIFICATION_RECEIVER_1 as string
@@ -21,7 +18,6 @@ export class NewBusinessNotification {
 
 
     }catch(err: any){
-      console.log({err})
     }
   }
 }
